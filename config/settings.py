@@ -18,6 +18,10 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: Optional[str] = ""
     OPENAI_MODEL: str = "gpt-4o-mini"
 
+    # Data directories (Member 3: Data & Financial Intelligence)
+    RAW_DATA_DIR: str = "data/raw"
+    PROCESSED_DATA_DIR: str = "data/processed"
+
     # Configuration for pydantic-settings
     model_config = SettingsConfigDict(
         env_file=".env",

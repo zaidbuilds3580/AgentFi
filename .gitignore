@@ -38,3 +38,9 @@ logs/
 .DS_Store
 Thumbs.db
 
+
+# Data files (keep folder structure, never commit real financial data)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
