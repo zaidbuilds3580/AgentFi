@@ -1,0 +1,2 @@
+"""Financial Intelligence agent package."""
+

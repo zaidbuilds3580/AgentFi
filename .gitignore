@@ -5,9 +5,11 @@ __pycache__/
 
 # Virtual environment
 venv/
+.venv/
 .env/
 ENV/
 env/
+.pytest_cache/
 
 # Environment variables file
 .env
@@ -35,3 +37,4 @@ logs/
 # OS generated files
 .DS_Store
 Thumbs.db
+
