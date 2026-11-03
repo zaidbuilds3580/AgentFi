@@ -130,3 +130,26 @@ class ActionProposal(BaseModel):
             raise ValueError("requires_approval must always be True for ActionProposal.")
         return True
 
+
+class FinalResponse(BaseModel):
+    """
+    Structured final response synthesized for the user.
+    """
+    summary: str = Field(
+        ...,
+        description="Clear narrative summary addressing the user's financial inquiry."
+    )
+    evidence: List[str] = Field(
+        default_factory=list,
+        description="Key supporting facts, data points, or metrics backing the summary."
+    )
+    caveats: List[str] = Field(
+        default_factory=list,
+        description="Important limitations, assumptions, data gaps, or uncertainties."
+    )
+    recommendations: List[str] = Field(
+        default_factory=list,
+        description="Actionable next steps or guidance for the business owner."
+    )
+
+

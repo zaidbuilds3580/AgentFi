@@ -14,7 +14,38 @@ from typing_extensions import TypedDict
 from langchain_core.messages import AnyMessage
 from langgraph.graph.message import add_messages
 
-from graph.state.models import ActionProposal, AgentResult, Intent, RouterDecision
+from graph.state.models import ActionProposal, AgentResult, FinalResponse, Intent, RouterDecision
+
+
+def validate_business_id(business_id: Optional[str]) -> str:
+    """
+    Validates that business_id is provided and non-empty.
+
+    Args:
+        business_id: Business tenant identifier string.
+
+    Returns:
+        The stripped business_id if valid.
+
+    Raises:
+        ValueError: If business_id is None, empty, or whitespace-only.
+    """
+    if not business_id or not str(business_id).strip():
+        raise ValueError("business_id must not be empty.")
+    return str(business_id).strip()
+
+
+def validate_agent_state(state: "AgentState") -> None:
+    """
+    Validates foundational invariants on an AgentState instance.
+
+    Args:
+        state: The AgentState dictionary to validate.
+
+    Raises:
+        ValueError: If business_id is missing or empty.
+    """
+    validate_business_id(state.get("business_id"))
 
 
 class AgentState(TypedDict, total=False):
@@ -27,8 +58,11 @@ class AgentState(TypedDict, total=False):
     must provide 'business_id'.
     """
 
-    # MANDATORY: Tenant identifier for the SME business
+    # MANDATORY: Tenant identifier for the SME business (must not be empty)
     business_id: str
+
+    # Unique identifier for the incoming request / interaction trace
+    request_id: str
 
     # User identifier who initiated the interaction
     user_id: str
@@ -54,6 +88,10 @@ class AgentState(TypedDict, total=False):
     # Uses operator.add reducer so errors accumulate
     errors: Annotated[List[str], operator.add]
 
+    # Final structured response synthesized for the user
+    final_response: Optional[Union[FinalResponse, Dict[str, Any]]]
+
     # Current execution status of the graph
     status: Literal["running", "success", "failed"]
+
 
