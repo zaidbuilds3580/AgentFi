@@ -1,4 +1,5 @@
 from finance_engine.schema.canonical import (
+    MIN_RECORD_DATE,
     CANONICAL_ENTITIES,
     SCHEMA_VERSION,
     Account,
@@ -17,6 +18,7 @@ from finance_engine.schema.canonical import (
 )
 
 __all__ = [
+    "MIN_RECORD_DATE",
     "CANONICAL_ENTITIES",
     "SCHEMA_VERSION",
     "Account",

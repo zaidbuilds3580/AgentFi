@@ -1,0 +1,5 @@
+Invoice Number,Invoice Date,Due Date,Customer Name,Customer Email,Payment Terms,Item Name,Quantity,Item Price,Tax %,Amount Paid,Invoice Status,Currency Code
+INV-1002,20/09/2026,20/10/2026,Greenleaf Organics Pvt Ltd,finance@greenleaf.example,Net 30,Brand identity package,1,"60,000.00",18%,"50,000.00",Overdue,INR
+INV-1002,20/09/2026,20/10/2026,Greenleaf Organics Pvt Ltd,finance@greenleaf.example,Net 30,Packaging mockups,4,"2,500.00",18%,"50,000.00",Overdue,INR
+INV-1006,03/11/2026,03/12/2026,Greenleaf Organics Pvt Ltd,finance@greenleaf.example,Net 30,Social media kit,1,"12,000.00",18%,0,Sent,INR
+INV-1007,04/11/2026,01/11/2026,Coastal Cafe Co,,Net 30,Signage design,1,"6,000.00",5%,0,Sent,INR

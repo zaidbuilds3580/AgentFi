@@ -1,0 +1,44 @@
+{
+  "business": {
+    "business_id": "biz_001",
+    "name": "Pixelcraft Studio Pvt Ltd",
+    "base_currency": "INR",
+    "industry": "Design & software services",
+    "fiscal_year_start_month": 4
+  },
+  "accounts": [
+    {
+      "account_id": "acc_hdfc_current",
+      "name": "HDFC Current A/c",
+      "account_type": "bank",
+      "currency": "INR",
+      "opening_balance": "100000.00"
+    }
+  ],
+  "sources": [
+    {
+      "type": "bank_statement",
+      "path": "bank_csv/hdfc_statement_oct_2026.csv",
+      "account_id": "acc_hdfc_current",
+      "layout": "hdfc_csv"
+    },
+    {
+      "type": "bank_statement",
+      "path": "bank_csv/hdfc_statement_2026-10-25_to_2026-11-04.csv",
+      "account_id": "acc_hdfc_current",
+      "layout": "hdfc_csv"
+    },
+    {
+      "type": "invoice_export",
+      "path": "invoices/zoho_invoices_export.csv"
+    },
+    {
+      "type": "invoice_export",
+      "path": "invoices/zoho_invoices_export_2026-11-04.csv"
+    },
+    {
+      "type": "expense_sheet",
+      "path": "expenses/expense_register.csv"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+Invoice Number,Invoice Date,Due Date,Customer Name,Customer Email,Payment Terms,Item Name,Quantity,Item Price,Tax %,Amount Paid,Invoice Status,Currency Code
+INV-1001,15/09/2026,30/09/2026,BrightPath Learning,accounts@brightpath.example,Net 15,Website redesign,1,"50,000.00",18%,"59,000.00",Paid,INR
+INV-1002,20/09/2026,20/10/2026,GreenLeaf Organics,finance@greenleaf.example,Net 30,Brand identity package,1,"60,000.00",18%,"30,000.00",Partially Paid,INR
+INV-1002,20/09/2026,20/10/2026,GreenLeaf Organics,finance@greenleaf.example,Net 30,Packaging mockups,4,"2,500.00",18%,"30,000.00",Partially Paid,INR
+INV-1003,01/10/2026,31/10/2026,BRIGHTPATH LEARNING PVT. LTD.,,Net 30,Monthly maintenance,1,"15,000.00",18%,0,Sent,INR
+INV-1004,25/10/2026,24/11/2026,Coastal Cafe Co,,Net 30,Menu design,2,"4,000.00",5%,0,Draft,INR
+INV-1005,28/10/2026,27/11/2026,Nordic Sails AB,ap@nordicsails.example,Net 30,UI audit,1,"1,200.00",0,0,Sent,USD
