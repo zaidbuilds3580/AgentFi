@@ -12,8 +12,8 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from backend.core.config import settings
 from backend.database.session import Base
-# In Day 2, all database models will be imported here for autogenerate detection:
-# from backend import models
+# Import all database models so target_metadata includes them for autogenerate
+import backend.models
 
 config = context.config
 
@@ -34,6 +34,7 @@ def run_migrations_offline() -> None:
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+        compare_type=True,
     )
 
     with context.begin_transaction():
@@ -69,6 +70,7 @@ def run_migrations_online() -> None:
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
+            compare_type=True,
         )
 
         with context.begin_transaction():
