@@ -172,9 +172,55 @@ Run the test suite from the repository root:
 
 ```bash
 # Run all unit tests (does not require a live Supabase database)
-python -m pytest tests/test_backend_health.py tests/test_backend_security.py tests/test_backend_auth.py tests/test_backend_schema.py
+python -m pytest tests/test_backend_health.py tests/test_backend_security.py tests/test_backend_auth.py tests/test_backend_schema.py tests/test_backend_import_unit.py
 
 # Run live database integration tests against Supabase (requires valid DATABASE_URL in .env)
-python -m pytest -m integration
+python -m pytest tests/test_backend_auth.py tests/test_backend_schema.py tests/test_backend_import_integration.py -m integration
 ```
+
+---
+
+## 8. CSV Ingestion & Import API (Day 3)
+
+The backend provides authenticated CSV ingestion with automatic header alias resolution, strict type validation, row-level error audit logs, and deduplication against the canonical schema.
+
+### Step A: Authenticate & Obtain JWT
+```bash
+# Login as an owner or admin
+TOKEN=$(curl -s -X POST http://localhost:8000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "demo.owner@sampletraders.com", "password": "DemoSecurePassword123!"}' \
+  | jq -r .access_token)
+```
+
+### Step B: Download CSV Template
+```bash
+# Download template CSV with standard headers
+curl -s -H "Authorization: Bearer $TOKEN" \
+  http://localhost:8000/api/imports/templates/transactions?format=csv \
+  -o transactions_template.csv
+```
+
+### Step C: Upload & Ingest CSV File
+```bash
+# Upload a bank transactions export
+curl -X POST http://localhost:8000/api/imports \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "file=@transactions_template.csv" \
+  -F "import_type=transactions" \
+  -F "source_dataset=bank_hdfc" \
+  -F "on_error=skip"
+```
+
+### Step D: Inspect Status & Row Errors
+```bash
+# Inspect batch summary
+curl -s -H "Authorization: Bearer $TOKEN" \
+  http://localhost:8000/api/imports/<batch_id> | jq .
+
+# Inspect paginated row-level errors
+curl -s -H "Authorization: Bearer $TOKEN" \
+  http://localhost:8000/api/imports/<batch_id>/errors | jq .
+```
+
 
