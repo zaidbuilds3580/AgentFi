@@ -10,6 +10,8 @@ from backend.models.vendors import Vendor
 from backend.models.transactions import Transaction
 from backend.models.invoices import Invoice
 from backend.models.expenses import Expense
+from backend.models.import_batch import ImportBatch
+from backend.models.import_row_error import ImportRowError
 
 __all__ = [
     "Business",
@@ -20,4 +22,6 @@ __all__ = [
     "Transaction",
     "Invoice",
     "Expense",
+    "ImportBatch",
+    "ImportRowError",
 ]
