@@ -53,6 +53,13 @@ class Settings(BaseSettings):
     EMAIL_PASSWORD: str = ""
     EMAIL_FROM: str = "no-reply@agentfi.local"
 
+    # CSV Upload and Import Limits (Step 3)
+    MAX_UPLOAD_MB: int = 10
+    MAX_IMPORT_ROWS: int = 50000
+    ALLOWED_EXTENSIONS: List[str] = [".csv"]
+    CSV_ENCODINGS: List[str] = ["utf-8-sig", "cp1252"]
+    USE_M3_ETL: bool = False
+
     model_config = SettingsConfigDict(
         env_file=DOTENV_PATH,
         env_file_encoding="utf-8",
