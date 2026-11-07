@@ -35,7 +35,7 @@ from finance_engine.schema.canonical import (
     TransactionDirection,
 )
 
-CALCULATION_VERSION = "finance-engine-1.0.0"
+CALCULATION_VERSION = "finance-engine-1.1.0"
 
 ZERO = Decimal("0")
 CENT = Decimal("0.01")

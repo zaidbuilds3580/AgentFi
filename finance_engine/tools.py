@@ -36,6 +36,7 @@ from finance_engine.calculations import (
 from finance_engine.data import FinanceData
 from finance_engine.forecasting import CashFlowForecastReport
 from finance_engine.forecasting import forecast_cash_flow as _forecast
+from finance_engine.receivables import AgingReport, OverdueReport, aging_report, detect_overdue
 from finance_engine.periods import Period, resolve_period
 
 PeriodLike = Union[str, Period]
@@ -126,3 +127,19 @@ def get_expense_anomalies(business_id: str, start_date: Optional[Union[str, date
     if end < start:
         raise ValueError("end_date must not be before start_date.")
     return detect_expense_anomalies(data, start, end)
+
+
+def get_aging_report(business_id: str, as_of_date: Optional[Union[str, date]] = None,
+                     today: Optional[date] = None, processed_dir: Optional[Path] = None,
+                     data: Optional[FinanceData] = None) -> AgingReport:
+    """Receivables aging by customer, DSO and customer payment behaviour."""
+    data = data or FinanceData.from_processed(business_id, processed_dir)
+    return aging_report(data, _as_date(as_of_date, today or date.today()))
+
+
+def get_overdue_report(business_id: str, as_of_date: Optional[Union[str, date]] = None, grace_days: int = 0,
+                       today: Optional[date] = None, processed_dir: Optional[Path] = None,
+                       data: Optional[FinanceData] = None) -> OverdueReport:
+    """Overdue and due-soon invoices with reminder stage and priority, status fixes, overdue bills."""
+    data = data or FinanceData.from_processed(business_id, processed_dir)
+    return detect_overdue(data, _as_date(as_of_date, today or date.today()), grace_days=grace_days)

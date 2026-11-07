@@ -59,11 +59,15 @@ month's overlapping statement, never creates duplicates. Running the pipeline tw
 
 ```
 stage                    businesses   accounts  counterparties  transactions  invoices  expenses
-extracted                         0          0              14            17         8         9
-duplicates_removed                0          0               2             2         1         1
+extracted                         0          0              17            45        15         9
+duplicates_removed                0          0               5             2         1         1
 quarantined                       0          0               0             0         1         1
-loaded                            1          1              12            15         6         8
+loaded                            1          1              12            43        13         8
 ```
+
+Jul–Sep 2026 history (one bank statement, one invoice export, all invoices paid) gives the aging,
+payment-behaviour and anomaly algorithms a baseline. The account's `opening_balance` (₹2,99,890.00 on
+1 Jul) is set so that the balance on 30 Sep is exactly the October statement's opening ₹1,00,000.00.
 
 | Planted problem | Handled by |
 |---|---|

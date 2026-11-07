@@ -178,12 +178,12 @@ def test_anomaly_rules_fire_on_crafted_data():
     ]
     r = detect_expense_anomalies(_data(transactions=txns, expenses=exps), date(2026, 10, 1), date(2026, 10, 31))
     by_rule = {a.rule_id: a for a in r.anomalies}
-    assert set(by_rule) == {"A1", "A2", "A3", "A4", "A5"}
+    # A3 (software spike) is suppressed: the single AWS payment that causes it is already A1
+    assert set(by_rule) == {"A1", "A2", "A4", "A5"}
 
     a1 = by_rule["A1"]
     assert (a1.vendor, a1.amount, a1.expected_baseline, a1.severity) == ("AWS", D("6000.00"), D("1000.00"), "high")
     assert by_rule["A2"].evidence_refs == ["uber1", "uber2"] and by_rule["A2"].severity == "high"
-    assert by_rule["A3"].category == "Software" and by_rule["A3"].severity == "high"
     assert (by_rule["A4"].amount, by_rule["A4"].expected_baseline) == (D("900.00"), D("1000.00"))
     assert by_rule["A5"].severity == "low"
     severities = [a.severity for a in r.anomalies]
@@ -210,7 +210,7 @@ def test_anomaly_ids_are_deterministic():
 
 def test_short_window_skips_spike_check():
     r = detect_expense_anomalies(_data(), date(2026, 10, 1), date(2026, 10, 7))
-    assert any("shorter than 28 days" in n for n in r.notes)
+    assert any("no complete calendar month" in n for n in r.notes)
 
 
 # ------------------------------------------------------------------------------ #
@@ -235,7 +235,7 @@ def test_contract_financial_summary(use_processed):
     real = finance_tools.get_financial_summary("biz_001", "last_month", today=TODAY)
     mock = mock_tools.get_financial_summary("biz_001", "last_month")
     assert type(real) is type(mock) and set(real.model_fields) == set(mock.model_fields)
-    assert real.cash_balance == 39838.5 and real.calculation_version == "finance-engine-1.0.0"
+    assert real.cash_balance == 39838.5 and real.calculation_version == "finance-engine-1.1.0"
 
 
 def test_contract_forecast(use_processed):
@@ -261,7 +261,13 @@ def test_contract_expense_anomalies(use_processed):
     real = finance_tools.get_expense_anomalies("biz_001", "2026-10-01", "2026-11-04")
     assert type(real) is type(mock_tools.get_expense_anomalies("biz_001"))
     assert (real.start_date, real.end_date) == ("2026-10-01", "2026-11-04")
-    assert [(a.category, a.vendor, a.severity) for a in real.anomalies] == [("Uncategorized", "MISC DR 5531", "low")]
+    assert [(a.category, a.vendor, a.severity) for a in real.anomalies] == [
+        ("Software", "Amazon Web Services", "medium"),   # A1 Oct: 3.3x usual AWS bill
+        ("Software", "Amazon Web Services", "medium"),   # A1 Nov: still 3.3x
+        ("Taxes", "GST PMT CBDT-OCT26 CPIN 26101234567", "low"),   # A6 +20%
+        ("Uncategorized", "MISC DR 5531", "low"),        # A5
+        ("Utilities", "Airtel Business", "low"),         # A7 October payment missing
+    ]
 
 
 @pytest.mark.parametrize("call", [

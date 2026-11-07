@@ -1,0 +1,8 @@
+Invoice Number,Invoice Date,Due Date,Customer Name,Customer Email,Payment Terms,Item Name,Quantity,Item Price,Tax %,Amount Paid,Invoice Status,Currency Code
+INV-0991,01/06/2026,30/06/2026,BrightPath Learning,accounts@brightpath.example,Net 30,Website redesign phase 1,1,"50,000.00",18%,"59,000.00",Paid,INR
+INV-0992,10/06/2026,25/06/2026,GreenLeaf Organics,finance@greenleaf.example,Net 15,Logo design,1,"40,000.00",18%,"47,200.00",Paid,INR
+INV-0993,01/08/2026,31/08/2026,Coastal Cafe Co,,Net 30,Menu photography,1,"8,000.00",5%,"8,400.00",Paid,INR
+INV-0994,25/07/2026,24/08/2026,BrightPath Learning,accounts@brightpath.example,Net 30,Monthly maintenance Jul,1,"15,000.00",18%,"17,700.00",Paid,INR
+INV-0995,20/07/2026,04/08/2026,GreenLeaf Organics,finance@greenleaf.example,Net 15,Packaging concepts,1,"30,000.00",18%,"35,400.00",Paid,INR
+INV-0996,15/08/2026,30/08/2026,BrightPath Learning,accounts@brightpath.example,Net 15,Website redesign phase 2,1,"50,000.00",18%,"59,000.00",Paid,INR
+INV-0997,25/08/2026,09/09/2026,GreenLeaf Organics,finance@greenleaf.example,Net 15,Social media campaign,1,"20,000.00",18%,"23,600.00",Paid,INR

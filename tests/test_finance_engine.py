@@ -359,7 +359,7 @@ def test_tools_read_processed_data(processed_dir):
     ar = tools.get_receivables("biz_001", as_of=date(2026, 10, 31), processed_dir=processed_dir)
     assert ar.total_outstanding == D("50300.00")
     js = s.model_dump(mode="json")
-    assert js["cash_balance"] == "39838.50" and js["calculation_version"] == "finance-engine-1.0.0"
+    assert js["cash_balance"] == "39838.50" and js["calculation_version"] == "finance-engine-1.1.0"
 
 
 def test_tools_errors(processed_dir):
@@ -380,4 +380,4 @@ def test_cashflow_agent_adapter_matches_agent_schema(processed_dir, monkeypatch)
     assert isinstance(s, FinancialSummary)
     assert (s.inflows, s.outflows, s.net_cash_flow, s.cash_balance, s.receivables) == (
         101000.0, 161161.5, -60161.5, 39838.5, 50300.0)
-    assert s.calculation_version == "finance-engine-1.0.0"
+    assert s.calculation_version == "finance-engine-1.1.0"

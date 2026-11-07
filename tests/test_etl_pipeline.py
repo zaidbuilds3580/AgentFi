@@ -127,11 +127,12 @@ def result():
 
 
 def test_stage_counts(result):
-    assert result.stats["extracted"] == {"counterparties": 14, "transactions": 17, "invoices": 8, "expenses": 9}
-    assert result.stats["duplicates_removed"] == {"counterparties": 2, "transactions": 2, "invoices": 1, "expenses": 1}
+    # Oct + overlapping Oct/Nov statements (17 rows) + Jul-Sep history statement (28 rows)
+    assert result.stats["extracted"] == {"counterparties": 17, "transactions": 45, "invoices": 15, "expenses": 9}
+    assert result.stats["duplicates_removed"] == {"counterparties": 5, "transactions": 2, "invoices": 1, "expenses": 1}
     assert result.stats["quarantined"] == {"invoices": 1, "expenses": 1}
     assert result.stats["loaded"] == {"businesses": 1, "accounts": 1, "counterparties": 12,
-                                      "transactions": 15, "invoices": 6, "expenses": 8}
+                                      "transactions": 43, "invoices": 13, "expenses": 8}
 
 
 def test_loaded_data_is_error_free(result):
@@ -209,9 +210,9 @@ def test_run_outputs_and_reload(tmp_path, result):
     assert {"transactions.csv", "_quarantine/invoices.csv", "_quarantine/expenses.csv",
             "_duplicates.csv", "_etl_report.json"} <= written
     report = json.loads((tmp_path / "_etl_report.json").read_text(encoding="utf-8"))
-    assert report["clean"] is True and report["stats"]["loaded"]["transactions"] == 15
+    assert report["clean"] is True and report["stats"]["loaded"]["transactions"] == 43
     reloaded = load_processed(tmp_path)
-    assert len(reloaded["transactions"]) == 15
+    assert len(reloaded["transactions"]) == 43
     assert isinstance(reloaded["invoices"][0]["line_items"], list)
     assert not list(tmp_path.glob("*.tmp"))   # atomic writes leave no temp files
 
