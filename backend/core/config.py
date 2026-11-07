@@ -5,9 +5,18 @@ Uses pydantic-settings to load environment variables from system environment
 or root .env file.
 """
 
+from pathlib import Path
 from typing import List, Union
+from dotenv import load_dotenv
 from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# Resolve absolute path to project root .env so it loads regardless of terminal working directory
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DOTENV_PATH = PROJECT_ROOT / ".env"
+
+# Explicitly populate environment variables from .env to bypass IDE terminal injection issues
+load_dotenv(dotenv_path=DOTENV_PATH, override=True)
 
 
 class Settings(BaseSettings):
@@ -45,7 +54,7 @@ class Settings(BaseSettings):
     EMAIL_FROM: str = "no-reply@agentfi.local"
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=DOTENV_PATH,
         env_file_encoding="utf-8",
         extra="ignore"
     )

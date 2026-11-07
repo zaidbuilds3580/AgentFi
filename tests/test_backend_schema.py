@@ -190,13 +190,14 @@ def test_all_8_tables_and_rls_enabled(db_session):
 @pytest.mark.integration
 def test_duplicate_email_case_insensitive_rejected(db_session):
     """Verify lower(email) unique index prevents duplicate registrations regardless of casing."""
-    biz = Business(name="Duplicate Test Biz")
+    biz = Business(name=f"Duplicate Test Biz {uuid.uuid4().hex[:6]}")
     db_session.add(biz)
     db_session.flush()
 
+    unique_email = f"user_{uuid.uuid4().hex[:8]}@example.com"
     u1 = User(
         business_id=biz.id,
-        email="Unique.Person@Example.com",
+        email=unique_email.upper(),
         password_hash="hashed_pw_1",
         role="owner",
     )
@@ -206,7 +207,7 @@ def test_duplicate_email_case_insensitive_rejected(db_session):
     # Attempt inserting same email in lowercase
     u2 = User(
         business_id=biz.id,
-        email="unique.person@example.com",
+        email=unique_email.lower(),
         password_hash="hashed_pw_2",
         role="viewer",
     )
@@ -356,3 +357,4 @@ def test_business_cascade_delete(db_session):
     # Assert user and account are gone
     assert db_session.query(User).filter(User.id == user.id).first() is None
     assert db_session.query(Account).filter(Account.id == acc.id).first() is None
+

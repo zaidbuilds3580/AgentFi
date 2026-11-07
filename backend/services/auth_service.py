@@ -124,3 +124,4 @@ def get_current_user_profile(db: Session, current_user: TokenPayload) -> dict:
         pass
 
     return response
+

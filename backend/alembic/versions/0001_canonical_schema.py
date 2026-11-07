@@ -243,3 +243,4 @@ def downgrade() -> None:
     op.drop_table('accounts')
     op.drop_table('users')
     op.drop_table('businesses')
+

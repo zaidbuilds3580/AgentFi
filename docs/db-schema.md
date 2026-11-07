@@ -311,3 +311,4 @@ When loading imported datasets (CSV, bank statements, Tally exports):
 3. **Automatic Deduplication**:
    - The partial unique index `(business_id, source_dataset, source_record_id)` automatically rejects duplicate rows if an ETL script is re-run.
    - Use `INSERT ... ON CONFLICT DO NOTHING` or catch SQLAlchemy `IntegrityError` to safely skip duplicates.
+

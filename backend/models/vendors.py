@@ -49,3 +49,4 @@ class Vendor(Base):
 
     business = relationship("Business", back_populates="vendors")
     expenses = relationship("Expense", back_populates="vendor")
+

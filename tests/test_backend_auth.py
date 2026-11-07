@@ -97,7 +97,7 @@ def test_auth_register_login_me_end_to_end_isolation():
 
     # 1. Register Biz 1
     reg1 = {
-        "email": f"owner1_{random_suffix}@company1.local",
+        "email": f"owner1_{random_suffix}@company1.com",
         "password": "Password123!",
         "full_name": "Alice Owner",
         "business_name": "Alpha Corp",
@@ -125,7 +125,7 @@ def test_auth_register_login_me_end_to_end_isolation():
 
     # 4. Register Biz 2
     reg2 = {
-        "email": f"owner2_{random_suffix}@company2.local",
+        "email": f"owner2_{random_suffix}@company2.com",
         "password": "Password123!",
         "full_name": "Bob Owner",
         "business_name": "Beta Corp",

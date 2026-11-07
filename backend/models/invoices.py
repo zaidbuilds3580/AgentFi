@@ -108,3 +108,4 @@ class Invoice(Base):
 
     business = relationship("Business", back_populates="invoices")
     customer = relationship("Customer", back_populates="invoices")
+

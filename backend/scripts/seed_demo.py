@@ -33,7 +33,7 @@ from backend.models import (
 
 DEMO_DATASET_TAG = "demo_seed"
 DEMO_BIZ_NAME = "DEMO - Sample Traders"
-DEMO_OWNER_EMAIL = "demo.owner@sampletraders.local"
+DEMO_OWNER_EMAIL = "demo.owner@sampletraders.com"
 
 
 def seed_demo_data(db: Session) -> None:
@@ -218,3 +218,4 @@ if __name__ == "__main__":
         seed_demo_data(db)
     finally:
         db.close()
+

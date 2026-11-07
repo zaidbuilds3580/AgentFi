@@ -65,3 +65,4 @@ class Business(Base):
     transactions = relationship("Transaction", back_populates="business", cascade="all, delete-orphan")
     invoices = relationship("Invoice", back_populates="business", cascade="all, delete-orphan")
     expenses = relationship("Expense", back_populates="business", cascade="all, delete-orphan")
+

@@ -50,3 +50,4 @@ class Customer(Base):
 
     business = relationship("Business", back_populates="customers")
     invoices = relationship("Invoice", back_populates="customer")
+

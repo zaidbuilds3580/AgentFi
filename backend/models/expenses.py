@@ -105,3 +105,4 @@ class Expense(Base):
     vendor = relationship("Vendor", back_populates="expenses")
     account = relationship("Account", back_populates="expenses")
     transaction = relationship("Transaction", back_populates="expenses")
+

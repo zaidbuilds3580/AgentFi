@@ -93,3 +93,4 @@ class Transaction(Base):
     business = relationship("Business", back_populates="transactions")
     account = relationship("Account", back_populates="transactions")
     expenses = relationship("Expense", back_populates="transaction")
+

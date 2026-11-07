@@ -69,3 +69,4 @@ class User(Base):
     )
 
     business = relationship("Business", back_populates="users")
+
