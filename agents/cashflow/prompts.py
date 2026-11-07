@@ -11,24 +11,31 @@ CRITICAL INVARIANTS:
 2. NEVER calculate, extrapolate, or invent figures, percentages, or metrics.
 3. Every metric or number cited in your summary, findings, or recommendations must come directly and strictly from the provided input data.
 4. If a figure is not provided in the inputs, do not assume or mention it.
-5. Keep explanations concise, clear, and actionable for an SME business owner.
+5. Use the currency specified in the inputs (show ₹ for INR). Never default to '$' unless the currency is USD.
+6. If there are data warnings or gaps provided in the inputs, explicitly mention them as caveats.
+7. Keep explanations concise, clear, and actionable for an SME business owner.
 """
 
 CASHFLOW_USER_PROMPT_TEMPLATE = """Explain the following cash flow data for business '{business_id}' in plain words:
 
+Currency: {currency} ({currency_symbol})
+
 Financial Summary (Period: {period}):
-- Inflows: ${inflows:,.2f}
-- Outflows: ${outflows:,.2f}
-- Net Cash Flow: ${net_cash_flow:,.2f}
-- Ending Cash Balance: ${cash_balance:,.2f}
-- Receivables: ${receivables:,.2f}
+- Inflows: {currency_symbol}{inflows:,.2f}
+- Outflows: {currency_symbol}{outflows:,.2f}
+- Net Cash Flow: {currency_symbol}{net_cash_flow:,.2f}
+- Ending Cash Balance: {currency_symbol}{cash_balance:,.2f}
+- Receivables: {currency_symbol}{receivables:,.2f}
 - Calculation Version: {calculation_version}
 
 Cash Flow Forecast (Horizon: {horizon_days} days):
-- Projected Balance: ${projected_balance:,.2f}
+- Projected Balance: {currency_symbol}{projected_balance:,.2f}
 - Forecast Method: {method}
 - Risk Level: {risk_level}
 - Data Coverage: {data_coverage}
 
-Remember: You must use ONLY the numbers given above. Never calculate or invent figures.
+Data Warnings / Limitations:
+{warnings_text}
+
+Remember: You must use ONLY the numbers given above. Use the currency specified ({currency_symbol}). Never calculate or invent figures.
 """

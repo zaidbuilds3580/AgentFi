@@ -35,6 +35,8 @@ def get_financial_summary(business_id: str, period: str = "current_month") -> Fi
         cash_balance=78000.0,
         receivables=15000.0,
         calculation_version="v1.0.0-mock",
+        currency="USD",
+        warnings=[],
     )
 
 
@@ -61,4 +63,6 @@ def forecast_cash_flow(business_id: str, horizon_days: int = 30) -> CashFlowFore
         method="linear_runway",
         risk_level="low",
         data_coverage=0.95,
+        currency="USD",
+        warnings=[],
     )

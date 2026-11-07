@@ -40,6 +40,8 @@ def get_financial_summary(business_id: str, period: str = "current_month",
         cash_balance=float(report.cash_balance),
         receivables=float(report.receivables),
         calculation_version=report.calculation_version,
+        currency=report.currency,
+        warnings=list(report.warnings),
     )
 
 
@@ -53,4 +55,6 @@ def forecast_cash_flow(business_id: str, horizon_days: int = 30,
         method=report.method,
         risk_level=report.risk_level,
         data_coverage=float(report.data_coverage),
+        currency=report.currency,
+        warnings=list(report.warnings),
     )

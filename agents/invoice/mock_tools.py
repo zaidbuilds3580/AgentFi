@@ -83,4 +83,6 @@ def get_overdue_invoices(
         ageing_bands=ageing_bands,
         invoices=invoices,
         calculation_version="v1.0.0-mock",
+        currency="USD",
+        warnings=[],
     )

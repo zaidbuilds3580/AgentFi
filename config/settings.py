@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     RAW_DATA_DIR: str = "data/raw"
     PROCESSED_DATA_DIR: str = "data/processed"
 
+    # Tool source toggle: use Member 3's real finance engine tools or mock tools
+    USE_REAL_FINANCE_TOOLS: bool = True
+
     # Configuration for pydantic-settings
     model_config = SettingsConfigDict(
         env_file=".env",

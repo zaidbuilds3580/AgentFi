@@ -75,4 +75,6 @@ def get_expense_anomalies(
         end_date=e_date,
         anomalies=anomalies,
         calculation_version="v1.0.0-mock",
+        currency="USD",
+        warnings=[],
     )

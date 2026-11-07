@@ -11,7 +11,7 @@ from typing import Any, Dict, Union
 from config.settings import settings
 from graph.state.agent_state import AgentState
 from graph.state.models import AgentResult
-from agents.cashflow.mock_tools import forecast_cash_flow, get_financial_summary
+from agents.tool_source import forecast_cash_flow, get_currency_symbol, get_financial_summary
 from agents.cashflow.prompts import (
     CASHFLOW_SYSTEM_PROMPT,
     CASHFLOW_USER_PROMPT_TEMPLATE,
@@ -41,20 +41,24 @@ def cash_flow_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
         business_id = state.get("business_id", "")
         period = state.get("period", "current_month")
         horizon_days = state.get("horizon_days", 30)
+        today = state.get("today")
     else:
         business_id = getattr(state, "business_id", "")
         period = getattr(state, "period", "current_month")
         horizon_days = getattr(state, "horizon_days", 30)
+        today = getattr(state, "today", None)
 
-    # Step 1: Call finance tools (MOCK tools)
+    # Step 1: Call finance tools (via tool_source toggle)
     try:
         financial_summary = get_financial_summary(
             business_id=str(business_id),
             period=period or "current_month",
+            today=today,
         )
         cash_flow_forecast = forecast_cash_flow(
             business_id=str(business_id),
             horizon_days=horizon_days or 30,
+            today=today,
         )
     except Exception as tool_exc:
         logger.warning(
@@ -67,8 +71,21 @@ def cash_flow_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
             metrics={},
             findings=["Financial calculation tool was unavailable or encountered an error."],
             recommendations=["Please verify your financial data connection or try again later."],
+            caveats=["Data unavailable or calculation error occurred."],
             requires_approval=False,
         )
+
+    # Combine tool warnings word-for-word
+    tool_warnings: list[str] = []
+    for w in getattr(financial_summary, "warnings", []):
+        if w not in tool_warnings:
+            tool_warnings.append(w)
+    for w in getattr(cash_flow_forecast, "warnings", []):
+        if w not in tool_warnings:
+            tool_warnings.append(w)
+
+    currency = getattr(financial_summary, "currency", "INR")
+    sym = get_currency_symbol(currency)
 
     # Step 2: Copy metrics straight from the tool outputs (NOT from AI)
     metrics: Dict[str, Any] = {
@@ -85,23 +102,25 @@ def cash_flow_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
         "method": cash_flow_forecast.method,
         "risk_level": cash_flow_forecast.risk_level,
         "data_coverage": cash_flow_forecast.data_coverage,
+        "currency": currency,
+        "warnings": list(tool_warnings),
     }
 
     # Step 3: Prepare template fallback built strictly from tool numbers
     template_summary = (
-        f"For {financial_summary.period}, total inflows were ${financial_summary.inflows:,.2f} "
-        f"and outflows were ${financial_summary.outflows:,.2f}, resulting in net cash flow of "
-        f"${financial_summary.net_cash_flow:,.2f} and an ending cash balance of ${financial_summary.cash_balance:,.2f}. "
+        f"For {financial_summary.period}, total inflows were {sym}{financial_summary.inflows:,.2f} "
+        f"and outflows were {sym}{financial_summary.outflows:,.2f}, resulting in net cash flow of "
+        f"{sym}{financial_summary.net_cash_flow:,.2f} and an ending cash balance of {sym}{financial_summary.cash_balance:,.2f}. "
         f"Over a {cash_flow_forecast.horizon_days}-day horizon, projected cash balance is "
-        f"${cash_flow_forecast.projected_balance:,.2f} with a {cash_flow_forecast.risk_level} risk level."
+        f"{sym}{cash_flow_forecast.projected_balance:,.2f} with a {cash_flow_forecast.risk_level} risk level."
     )
     template_findings = [
-        f"Net cash flow is ${financial_summary.net_cash_flow:,.2f} (inflows: ${financial_summary.inflows:,.2f}, outflows: ${financial_summary.outflows:,.2f}).",
-        f"Outstanding customer receivables total ${financial_summary.receivables:,.2f}.",
-        f"Projected {cash_flow_forecast.horizon_days}-day balance is ${cash_flow_forecast.projected_balance:,.2f} assessed at {cash_flow_forecast.risk_level} risk.",
+        f"Net cash flow is {sym}{financial_summary.net_cash_flow:,.2f} (inflows: {sym}{financial_summary.inflows:,.2f}, outflows: {sym}{financial_summary.outflows:,.2f}).",
+        f"Outstanding customer receivables total {sym}{financial_summary.receivables:,.2f}.",
+        f"Projected {cash_flow_forecast.horizon_days}-day balance is {sym}{cash_flow_forecast.projected_balance:,.2f} assessed at {cash_flow_forecast.risk_level} risk.",
     ]
     template_recommendations = [
-        f"Monitor collection efforts for ${financial_summary.receivables:,.2f} in pending receivables.",
+        f"Monitor collection efforts for {sym}{financial_summary.receivables:,.2f} in pending receivables.",
         "Maintain ongoing operating expenditures within current levels to preserve cash reserves.",
     ]
 
@@ -117,6 +136,7 @@ def cash_flow_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
                 timeout=10,
                 max_retries=1,
             )
+            warnings_text = "\n".join(f"- {w}" for w in tool_warnings) if tool_warnings else "None"
             user_prompt = CASHFLOW_USER_PROMPT_TEMPLATE.format(
                 business_id=financial_summary.business_id,
                 period=financial_summary.period,
@@ -131,6 +151,9 @@ def cash_flow_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
                 method=cash_flow_forecast.method,
                 risk_level=cash_flow_forecast.risk_level,
                 data_coverage=cash_flow_forecast.data_coverage,
+                currency=currency,
+                currency_symbol=sym,
+                warnings_text=warnings_text,
             )
             completion = client.beta.chat.completions.parse(
                 model=settings.OPENAI_MODEL,
@@ -148,6 +171,7 @@ def cash_flow_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
                     metrics=metrics,  # copied straight from tool output!
                     findings=explanation.findings,
                     recommendations=explanation.recommendations,
+                    caveats=list(tool_warnings),
                     requires_approval=False,
                 )
         except Exception as ai_exc:
@@ -164,5 +188,6 @@ def cash_flow_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
         metrics=metrics,  # copied straight from tool output!
         findings=template_findings,
         recommendations=template_recommendations,
+        caveats=list(tool_warnings),
         requires_approval=False,
     )

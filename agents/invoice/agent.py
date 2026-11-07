@@ -11,7 +11,7 @@ from typing import Any, Dict, Union
 from config.settings import settings
 from graph.state.agent_state import AgentState
 from graph.state.models import AgentResult
-from agents.invoice.mock_tools import get_overdue_invoices
+from agents.tool_source import get_currency_symbol, get_overdue_invoices
 from agents.invoice.prompts import (
     INVOICE_SYSTEM_PROMPT,
     INVOICE_USER_PROMPT_TEMPLATE,
@@ -42,9 +42,11 @@ def invoice_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
     if isinstance(state, dict):
         business_id = state.get("business_id", "")
         as_of_date = state.get("as_of_date")
+        today = state.get("today")
     else:
         business_id = getattr(state, "business_id", "")
         as_of_date = getattr(state, "as_of_date", None)
+        today = getattr(state, "today", None)
 
     # Empty business_id: return a limitation immediately, do not call the tool
     if not business_id or not str(business_id).strip():
@@ -54,14 +56,16 @@ def invoice_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
             metrics={},
             findings=["Validation error: business_id was not provided or is empty."],
             recommendations=["Please specify a valid business_id to inspect overdue invoices."],
+            caveats=["Missing business_id parameter."],
             requires_approval=False,
         )
 
-    # Step 1: Call finance tools (MOCK tools)
+    # Step 1: Call finance tools (via tool_source toggle)
     try:
         overdue_result = get_overdue_invoices(
             business_id=str(business_id).strip(),
             as_of_date=as_of_date,
+            today=today,
         )
     except Exception as tool_exc:
         logger.warning(
@@ -74,8 +78,13 @@ def invoice_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
             metrics={},
             findings=["Invoice calculation tool was unavailable or encountered an error."],
             recommendations=["Please verify your invoicing data connection or try again later."],
+            caveats=["Data unavailable or calculation error occurred."],
             requires_approval=False,
         )
+
+    tool_warnings = list(getattr(overdue_result, "warnings", []))
+    currency = getattr(overdue_result, "currency", "INR")
+    sym = get_currency_symbol(currency)
 
     # Step 2: Copy metrics straight from the tool outputs (NOT from AI)
     metrics: Dict[str, Any] = {
@@ -86,21 +95,23 @@ def invoice_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
         "ageing_bands": [band.model_dump() for band in overdue_result.ageing_bands],
         "invoices": [inv.model_dump() for inv in overdue_result.invoices],
         "calculation_version": overdue_result.calculation_version,
+        "currency": currency,
+        "warnings": list(tool_warnings),
     }
 
     # Step 3: Prepare template fallback built strictly from tool numbers
     template_summary = (
         f"As of {overdue_result.as_of_date}, there are {overdue_result.count} overdue invoices "
-        f"totaling ${overdue_result.total_amount:,.2f} across {len(overdue_result.ageing_bands)} ageing bands."
+        f"totaling {sym}{overdue_result.total_amount:,.2f} across {len(overdue_result.ageing_bands)} ageing bands."
     )
     template_findings = [
-        f"Total overdue receivables stand at ${overdue_result.total_amount:,.2f} across {overdue_result.count} invoices.",
-        f"Ageing distribution: {', '.join(f'Band {b.band}: ${b.total_amount:,.2f} ({b.count} invoices)' for b in overdue_result.ageing_bands)}.",
+        f"Total overdue receivables stand at {sym}{overdue_result.total_amount:,.2f} across {overdue_result.count} invoices.",
+        f"Ageing distribution: {', '.join(f'Band {b.band}: {sym}{b.total_amount:,.2f} ({b.count} invoices)' for b in overdue_result.ageing_bands)}.",
     ]
     if overdue_result.invoices:
         most_overdue = max(overdue_result.invoices, key=lambda inv: inv.days_overdue)
         template_findings.append(
-            f"Most critical overdue invoice: {most_overdue.invoice_id} ({most_overdue.days_overdue} days overdue, ${most_overdue.amount:,.2f})."
+            f"Most critical overdue invoice: {most_overdue.invoice_id} ({most_overdue.days_overdue} days overdue, {sym}{most_overdue.amount:,.2f})."
         )
         template_recommendations = [
             f"Consider sending a payment reminder for invoice {most_overdue.invoice_id}.",
@@ -125,13 +136,14 @@ def invoice_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
             )
 
             ageing_text = "\n".join(
-                f"- Band {b.band}: {b.count} invoices, ${b.total_amount:,.2f}"
+                f"- Band {b.band}: {b.count} invoices, {sym}{b.total_amount:,.2f}"
                 for b in overdue_result.ageing_bands
             )
             invoices_text = "\n".join(
-                f"- Invoice {inv.invoice_id}: Customer {inv.customer_id}, Due {inv.due_date}, Amount ${inv.amount:,.2f}, {inv.days_overdue} days overdue"
+                f"- Invoice {inv.invoice_id}: Customer {inv.customer_id}, Due {inv.due_date}, Amount {sym}{inv.amount:,.2f}, {inv.days_overdue} days overdue"
                 for inv in overdue_result.invoices
             )
+            warnings_text = "\n".join(f"- {w}" for w in tool_warnings) if tool_warnings else "None"
             user_prompt = INVOICE_USER_PROMPT_TEMPLATE.format(
                 business_id=overdue_result.business_id,
                 as_of_date=overdue_result.as_of_date,
@@ -140,6 +152,9 @@ def invoice_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
                 calculation_version=overdue_result.calculation_version,
                 ageing_bands_text=ageing_text,
                 invoices_text=invoices_text,
+                currency=currency,
+                currency_symbol=sym,
+                warnings_text=warnings_text,
             )
 
             completion = client.beta.chat.completions.parse(
@@ -158,6 +173,7 @@ def invoice_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
                     metrics=metrics,  # copied straight from tool output!
                     findings=explanation.findings,
                     recommendations=explanation.recommendations,
+                    caveats=list(tool_warnings),
                     requires_approval=False,
                 )
         except Exception as ai_exc:
@@ -174,5 +190,6 @@ def invoice_agent(state: Union[AgentState, Dict[str, Any]]) -> AgentResult:
         metrics=metrics,  # copied straight from tool output!
         findings=template_findings,
         recommendations=template_recommendations,
+        caveats=list(tool_warnings),
         requires_approval=False,
     )

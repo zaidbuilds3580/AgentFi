@@ -82,6 +82,14 @@ class OverdueInvoicesResult(BaseModel):
         default="v1.0.0-mock",
         description="Version identifier of the calculation algorithm used."
     )
+    currency: str = Field(
+        default="INR",
+        description="Base currency code for overdue invoice amounts."
+    )
+    warnings: List[str] = Field(
+        default_factory=list,
+        description="Data gaps or invoice exclusions affecting the figures."
+    )
 
     @field_validator("business_id")
     @classmethod

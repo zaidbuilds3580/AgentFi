@@ -26,6 +26,12 @@ from agents.expense.schemas import (
 )
 
 
+@pytest.fixture(autouse=True)
+def force_mock_finance_tools(monkeypatch):
+    """Force mock finance tools for existing mock-data tests."""
+    monkeypatch.setattr(settings, "USE_REAL_FINANCE_TOOLS", False)
+
+
 def test_mock_tools_return_fixed_sample_data_with_different_severities():
     """
     Verify mock tool returns the expected schema and 3 anomalies covering

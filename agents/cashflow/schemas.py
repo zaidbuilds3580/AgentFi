@@ -42,6 +42,14 @@ class FinancialSummary(BaseModel):
         default="v1.0.0-mock",
         description="Version identifier of the calculation algorithm used."
     )
+    currency: str = Field(
+        default="INR",
+        description="Base currency code for all financial amounts (e.g. 'INR', 'USD')."
+    )
+    warnings: List[str] = Field(
+        default_factory=list,
+        description="Data gaps or validation warnings affecting the figures."
+    )
 
     @field_validator("business_id")
     @classmethod
@@ -78,6 +86,14 @@ class CashFlowForecast(BaseModel):
     data_coverage: float = Field(
         ...,
         description="Data completeness/coverage ratio (e.g. 0.95 for 95% coverage)."
+    )
+    currency: str = Field(
+        default="INR",
+        description="Base currency code for all forecast amounts."
+    )
+    warnings: List[str] = Field(
+        default_factory=list,
+        description="Data gaps or forecast assumptions affecting the figures."
     )
 
     @field_validator("business_id")

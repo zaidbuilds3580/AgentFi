@@ -38,4 +38,6 @@ def get_overdue_invoices(business_id: str, as_of_date: Optional[str] = None,
                                  days_overdue=i.days_overdue)
                   for i in report.invoices],
         calculation_version=report.calculation_version,
+        currency=report.currency,
+        warnings=list(report.warnings),
     )

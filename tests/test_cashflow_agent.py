@@ -24,6 +24,12 @@ from agents.cashflow.schemas import (
 )
 
 
+@pytest.fixture(autouse=True)
+def force_mock_finance_tools(monkeypatch):
+    """Force mock finance tools for existing mock-data tests."""
+    monkeypatch.setattr(settings, "USE_REAL_FINANCE_TOOLS", False)
+
+
 def test_mock_tools_return_fixed_sample_data():
     """Verify mock tools return the exact expected schema and fixed sample numbers."""
     biz_id = "biz_mock_001"

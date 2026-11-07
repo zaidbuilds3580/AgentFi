@@ -80,6 +80,10 @@ class AgentResult(BaseModel):
         default_factory=list,
         description="Actionable advice suggested for the business owner."
     )
+    caveats: List[str] = Field(
+        default_factory=list,
+        description="Important limitations, data gaps, or tool warnings passed word-for-word."
+    )
     requires_approval: bool = Field(
         default=False,
         description="Flag indicating whether this result suggests an external action requiring human sign-off."

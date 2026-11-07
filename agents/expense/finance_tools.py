@@ -35,4 +35,6 @@ def get_expense_anomalies(business_id: str, start_date: Optional[str] = None,
                                   severity=a.severity, rule=a.rule, evidence_refs=a.evidence_refs)
                    for a in report.anomalies],
         calculation_version=report.calculation_version,
+        currency=report.currency,
+        warnings=list(report.warnings),
     )
