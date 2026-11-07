@@ -1,0 +1,7 @@
+transaction_date,transaction_type,amount,description,reference,currency
+2026-10-01,inflow,15000.00,Valid row 1,TXN1001,INR
+invalid-date,inflow,5000.00,Bad date,TXN1002,INR
+2026-10-03,unknown_type,5000.00,Bad type,TXN1003,INR
+2026-10-04,inflow,-500.00,Negative amount,TXN1004,INR
+2026-10-05,inflow,0.00,Zero amount,TXN1005,INR
+2026-10-06,outflow,3500.00,Valid row 2,TXN1006,INR

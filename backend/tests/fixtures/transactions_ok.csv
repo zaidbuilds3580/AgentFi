@@ -1,0 +1,5 @@
+transaction_date,transaction_type,amount,description,reference,currency
+2026-10-01,inflow,15000.00,Client retainership payment,TXN1001,INR
+05/10/2026,outflow,2500.50,Office stationery supplies,TXN1002,INR
+12-10-2026,cr,8000.00,Software consulting invoice settlement,TXN1003,INR
+2026-10-15,debit,1200.00,Team working lunch,TXN1004,INR
