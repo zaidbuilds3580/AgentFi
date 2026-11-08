@@ -14,18 +14,31 @@ Differences from the mock:
 """
 
 from datetime import date
-from typing import Optional
+from typing import Optional, Union
 
+from config.settings import settings
 from agents.expense.schemas import ExpenseAnomaliesResult, ExpenseAnomaly
 from finance_engine.tools import get_expense_anomalies as _engine_anomalies
 
 
+def _resolve_today(today: Optional[Union[date, str]]) -> date:
+    if today is None or today == "":
+        return settings.get_as_of_date()
+    if isinstance(today, date):
+        return today
+    try:
+        return date.fromisoformat(str(today).strip())
+    except ValueError:
+        return settings.get_as_of_date()
+
+
 def get_expense_anomalies(business_id: str, start_date: Optional[str] = None,
                           end_date: Optional[str] = None,
-                          today: Optional[date] = None) -> ExpenseAnomaliesResult:
+                          today: Optional[Union[date, str]] = None) -> ExpenseAnomaliesResult:
     if not business_id or not str(business_id).strip():
         raise ValueError("business_id must not be empty.")
-    report = _engine_anomalies(str(business_id).strip(), start_date=start_date, end_date=end_date, today=today)
+    ref_today = _resolve_today(today)
+    report = _engine_anomalies(str(business_id).strip(), start_date=start_date, end_date=end_date, today=ref_today)
     return ExpenseAnomaliesResult(
         business_id=report.business_id,
         start_date=report.period.start.isoformat(),

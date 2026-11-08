@@ -14,8 +14,9 @@ The optional `today` argument pins the reference date (tests, reproducible demos
 """
 
 from datetime import date
-from typing import Optional
+from typing import Optional, Union
 
+from config.settings import settings
 from agents.cashflow.schemas import CashFlowForecast, FinancialSummary
 from finance_engine.tools import get_cash_flow_forecast as _engine_forecast
 from finance_engine.tools import get_financial_summary as _engine_summary
@@ -27,9 +28,21 @@ def _require_id(business_id: str) -> str:
     return str(business_id).strip()
 
 
+def _resolve_today(today: Optional[Union[date, str]]) -> date:
+    if today is None or today == "":
+        return settings.get_as_of_date()
+    if isinstance(today, date):
+        return today
+    try:
+        return date.fromisoformat(str(today).strip())
+    except ValueError:
+        return settings.get_as_of_date()
+
+
 def get_financial_summary(business_id: str, period: str = "current_month",
-                          today: Optional[date] = None) -> FinancialSummary:
-    report = _engine_summary(_require_id(business_id), period=period or "current_month", today=today)
+                          today: Optional[Union[date, str]] = None) -> FinancialSummary:
+    ref_today = _resolve_today(today)
+    report = _engine_summary(_require_id(business_id), period=period or "current_month", today=ref_today)
     # The agent schema uses floats; Decimal -> float only here, at the boundary.
     return FinancialSummary(
         business_id=report.business_id,
@@ -46,8 +59,9 @@ def get_financial_summary(business_id: str, period: str = "current_month",
 
 
 def forecast_cash_flow(business_id: str, horizon_days: int = 30,
-                       today: Optional[date] = None) -> CashFlowForecast:
-    report = _engine_forecast(_require_id(business_id), horizon_days=horizon_days or 30, today=today)
+                       today: Optional[Union[date, str]] = None) -> CashFlowForecast:
+    ref_today = _resolve_today(today)
+    report = _engine_forecast(_require_id(business_id), horizon_days=horizon_days or 30, today=ref_today)
     return CashFlowForecast(
         business_id=report.business_id,
         horizon_days=report.horizon_days,

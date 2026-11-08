@@ -8,6 +8,7 @@ or calculating new figures.
 
 import logging
 import re
+from datetime import date
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 from config.settings import settings
@@ -42,13 +43,14 @@ def _extract_inputs(
 ) -> Tuple[
     str,
     ReportType,
+    date,
     Optional[Union[FinancialIntelligenceResult, AgentResult, Dict[str, Any]]],
     Optional[Union[AgentResult, Dict[str, Any]]],
     Optional[Union[AgentResult, Dict[str, Any]]],
     Optional[Union[AgentResult, Dict[str, Any]]],
 ]:
     """
-    Extracts business_id, report_type, intelligence_result, cashflow_result,
+    Extracts business_id, report_type, as_of_date, intelligence_result, cashflow_result,
     invoice_result, and expense_result from state dictionary, AgentState, or kwargs.
     """
     state_dict: Dict[str, Any] = {}
@@ -76,6 +78,18 @@ def _extract_inputs(
             report_type = ReportType.DAILY
     else:
         report_type = ReportType.DAILY
+
+    raw_date = kwargs.get("as_of_date") or kwargs.get("today") or state_dict.get("as_of_date") or state_dict.get("today")
+    if raw_date is not None and str(raw_date).strip():
+        if isinstance(raw_date, date):
+            as_of_date = raw_date
+        else:
+            try:
+                as_of_date = date.fromisoformat(str(raw_date).strip())
+            except ValueError:
+                as_of_date = settings.get_as_of_date()
+    else:
+        as_of_date = settings.get_as_of_date()
 
     intel_res = (
         kwargs.get("intelligence_result")
@@ -105,7 +119,7 @@ def _extract_inputs(
             elif name == "expense" and exp_res is None:
                 exp_res = res
 
-    return business_id, report_type, intel_res, cf_res, inv_res, exp_res
+    return business_id, report_type, as_of_date, intel_res, cf_res, inv_res, exp_res
 
 
 def _is_input_limitation(result: Optional[Union[AgentResult, Dict[str, Any]]]) -> bool:
@@ -229,10 +243,10 @@ def reporting_agent(
     - Never calculates new numbers.
     - Preserves specialist caveats and recommendations without modification.
     """
-    business_id, report_type, intel_res, cf_res, inv_res, exp_res = _extract_inputs(state, **kwargs)
+    business_id, report_type, as_of_date, intel_res, cf_res, inv_res, exp_res = _extract_inputs(state, **kwargs)
 
     report_type_val = report_type.value if hasattr(report_type, "value") else str(report_type)
-    title = f"{report_type_val.capitalize()} Financial Report"
+    title = f"{report_type_val.capitalize()} report - {as_of_date.day} {as_of_date.strftime('%B')} {as_of_date.year}"
 
     # Hard Rule 5: Empty business_id gives a limitation result
     if not business_id or not business_id.strip():

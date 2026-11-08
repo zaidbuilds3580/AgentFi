@@ -97,7 +97,7 @@ def test_daily_report_with_all_inputs(mock_all_inputs):
     assert isinstance(result, AgentResult)
     assert result.agent_name == "reporting"
     assert result.report_type == ReportType.DAILY
-    assert result.title == "Daily Financial Report"
+    assert result.title == "Daily report - 5 November 2026"
     assert result.missing_parts == []
     assert result.currency == "INR"
 
@@ -125,7 +125,7 @@ def test_monthly_report_with_all_inputs(mock_all_inputs):
 
     assert isinstance(result, ReportingResult)
     assert result.report_type == ReportType.MONTHLY
-    assert result.title == "Monthly Financial Report"
+    assert result.title == "Monthly report - 5 November 2026"
     assert result.missing_parts == []
     assert result.currency == "INR"
 
@@ -600,7 +600,7 @@ def test_state_dict_and_report_agent_alias(mock_all_inputs):
 
     assert isinstance(result, ReportingResult)
     assert result.report_type == ReportType.MONTHLY
-    assert result.title == "Monthly Financial Report"
+    assert result.title == "Monthly report - 5 November 2026"
     assert result["summary"] == result.summary
     assert result["metrics"] == result.metrics
 

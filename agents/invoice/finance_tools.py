@@ -15,17 +15,30 @@ Differences from the mock:
 """
 
 from datetime import date
-from typing import Optional
+from typing import Optional, Union
 
+from config.settings import settings
 from agents.invoice.schemas import AgeingBand, OverdueInvoice, OverdueInvoicesResult
 from finance_engine.tools import get_overdue_invoices as _engine_overdue
 
 
+def _resolve_today(today: Optional[Union[date, str]]) -> date:
+    if today is None or today == "":
+        return settings.get_as_of_date()
+    if isinstance(today, date):
+        return today
+    try:
+        return date.fromisoformat(str(today).strip())
+    except ValueError:
+        return settings.get_as_of_date()
+
+
 def get_overdue_invoices(business_id: str, as_of_date: Optional[str] = None,
-                         today: Optional[date] = None) -> OverdueInvoicesResult:
+                         today: Optional[Union[date, str]] = None) -> OverdueInvoicesResult:
     if not business_id or not str(business_id).strip():
         raise ValueError("business_id must not be empty.")
-    report = _engine_overdue(str(business_id).strip(), as_of_date=as_of_date, today=today)
+    ref_today = _resolve_today(today)
+    report = _engine_overdue(str(business_id).strip(), as_of_date=as_of_date, today=ref_today)
     return OverdueInvoicesResult(
         business_id=report.business_id,
         as_of_date=report.as_of.isoformat(),
