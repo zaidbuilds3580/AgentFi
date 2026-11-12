@@ -209,7 +209,7 @@ def test_fixture_environment_restores_settings(processed_root):
 # ============================================================================== #
 
 def _inr(x: float) -> str:
-    return f"₹{x:,.2f}"
+    return f"-₹{abs(x):,.2f}" if x < 0 else f"₹{x:,.2f}"
 
 
 def _numbers(obj):

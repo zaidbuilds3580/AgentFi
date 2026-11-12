@@ -451,7 +451,7 @@
     },
     "report": {
       "agent_name": "reporting",
-      "summary": "Ending cash balance is ₹5,398.50 with net cash flow of ₹-34,440.00. Operations show 2 overdue invoices total ₹50,300.00 and 1 expense anomalies were detected.",
+      "summary": "Ending cash balance is ₹5,398.50 with net cash flow of -₹34,440.00. Operations show 2 overdue invoices total ₹50,300.00 and 1 expense anomalies were detected.",
       "metrics": {
         "intelligence": {
           "cashflow": {
@@ -809,12 +809,12 @@
         },
         {
           "label": "Net Cash Flow",
-          "value": "₹-34,440.00",
+          "value": "-₹34,440.00",
           "source": "cashflow"
         },
         {
           "label": "Projected Cash Balance",
-          "value": "₹-82,322.90",
+          "value": "-₹82,322.90",
           "source": "cashflow"
         },
         {
@@ -877,7 +877,7 @@
       "currency": "INR"
     },
     "chat_response": {
-      "summary": "Ending cash balance is ₹5,398.50 with net cash flow of ₹-34,440.00. Operations show 2 overdue invoices total ₹50,300.00 and 1 expense anomalies were detected.",
+      "summary": "Ending cash balance is ₹5,398.50 with net cash flow of -₹34,440.00. Operations show 2 overdue invoices total ₹50,300.00 and 1 expense anomalies were detected.",
       "evidence": [
         {
           "label": "Cash Balance",
@@ -886,12 +886,12 @@
         },
         {
           "label": "Net Cash Flow",
-          "value": "₹-34,440.00",
+          "value": "-₹34,440.00",
           "source": "cashflow"
         },
         {
           "label": "Projected Cash Balance",
-          "value": "₹-82,322.90",
+          "value": "-₹82,322.90",
           "source": "cashflow"
         },
         {
@@ -1583,7 +1583,7 @@
     },
     "report": {
       "agent_name": "reporting",
-      "summary": "Monthly cash balance concluded at ₹39,838.50 with a net cash flow of ₹-60,161.50 (inflows ₹101,000.00, outflows ₹161,161.50). The 30-day projected cash balance stands at ₹-82,322.90 under a high liquidity risk assessment. Outstanding receivables include 2 overdue invoices totaling ₹50,300.00 requiring collection attention. A total of 4 anomalous expense transactions were detected during the period.",
+      "summary": "Monthly cash balance concluded at ₹39,838.50 with a net cash flow of -₹60,161.50 (inflows ₹101,000.00, outflows ₹161,161.50). The 30-day projected cash balance stands at -₹82,322.90 under a high liquidity risk assessment. Outstanding receivables include 2 overdue invoices totaling ₹50,300.00 requiring collection attention. A total of 4 anomalous expense transactions were detected during the period.",
       "metrics": {
         "intelligence": {
           "cashflow": {
@@ -2094,12 +2094,12 @@
         },
         {
           "label": "Net Cash Flow",
-          "value": "₹-60,161.50",
+          "value": "-₹60,161.50",
           "source": "cashflow"
         },
         {
           "label": "Projected Cash Balance",
-          "value": "₹-82,322.90",
+          "value": "-₹82,322.90",
           "source": "cashflow"
         },
         {
@@ -2162,7 +2162,7 @@
       "currency": "INR"
     },
     "chat_response": {
-      "summary": "Monthly cash balance concluded at ₹39,838.50 with a net cash flow of ₹-60,161.50 (inflows ₹101,000.00, outflows ₹161,161.50). The 30-day projected cash balance stands at ₹-82,322.90 under a high liquidity risk assessment. Outstanding receivables include 2 overdue invoices totaling ₹50,300.00 requiring collection attention. A total of 4 anomalous expense transactions were detected during the period.",
+      "summary": "Monthly cash balance concluded at ₹39,838.50 with a net cash flow of -₹60,161.50 (inflows ₹101,000.00, outflows ₹161,161.50). The 30-day projected cash balance stands at -₹82,322.90 under a high liquidity risk assessment. Outstanding receivables include 2 overdue invoices totaling ₹50,300.00 requiring collection attention. A total of 4 anomalous expense transactions were detected during the period.",
       "evidence": [
         {
           "label": "Cash Balance",
@@ -2171,12 +2171,12 @@
         },
         {
           "label": "Net Cash Flow",
-          "value": "₹-60,161.50",
+          "value": "-₹60,161.50",
           "source": "cashflow"
         },
         {
           "label": "Projected Cash Balance",
-          "value": "₹-82,322.90",
+          "value": "-₹82,322.90",
           "source": "cashflow"
         },
         {

@@ -395,7 +395,7 @@
     },
     "report": {
       "agent_name": "reporting",
-      "summary": "Ending cash balance is ₹23,764.00 with net cash flow of ₹-12,236.00. Operations show 3 overdue invoices total ₹278,600.00 and 0 expense anomalies were detected.",
+      "summary": "Ending cash balance is ₹23,764.00 with net cash flow of -₹12,236.00. Operations show 3 overdue invoices total ₹278,600.00 and 0 expense anomalies were detected.",
       "metrics": {
         "intelligence": {
           "cashflow": {
@@ -703,7 +703,7 @@
         },
         {
           "label": "Net Cash Flow",
-          "value": "₹-12,236.00",
+          "value": "-₹12,236.00",
           "source": "cashflow"
         },
         {
@@ -771,7 +771,7 @@
       "currency": "INR"
     },
     "chat_response": {
-      "summary": "Ending cash balance is ₹23,764.00 with net cash flow of ₹-12,236.00. Operations show 3 overdue invoices total ₹278,600.00 and 0 expense anomalies were detected.",
+      "summary": "Ending cash balance is ₹23,764.00 with net cash flow of -₹12,236.00. Operations show 3 overdue invoices total ₹278,600.00 and 0 expense anomalies were detected.",
       "evidence": [
         {
           "label": "Cash Balance",
@@ -780,7 +780,7 @@
         },
         {
           "label": "Net Cash Flow",
-          "value": "₹-12,236.00",
+          "value": "-₹12,236.00",
           "source": "cashflow"
         },
         {
@@ -1254,7 +1254,7 @@
     },
     "report": {
       "agent_name": "reporting",
-      "summary": "Monthly cash balance concluded at ₹36,000.00 with a net cash flow of ₹-12,000.00 (inflows ₹236,000.00, outflows ₹248,000.00). The 30-day projected cash balance stands at ₹47,735.33 under a high liquidity risk assessment. Outstanding receivables include 3 overdue invoices totaling ₹278,600.00 requiring collection attention. A total of 0 anomalous expense transactions were detected during the period.",
+      "summary": "Monthly cash balance concluded at ₹36,000.00 with a net cash flow of -₹12,000.00 (inflows ₹236,000.00, outflows ₹248,000.00). The 30-day projected cash balance stands at ₹47,735.33 under a high liquidity risk assessment. Outstanding receivables include 3 overdue invoices totaling ₹278,600.00 requiring collection attention. A total of 0 anomalous expense transactions were detected during the period.",
       "metrics": {
         "intelligence": {
           "cashflow": {
@@ -1562,7 +1562,7 @@
         },
         {
           "label": "Net Cash Flow",
-          "value": "₹-12,000.00",
+          "value": "-₹12,000.00",
           "source": "cashflow"
         },
         {
@@ -1630,7 +1630,7 @@
       "currency": "INR"
     },
     "chat_response": {
-      "summary": "Monthly cash balance concluded at ₹36,000.00 with a net cash flow of ₹-12,000.00 (inflows ₹236,000.00, outflows ₹248,000.00). The 30-day projected cash balance stands at ₹47,735.33 under a high liquidity risk assessment. Outstanding receivables include 3 overdue invoices totaling ₹278,600.00 requiring collection attention. A total of 0 anomalous expense transactions were detected during the period.",
+      "summary": "Monthly cash balance concluded at ₹36,000.00 with a net cash flow of -₹12,000.00 (inflows ₹236,000.00, outflows ₹248,000.00). The 30-day projected cash balance stands at ₹47,735.33 under a high liquidity risk assessment. Outstanding receivables include 3 overdue invoices totaling ₹278,600.00 requiring collection attention. A total of 0 anomalous expense transactions were detected during the period.",
       "evidence": [
         {
           "label": "Cash Balance",
@@ -1639,7 +1639,7 @@
         },
         {
           "label": "Net Cash Flow",
-          "value": "₹-12,000.00",
+          "value": "-₹12,000.00",
           "source": "cashflow"
         },
         {

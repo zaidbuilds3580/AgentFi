@@ -37,6 +37,13 @@ from agents.reporting.schemas import (
 logger = logging.getLogger(__name__)
 
 
+def _money(value):
+    """Format money as -₹1,234.00 (minus sign before the rupee symbol)."""
+    rounded = round(value, 2)
+    sign = "-" if rounded < 0 else ""
+    return f"{sign}₹{abs(rounded):,.2f}"
+
+
 def _extract_inputs(
     state: Optional[Union[AgentState, Dict[str, Any]]] = None,
     **kwargs: Any,
@@ -145,7 +152,7 @@ def _build_template_summary(
         if "cash_balance" in combined_metrics and "net_cash_flow" in combined_metrics:
             cb = combined_metrics["cash_balance"]
             ncf = combined_metrics["net_cash_flow"]
-            sentences.append(f"Ending cash balance is ₹{cb:,.2f} with net cash flow of ₹{ncf:,.2f}.")
+            sentences.append(f"Ending cash balance is {_money(cb)} with net cash flow of {_money(ncf)}.")
         elif intel_res:
             s = getattr(intel_res, "overall_summary", "") if not isinstance(intel_res, dict) else intel_res.get("overall_summary", "")
             if s:
@@ -155,7 +162,7 @@ def _build_template_summary(
         if "total_amount" in combined_metrics and "count" in combined_metrics:
             tot = combined_metrics["total_amount"]
             cnt = combined_metrics["count"]
-            ops_parts.append(f"{cnt} overdue invoices total ₹{tot:,.2f}")
+            ops_parts.append("no overdue invoices" if cnt == 0 else f"{cnt} overdue invoice{'s' if cnt != 1 else ''} total {_money(tot)}")
         if "anomalies_count" in combined_metrics:
             acnt = combined_metrics["anomalies_count"]
             ops_parts.append(f"{acnt} expense anomalies were detected")
@@ -179,11 +186,11 @@ def _build_template_summary(
             out = combined_metrics.get("outflows", 0.0)
             if "inflows" in combined_metrics and "outflows" in combined_metrics:
                 sentences.append(
-                    f"Monthly cash balance concluded at ₹{cb:,.2f} with a net cash flow of ₹{ncf:,.2f} (inflows ₹{inf:,.2f}, outflows ₹{out:,.2f})."
+                    f"Monthly cash balance concluded at {_money(cb)} with a net cash flow of {_money(ncf)} (inflows {_money(inf)}, outflows {_money(out)})."
                 )
             else:
                 sentences.append(
-                    f"Monthly cash balance concluded at ₹{cb:,.2f} with a net cash flow of ₹{ncf:,.2f}."
+                    f"Monthly cash balance concluded at {_money(cb)} with a net cash flow of {_money(ncf)}."
                 )
 
         if "projected_balance" in combined_metrics and "horizon_days" in combined_metrics:
@@ -191,14 +198,14 @@ def _build_template_summary(
             hdays = combined_metrics["horizon_days"]
             risk = combined_metrics.get("risk_level", "low")
             sentences.append(
-                f"The {hdays}-day projected cash balance stands at ₹{pb:,.2f} under a {risk} liquidity risk assessment."
+                f"The {hdays}-day projected cash balance stands at {_money(pb)} under a {risk} liquidity risk assessment."
             )
 
         if "total_amount" in combined_metrics and "count" in combined_metrics:
             tot = combined_metrics["total_amount"]
             cnt = combined_metrics["count"]
             sentences.append(
-                f"Outstanding receivables include {cnt} overdue invoices totaling ₹{tot:,.2f} requiring collection attention."
+                ("There are no overdue invoices." if cnt == 0 else f"Outstanding receivables include {cnt} overdue invoice{'s' if cnt != 1 else ''} totaling {_money(tot)} requiring collection attention.")
             )
 
         if "anomalies_count" in combined_metrics:
@@ -341,13 +348,13 @@ def reporting_agent(
     if "cashflow" not in missing_parts or ("cash_balance" in combined_metrics and cf_res is not None):
         if "cash_balance" in combined_metrics:
             cb = combined_metrics["cash_balance"]
-            evidence.append(ReportEvidenceItem(label="Cash Balance", value=f"₹{cb:,.2f}", source="cashflow"))
+            evidence.append(ReportEvidenceItem(label="Cash Balance", value=f"{_money(cb)}", source="cashflow"))
         if "net_cash_flow" in combined_metrics:
             ncf = combined_metrics["net_cash_flow"]
-            evidence.append(ReportEvidenceItem(label="Net Cash Flow", value=f"₹{ncf:,.2f}", source="cashflow"))
+            evidence.append(ReportEvidenceItem(label="Net Cash Flow", value=f"{_money(ncf)}", source="cashflow"))
         if "projected_balance" in combined_metrics:
             pb = combined_metrics["projected_balance"]
-            evidence.append(ReportEvidenceItem(label="Projected Cash Balance", value=f"₹{pb:,.2f}", source="cashflow"))
+            evidence.append(ReportEvidenceItem(label="Projected Cash Balance", value=f"{_money(pb)}", source="cashflow"))
         if "risk_level" in combined_metrics:
             rlevel = str(combined_metrics["risk_level"]).title()
             evidence.append(ReportEvidenceItem(label="Liquidity Risk Level", value=rlevel, source="cashflow"))
@@ -356,7 +363,7 @@ def reporting_agent(
     if "invoice" not in missing_parts or ("total_amount" in combined_metrics and inv_res is not None):
         if "total_amount" in combined_metrics:
             tot = combined_metrics["total_amount"]
-            evidence.append(ReportEvidenceItem(label="Overdue Invoices Total", value=f"₹{tot:,.2f}", source="invoice"))
+            evidence.append(ReportEvidenceItem(label="Overdue Invoices Total", value=f"{_money(tot)}", source="invoice"))
         if "count" in combined_metrics:
             cnt = str(combined_metrics["count"])
             evidence.append(ReportEvidenceItem(label="Overdue Invoices Count", value=cnt, source="invoice"))
