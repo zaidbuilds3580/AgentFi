@@ -16,7 +16,8 @@ Supported labels (case-insensitive):
     ytd | fytd | current_fy | this_fy       fiscal-year-to-date
     last_fy | previous_fy                   previous full fiscal year
     fy2026 | fy2026-27                      fiscal year starting in 2026
-    2026-10                                 calendar month
+    2026-10 | october_2026 | oct-2026       calendar month
+    october | oct                           most recent October that has started (this year or last)
     2026-10-01..2026-10-31                  custom range (also accepts ':' or ' to ')
 
 Fiscal quarters follow `Business.fiscal_year_start_month` (default 4 = April, Indian FY):
@@ -59,8 +60,8 @@ class Period(BaseModel):
         return f"{self.label} ({self.start.isoformat()} to {self.end.isoformat()})"
 
 
-class PeriodError(ValueError):
-    """Raised when a period label cannot be understood."""
+# PeriodError lives in finance_engine.errors (an InvalidInputError, so also a ValueError)
+from finance_engine.errors import PeriodError  # noqa: E402  (re-exported for existing imports)
 
 
 # ----------------------------------------------------------------------------- #
@@ -107,6 +108,11 @@ _MONTH_RE = re.compile(r"^(\d{4})-(\d{2})$")
 _LAST_N_RE = re.compile(r"^(?:last|past)_?(\d{1,4})_?days?$")
 _FY_RE = re.compile(r"^fy_?(\d{4})(?:-(\d{2,4}))?$")
 _Q_RE = re.compile(r"^q([1-4])$")
+_MONTH_NAMES = {name: i for i, names in enumerate(
+    [("jan", "january"), ("feb", "february"), ("mar", "march"), ("apr", "april"), ("may",), ("jun", "june"),
+     ("jul", "july"), ("aug", "august"), ("sep", "sept", "september"), ("oct", "october"),
+     ("nov", "november"), ("dec", "december")], start=1) for name in names}
+_MONTH_NAME_RE = re.compile(r"^(?:this_|last_)?([a-z]+)(?:[_\-/]?(\d{4}))?$")
 
 
 def resolve_period(label: str, today: date, fy_start_month: int = 4) -> Period:
@@ -162,6 +168,18 @@ def resolve_period(label: str, today: date, fy_start_month: int = 4) -> Period:
             start = date(int(m.group(1)), int(m.group(2)), 1)
         except ValueError as exc:
             raise PeriodError(f"invalid month '{raw}'.") from exc
+        return _clip_to_today(key, start, month_end(start), today)
+
+    m = _MONTH_NAME_RE.match(key)
+    if m and m.group(1) in _MONTH_NAMES:
+        month = _MONTH_NAMES[m.group(1)]
+        if m.group(2):
+            year = int(m.group(2))
+        else:  # most recent occurrence that has started
+            year = today.year if month <= today.month else today.year - 1
+        start = date(year, month, 1)
+        if start > today:
+            raise PeriodError(f"{raw} has not started yet.")
         return _clip_to_today(key, start, month_end(start), today)
 
     m = _RANGE_RE.match(raw.lower())
