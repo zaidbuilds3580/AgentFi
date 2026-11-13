@@ -136,3 +136,50 @@ class ExpenseRead(BaseReadSchema):
     created_at: datetime
     updated_at: datetime
 
+
+class InvoiceListItemRead(InvoiceRead):
+    """
+    Enriched Invoice DTO for table views including joined customer name and computed outstanding balance.
+    """
+    customer_name: Optional[str] = None
+    outstanding_amount: Decimal = Decimal("0.00")
+
+
+class ExpenseListItemRead(ExpenseRead):
+    """
+    Enriched Expense DTO for table views including joined vendor name.
+    """
+    vendor_name: Optional[str] = None
+
+
+class AccountLookupRead(BaseReadSchema):
+    id: UUID
+    name: str
+    account_type: str
+    currency: str
+    current_balance: Decimal
+    is_active: bool
+
+
+class CustomerLookupRead(BaseReadSchema):
+    id: UUID
+    name: str
+
+
+class VendorLookupRead(BaseReadSchema):
+    id: UUID
+    name: str
+
+
+class DataRangeSummary(BaseModel):
+    min_date: Optional[date] = None
+    max_date: Optional[date] = None
+    count: int = 0
+
+
+class DataRangeResponse(BaseModel):
+    transactions: DataRangeSummary
+    invoices: DataRangeSummary
+    expenses: DataRangeSummary
+
+

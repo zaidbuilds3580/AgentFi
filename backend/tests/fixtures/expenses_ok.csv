@@ -1,0 +1,4 @@
+expense_date,category,amount,vendor_name,description,payment_method,currency
+2026-10-02,Cloud Hosting,6500.00,AWS Cloud,Server compute,card,INR
+06/10/2026,Office Supplies,1200.00,Stationery Hub,Printer paper,cash,INR
+11-10-2026,Internet,3500.00,Airtel Broadband,Fiber internet,upi,INR

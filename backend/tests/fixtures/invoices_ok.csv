@@ -1,0 +1,4 @@
+invoice_number,customer_name,invoice_date,due_date,amount_total,amount_paid,status,currency
+INV-2026-001,Alpha Retail,2026-10-01,2026-10-20,50000.00,10000.00,partially_paid,INR
+INV-2026-002,Beta Solutions,05/10/2026,25/10/2026,25000.00,25000.00,paid,INR
+INV-2026-003,Gamma Logistics,10-10-2026,30-10-2026,18000.00,0.00,sent,INR

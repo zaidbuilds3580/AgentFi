@@ -1,0 +1,2999 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AgentFi API",
+    "description": "Multi-agent finance operations assistant for SMEs - Backend Service",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Application Health Check",
+        "description": "Returns application status and current environment.",
+        "operationId": "check_health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Check Health Api Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health/db": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Database Connectivity Check",
+        "description": "Executes a lightweight ping (SELECT 1) against the Supabase PostgreSQL database.\nCatches connection failures and returns a clean 503 without exposing secrets.",
+        "operationId": "check_database_health_api_health_db_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Check Database Health Api Health Db Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Register new SME business tenant & owner user",
+        "description": "Atomically creates a new business tenant and its initial 'owner' user.\nEnforces minimum 8-character password and lower(email) uniqueness.",
+        "operationId": "register_api_auth_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPublic"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Login user & issue signed JWT",
+        "description": "Verifies user credentials against the database, updates last_login_at,\nand returns a signed multi-tenant JWT access token.",
+        "operationId": "login_api_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Get current user claims & profile from JWT",
+        "description": "Validates Bearer token and returns authenticated user claims, full name,\nemail, and business tenant name.",
+        "operationId": "get_me_api_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Me Api Auth Me Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/imports": {
+      "post": {
+        "tags": [
+          "Imports"
+        ],
+        "summary": "Upload and ingest CSV data (transactions, invoices, or expenses)",
+        "operationId": "upload_import_api_imports_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_import_api_imports_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Imports"
+        ],
+        "summary": "List historical import batches for caller's business",
+        "operationId": "list_imports_api_imports_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportBatchListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/businesses/{business_id}/upload": {
+      "post": {
+        "tags": [
+          "Imports"
+        ],
+        "summary": "Upload CSV data (alias endpoint with explicit business_id verification)",
+        "operationId": "upload_import_alias_api_businesses__business_id__upload_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "business_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Business Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_import_alias_api_businesses__business_id__upload_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/imports/templates/{import_type}": {
+      "get": {
+        "tags": [
+          "Imports"
+        ],
+        "summary": "Get CSV template specification or download blank CSV template",
+        "operationId": "get_template_api_imports_templates__import_type__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "import_type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Import Type"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Set format=csv to download empty template file",
+              "title": "Format"
+            },
+            "description": "Set format=csv to download empty template file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Get Template Api Imports Templates  Import Type  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/imports/{batch_id}": {
+      "get": {
+        "tags": [
+          "Imports"
+        ],
+        "summary": "Get detailed status and summary of an import batch",
+        "operationId": "get_import_batch_api_imports__batch_id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "batch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Batch Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/imports/{batch_id}/errors": {
+      "get": {
+        "tags": [
+          "Imports"
+        ],
+        "summary": "Get paginated list of row-level errors for an import batch",
+        "operationId": "get_import_errors_api_imports__batch_id__errors_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "batch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Batch Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RowErrorRead"
+                  },
+                  "title": "Response Get Import Errors Api Imports  Batch Id  Errors Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/transactions": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "List transactions with filtering, sorting, pagination, and optional totals",
+        "operationId": "get_transactions_endpoint_api_transactions_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "date_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter transactions on or after this date (YYYY-MM-DD)",
+              "title": "Date From"
+            },
+            "description": "Filter transactions on or after this date (YYYY-MM-DD)"
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter transactions on or before this date (YYYY-MM-DD)",
+              "title": "Date To"
+            },
+            "description": "Filter transactions on or before this date (YYYY-MM-DD)"
+          },
+          {
+            "name": "transaction_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by transaction type: 'inflow' or 'outflow'",
+              "title": "Transaction Type"
+            },
+            "description": "Filter by transaction type: 'inflow' or 'outflow'"
+          },
+          {
+            "name": "account_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by financial account UUID",
+              "title": "Account Id"
+            },
+            "description": "Filter by financial account UUID"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by category (repeatable)",
+              "title": "Category"
+            },
+            "description": "Filter by category (repeatable)"
+          },
+          {
+            "name": "counterparty",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by exact counterparty name (case-insensitive)",
+              "title": "Counterparty"
+            },
+            "description": "Filter by exact counterparty name (case-insensitive)"
+          },
+          {
+            "name": "min_amount",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter transactions with amount >= min_amount",
+              "title": "Min Amount"
+            },
+            "description": "Filter transactions with amount >= min_amount"
+          },
+          {
+            "name": "max_amount",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter transactions with amount <= max_amount",
+              "title": "Max Amount"
+            },
+            "description": "Filter transactions with amount <= max_amount"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Substring search in description, counterparty, and reference",
+              "title": "Q"
+            },
+            "description": "Substring search in description, counterparty, and reference"
+          },
+          {
+            "name": "source_dataset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by origin dataset / batch identifier",
+              "title": "Source Dataset"
+            },
+            "description": "Filter by origin dataset / batch identifier"
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Column to sort by (transaction_date, amount, created_at, category)",
+              "default": "transaction_date",
+              "title": "Sort By"
+            },
+            "description": "Column to sort by (transaction_date, amount, created_at, category)"
+          },
+          {
+            "name": "sort_order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort direction ('asc' or 'desc')",
+              "default": "desc",
+              "title": "Sort Order"
+            },
+            "description": "Sort direction ('asc' or 'desc')"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Items per page (1..200)",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Items per page (1..200)"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Page offset (>= 0)",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "Page offset (>= 0)"
+          },
+          {
+            "name": "include_totals",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Whether to include inflow_total, outflow_total, and net in response",
+              "default": false,
+              "title": "Include Totals"
+            },
+            "description": "Whether to include inflow_total, outflow_total, and net in response"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionPage_TransactionRead_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/transactions/{id}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Get single transaction detail by UUID",
+        "operationId": "get_transaction_detail_endpoint_api_transactions__id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invoices": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "List invoices with customer enrichment, status filters, overdue checks, and sorting",
+        "operationId": "get_invoices_endpoint_api_invoices_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by status (e.g. draft, sent, paid, overdue, void)",
+              "title": "Status"
+            },
+            "description": "Filter by status (e.g. draft, sent, paid, overdue, void)"
+          },
+          {
+            "name": "customer_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by customer UUID",
+              "title": "Customer Id"
+            },
+            "description": "Filter by customer UUID"
+          },
+          {
+            "name": "invoice_date_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Invoices issued on or after (YYYY-MM-DD)",
+              "title": "Invoice Date From"
+            },
+            "description": "Invoices issued on or after (YYYY-MM-DD)"
+          },
+          {
+            "name": "invoice_date_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Invoices issued on or before (YYYY-MM-DD)",
+              "title": "Invoice Date To"
+            },
+            "description": "Invoices issued on or before (YYYY-MM-DD)"
+          },
+          {
+            "name": "due_date_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Invoices due on or after (YYYY-MM-DD)",
+              "title": "Due Date From"
+            },
+            "description": "Invoices due on or after (YYYY-MM-DD)"
+          },
+          {
+            "name": "due_date_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Invoices due on or before (YYYY-MM-DD)",
+              "title": "Due Date To"
+            },
+            "description": "Invoices due on or before (YYYY-MM-DD)"
+          },
+          {
+            "name": "min_amount",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter invoices with amount_total >= min_amount",
+              "title": "Min Amount"
+            },
+            "description": "Filter invoices with amount_total >= min_amount"
+          },
+          {
+            "name": "max_amount",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter invoices with amount_total <= max_amount",
+              "title": "Max Amount"
+            },
+            "description": "Filter invoices with amount_total <= max_amount"
+          },
+          {
+            "name": "overdue",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter invoices that are overdue relative to business timezone",
+              "title": "Overdue"
+            },
+            "description": "Filter invoices that are overdue relative to business timezone"
+          },
+          {
+            "name": "unpaid",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter invoices with amount_paid < amount_total and not void/paid",
+              "title": "Unpaid"
+            },
+            "description": "Filter invoices with amount_paid < amount_total and not void/paid"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Substring search on invoice_number and customer name",
+              "title": "Q"
+            },
+            "description": "Substring search on invoice_number and customer name"
+          },
+          {
+            "name": "source_dataset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by provenance dataset",
+              "title": "Source Dataset"
+            },
+            "description": "Filter by provenance dataset"
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort column (due_date, invoice_date, amount_total, created_at, invoice_number)",
+              "default": "due_date",
+              "title": "Sort By"
+            },
+            "description": "Sort column (due_date, invoice_date, amount_total, created_at, invoice_number)"
+          },
+          {
+            "name": "sort_order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort direction ('asc' or 'desc')",
+              "default": "asc",
+              "title": "Sort Order"
+            },
+            "description": "Sort direction ('asc' or 'desc')"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Items per page (1..200)",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Items per page (1..200)"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Page offset (>= 0)",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "Page offset (>= 0)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_InvoiceListItemRead_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invoices/{id}": {
+      "get": {
+        "tags": [
+          "Invoices"
+        ],
+        "summary": "Get single invoice detail by UUID",
+        "operationId": "get_invoice_detail_endpoint_api_invoices__id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceListItemRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/expenses": {
+      "get": {
+        "tags": [
+          "Expenses"
+        ],
+        "summary": "List expenses with vendor enrichment, category/method filters, and optional totals",
+        "operationId": "get_expenses_endpoint_api_expenses_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "date_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Expenses on or after this date (YYYY-MM-DD)",
+              "title": "Date From"
+            },
+            "description": "Expenses on or after this date (YYYY-MM-DD)"
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Expenses on or before this date (YYYY-MM-DD)",
+              "title": "Date To"
+            },
+            "description": "Expenses on or before this date (YYYY-MM-DD)"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by category (repeatable)",
+              "title": "Category"
+            },
+            "description": "Filter by category (repeatable)"
+          },
+          {
+            "name": "vendor_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by vendor UUID",
+              "title": "Vendor Id"
+            },
+            "description": "Filter by vendor UUID"
+          },
+          {
+            "name": "account_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by financial account UUID",
+              "title": "Account Id"
+            },
+            "description": "Filter by financial account UUID"
+          },
+          {
+            "name": "payment_method",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by payment method (repeatable)",
+              "title": "Payment Method"
+            },
+            "description": "Filter by payment method (repeatable)"
+          },
+          {
+            "name": "is_recurring",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter recurring vs one-off expenses",
+              "title": "Is Recurring"
+            },
+            "description": "Filter recurring vs one-off expenses"
+          },
+          {
+            "name": "min_amount",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter expenses with amount >= min_amount",
+              "title": "Min Amount"
+            },
+            "description": "Filter expenses with amount >= min_amount"
+          },
+          {
+            "name": "max_amount",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter expenses with amount <= max_amount",
+              "title": "Max Amount"
+            },
+            "description": "Filter expenses with amount <= max_amount"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Substring search on description, category, and vendor name",
+              "title": "Q"
+            },
+            "description": "Substring search on description, category, and vendor name"
+          },
+          {
+            "name": "source_dataset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by provenance dataset",
+              "title": "Source Dataset"
+            },
+            "description": "Filter by provenance dataset"
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort column (expense_date, amount, category, created_at)",
+              "default": "expense_date",
+              "title": "Sort By"
+            },
+            "description": "Sort column (expense_date, amount, category, created_at)"
+          },
+          {
+            "name": "sort_order",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort direction ('asc' or 'desc')",
+              "default": "desc",
+              "title": "Sort Order"
+            },
+            "description": "Sort direction ('asc' or 'desc')"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Items per page (1..200)",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Items per page (1..200)"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Page offset (>= 0)",
+              "default": 0,
+              "title": "Offset"
+            },
+            "description": "Page offset (>= 0)"
+          },
+          {
+            "name": "include_totals",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Whether to include total_amount and count in response envelope",
+              "default": false,
+              "title": "Include Totals"
+            },
+            "description": "Whether to include total_amount and count in response envelope"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpensePage_ExpenseListItemRead_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/expenses/{id}": {
+      "get": {
+        "tags": [
+          "Expenses"
+        ],
+        "summary": "Get single expense detail by UUID",
+        "operationId": "get_expense_detail_endpoint_api_expenses__id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseListItemRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/accounts": {
+      "get": {
+        "tags": [
+          "Lookups"
+        ],
+        "summary": "List active financial accounts for the business",
+        "operationId": "get_accounts_endpoint_api_accounts_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AccountLookupRead"
+                  },
+                  "type": "array",
+                  "title": "Response Get Accounts Endpoint Api Accounts Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/customers": {
+      "get": {
+        "tags": [
+          "Lookups"
+        ],
+        "summary": "List customers for dropdown selection with optional search",
+        "operationId": "get_customers_endpoint_api_customers_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Substring search on customer name",
+              "title": "Q"
+            },
+            "description": "Substring search on customer name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomerLookupRead"
+                  },
+                  "title": "Response Get Customers Endpoint Api Customers Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/vendors": {
+      "get": {
+        "tags": [
+          "Lookups"
+        ],
+        "summary": "List vendors for dropdown selection with optional search",
+        "operationId": "get_vendors_endpoint_api_vendors_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Substring search on vendor name",
+              "title": "Q"
+            },
+            "description": "Substring search on vendor name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VendorLookupRead"
+                  },
+                  "title": "Response Get Vendors Endpoint Api Vendors Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "tags": [
+          "Lookups"
+        ],
+        "summary": "List distinct categories populated for transactions or expenses",
+        "operationId": "get_categories_endpoint_api_categories_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Entity kind: 'transaction' or 'expense'",
+              "title": "Kind"
+            },
+            "description": "Entity kind: 'transaction' or 'expense'"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Response Get Categories Endpoint Api Categories Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/meta/data-range": {
+      "get": {
+        "tags": [
+          "Lookups"
+        ],
+        "summary": "Get min date, max date, and count across transactions, invoices, and expenses",
+        "operationId": "get_data_range_endpoint_api_meta_data_range_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataRangeResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Root index",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccountLookupRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "account_type": {
+            "type": "string",
+            "title": "Account Type"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency"
+          },
+          "current_balance": {
+            "type": "string",
+            "title": "Current Balance"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "account_type",
+          "currency",
+          "current_balance",
+          "is_active"
+        ],
+        "title": "AccountLookupRead"
+      },
+      "Body_upload_import_alias_api_businesses__business_id__upload_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          },
+          "import_type": {
+            "type": "string",
+            "title": "Import Type"
+          },
+          "source_dataset": {
+            "type": "string",
+            "title": "Source Dataset",
+            "default": "csv_upload"
+          },
+          "on_error": {
+            "type": "string",
+            "title": "On Error",
+            "default": "skip"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file",
+          "import_type"
+        ],
+        "title": "Body_upload_import_alias_api_businesses__business_id__upload_post"
+      },
+      "Body_upload_import_api_imports_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File"
+          },
+          "import_type": {
+            "type": "string",
+            "title": "Import Type"
+          },
+          "source_dataset": {
+            "type": "string",
+            "title": "Source Dataset",
+            "default": "csv_upload"
+          },
+          "on_error": {
+            "type": "string",
+            "title": "On Error",
+            "default": "skip"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file",
+          "import_type"
+        ],
+        "title": "Body_upload_import_api_imports_post"
+      },
+      "CustomerLookupRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "CustomerLookupRead"
+      },
+      "DataRangeResponse": {
+        "properties": {
+          "transactions": {
+            "$ref": "#/components/schemas/DataRangeSummary"
+          },
+          "invoices": {
+            "$ref": "#/components/schemas/DataRangeSummary"
+          },
+          "expenses": {
+            "$ref": "#/components/schemas/DataRangeSummary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "transactions",
+          "invoices",
+          "expenses"
+        ],
+        "title": "DataRangeResponse"
+      },
+      "DataRangeSummary": {
+        "properties": {
+          "min_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Date"
+          },
+          "max_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Date"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "DataRangeSummary"
+      },
+      "ExpenseListItemRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "business_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Business Id"
+          },
+          "vendor_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vendor Id"
+          },
+          "account_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Account Id"
+          },
+          "transaction_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transaction Id"
+          },
+          "expense_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Expense Date"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "amount": {
+            "type": "string",
+            "title": "Amount"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "payment_method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payment Method"
+          },
+          "is_recurring": {
+            "type": "boolean",
+            "title": "Is Recurring"
+          },
+          "source_dataset": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Dataset"
+          },
+          "source_record_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Record Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "vendor_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vendor Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "business_id",
+          "expense_date",
+          "category",
+          "amount",
+          "currency",
+          "is_recurring",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "ExpenseListItemRead",
+        "description": "Enriched Expense DTO for table views including joined vendor name."
+      },
+      "ExpensePage_ExpenseListItemRead_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ExpenseListItemRead"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Total",
+            "description": "Total number of items matching the query"
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 200.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "description": "Page limit applied"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Offset",
+            "description": "Page offset applied"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More",
+            "description": "True if more items exist beyond this page"
+          },
+          "totals": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExpenseTotals"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Aggregate summary totals across filtered set (only when include_totals=true)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset",
+          "has_more"
+        ],
+        "title": "ExpensePage[ExpenseListItemRead]"
+      },
+      "ExpenseTotals": {
+        "properties": {
+          "count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Count",
+            "description": "Total number of matching expenses"
+          },
+          "total_amount": {
+            "type": "string",
+            "title": "Total Amount",
+            "description": "Sum of expense amounts",
+            "default": "0.00"
+          }
+        },
+        "type": "object",
+        "required": [
+          "count"
+        ],
+        "title": "ExpenseTotals",
+        "description": "Display-only summary totals over the entire filtered expense set."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ImportBatchListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ImportResult"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "ImportBatchListResponse"
+      },
+      "ImportResult": {
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Batch Id"
+          },
+          "import_type": {
+            "type": "string",
+            "title": "Import Type"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "source_dataset": {
+            "type": "string",
+            "title": "Source Dataset"
+          },
+          "original_filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original Filename"
+          },
+          "total_rows": {
+            "type": "integer",
+            "title": "Total Rows",
+            "default": 0
+          },
+          "inserted_rows": {
+            "type": "integer",
+            "title": "Inserted Rows",
+            "default": 0
+          },
+          "duplicate_rows": {
+            "type": "integer",
+            "title": "Duplicate Rows",
+            "default": 0
+          },
+          "error_rows": {
+            "type": "integer",
+            "title": "Error Rows",
+            "default": 0
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          },
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/RowErrorRead"
+            },
+            "type": "array",
+            "title": "Errors"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "batch_id",
+          "import_type",
+          "status",
+          "source_dataset"
+        ],
+        "title": "ImportResult"
+      },
+      "InvoiceListItemRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "business_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Business Id"
+          },
+          "customer_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Id"
+          },
+          "invoice_number": {
+            "type": "string",
+            "title": "Invoice Number"
+          },
+          "invoice_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Invoice Date"
+          },
+          "due_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Due Date"
+          },
+          "amount_total": {
+            "type": "string",
+            "title": "Amount Total"
+          },
+          "amount_paid": {
+            "type": "string",
+            "title": "Amount Paid"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "payment_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payment Date"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "source_dataset": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Dataset"
+          },
+          "source_record_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Record Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "customer_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Name"
+          },
+          "outstanding_amount": {
+            "type": "string",
+            "title": "Outstanding Amount",
+            "default": "0.00"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "business_id",
+          "invoice_number",
+          "invoice_date",
+          "due_date",
+          "amount_total",
+          "amount_paid",
+          "currency",
+          "status",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "InvoiceListItemRead",
+        "description": "Enriched Invoice DTO for table views including joined customer name and computed outstanding balance."
+      },
+      "LoginRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "LoginRequest",
+        "description": "User login request body."
+      },
+      "Page_InvoiceListItemRead_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/InvoiceListItemRead"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Total",
+            "description": "Total number of items matching the query"
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 200.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "description": "Page limit applied"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Offset",
+            "description": "Page offset applied"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More",
+            "description": "True if more items exist beyond this page"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset",
+          "has_more"
+        ],
+        "title": "Page[InvoiceListItemRead]"
+      },
+      "RegisterRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "title": "Password"
+          },
+          "full_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Full Name"
+          },
+          "business_name": {
+            "type": "string",
+            "minLength": 2,
+            "title": "Business Name"
+          },
+          "role": {
+            "type": "string",
+            "pattern": "^(owner|admin|viewer)$",
+            "title": "Role",
+            "default": "owner"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password",
+          "business_name"
+        ],
+        "title": "RegisterRequest",
+        "description": "User registration request body (initial tenant creation)."
+      },
+      "RowErrorRead": {
+        "properties": {
+          "row_number": {
+            "type": "integer",
+            "title": "Row Number"
+          },
+          "field": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Field"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "row_number",
+          "code",
+          "message"
+        ],
+        "title": "RowErrorRead"
+      },
+      "Token": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "bearer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token"
+        ],
+        "title": "Token",
+        "description": "Standard OAuth2 / Bearer token response."
+      },
+      "TransactionPage_TransactionRead_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/TransactionRead"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Total",
+            "description": "Total number of items matching the query"
+          },
+          "limit": {
+            "type": "integer",
+            "maximum": 200.0,
+            "minimum": 1.0,
+            "title": "Limit",
+            "description": "Page limit applied"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Offset",
+            "description": "Page offset applied"
+          },
+          "has_more": {
+            "type": "boolean",
+            "title": "Has More",
+            "description": "True if more items exist beyond this page"
+          },
+          "totals": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TransactionTotals"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Aggregate summary totals across filtered set (only when include_totals=true)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset",
+          "has_more"
+        ],
+        "title": "TransactionPage[TransactionRead]"
+      },
+      "TransactionRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "business_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Business Id"
+          },
+          "account_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Account Id"
+          },
+          "transaction_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Transaction Date"
+          },
+          "transaction_type": {
+            "type": "string",
+            "title": "Transaction Type"
+          },
+          "amount": {
+            "type": "string",
+            "title": "Amount"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "counterparty": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Counterparty"
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference"
+          },
+          "source_dataset": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Dataset"
+          },
+          "source_record_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Record Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "business_id",
+          "transaction_date",
+          "transaction_type",
+          "amount",
+          "currency",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "TransactionRead"
+      },
+      "TransactionTotals": {
+        "properties": {
+          "count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Count",
+            "description": "Total number of matching transactions"
+          },
+          "inflow_total": {
+            "type": "string",
+            "title": "Inflow Total",
+            "description": "Sum of positive inflow amounts",
+            "default": "0.00"
+          },
+          "outflow_total": {
+            "type": "string",
+            "title": "Outflow Total",
+            "description": "Sum of positive outflow amounts",
+            "default": "0.00"
+          },
+          "net": {
+            "type": "string",
+            "title": "Net",
+            "description": "Net cash flow (inflow_total - outflow_total)",
+            "default": "0.00"
+          }
+        },
+        "type": "object",
+        "required": [
+          "count"
+        ],
+        "title": "TransactionTotals",
+        "description": "Display-only summary totals over the entire filtered transaction set."
+      },
+      "UserPublic": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "full_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Full Name"
+          },
+          "business_id": {
+            "type": "string",
+            "title": "Business Id"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "business_id",
+          "role"
+        ],
+        "title": "UserPublic",
+        "description": "Public user profile representation."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VendorLookupRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "VendorLookupRead"
+      }
+    },
+    "securitySchemes": {
+      "OAuth2PasswordBearer": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "scopes": {},
+            "tokenUrl": "/api/auth/login"
+          }
+        }
+      }
+    }
+  }
+}

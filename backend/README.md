@@ -45,7 +45,7 @@ backend/
 
 ## 1. Prerequisites
 
-- Python 3.11, 3.12, 3.13, or 3.14
+- Python 3.12 (Recommended standard for AgentFi)
 - A [Supabase](https://supabase.com) account (Free Tier is fully supported)
 - Git
 
@@ -56,8 +56,9 @@ backend/
 From the repository root:
 
 ```bash
-# Create a virtual environment inside backend/ (git-ignored)
-python -m venv backend/.venv
+# Create a virtual environment with Python 3.12 inside backend/ (git-ignored)
+py -3.12 -m venv backend/.venv
+# (or: python -m venv backend/.venv if 3.12 is default)
 
 # Activate the virtual environment
 # Windows (PowerShell):
@@ -172,9 +173,91 @@ Run the test suite from the repository root:
 
 ```bash
 # Run all unit tests (does not require a live Supabase database)
-python -m pytest tests/test_backend_health.py tests/test_backend_security.py tests/test_backend_auth.py tests/test_backend_schema.py
+python -m pytest tests/test_backend_health.py tests/test_backend_security.py tests/test_backend_auth.py tests/test_backend_schema.py tests/test_backend_import_unit.py tests/test_backend_query_unit.py
 
 # Run live database integration tests against Supabase (requires valid DATABASE_URL in .env)
-python -m pytest -m integration
+python -m pytest tests/test_backend_auth.py tests/test_backend_schema.py tests/test_backend_import_integration.py tests/test_backend_read_integration.py -m integration
 ```
+
+---
+
+## 8. CSV Ingestion & Import API (Day 3)
+
+The backend provides authenticated CSV ingestion with automatic header alias resolution, strict type validation, row-level error audit logs, and deduplication against the canonical schema.
+
+### Step A: Authenticate & Obtain JWT
+```bash
+# Login as an owner or admin
+TOKEN=$(curl -s -X POST http://localhost:8000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "demo.owner@sampletraders.com", "password": "DemoSecurePassword123!"}' \
+  | jq -r .access_token)
+```
+
+### Step B: Download CSV Template
+```bash
+# Download template CSV with standard headers
+curl -s -H "Authorization: Bearer $TOKEN" \
+  http://localhost:8000/api/imports/templates/transactions?format=csv \
+  -o transactions_template.csv
+```
+
+### Step C: Upload & Ingest CSV File
+```bash
+# Upload a bank transactions export
+curl -X POST http://localhost:8000/api/imports \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "file=@transactions_template.csv" \
+  -F "import_type=transactions" \
+  -F "source_dataset=bank_hdfc" \
+  -F "on_error=skip"
+```
+
+### Step D: Inspect Status & Row Errors
+```bash
+# Inspect batch summary
+curl -s -H "Authorization: Bearer $TOKEN" \
+  http://localhost:8000/api/imports/<batch_id> | jq .
+
+# Inspect paginated row-level errors
+curl -s -H "Authorization: Bearer $TOKEN" \
+  http://localhost:8000/api/imports/<batch_id>/errors | jq .
+```
+
+---
+
+## 9. Core Financial Read APIs & Lookups (Day 4)
+
+Exposes paginated, filterable, sortable, tenant-scoped read endpoints for transactions, invoices, expenses, UI dropdowns, and an internal programmatic data access layer for Members 3 & 4.
+
+### REST Endpoints
+- `GET /api/transactions`: Filter by date range, type (`inflow`/`outflow`), category, amount, counterparty, search `q`, dataset. Includes optional aggregate totals (`include_totals=true`).
+- `GET /api/transactions/{id}`: Tenant-scoped detail lookup (404 on cross-tenant access).
+- `GET /api/invoices`: Enriched with `customer_name` and `outstanding_amount`. Filter by status, customer, date range, overdue, unpaid, search `q`.
+- `GET /api/invoices/{id}`: Tenant-scoped detail lookup.
+- `GET /api/expenses`: Enriched with `vendor_name`. Filter by date, category, vendor, payment method, recurring flag, amount, search `q`. Optional totals.
+- `GET /api/expenses/{id}`: Tenant-scoped detail lookup.
+- `GET /api/accounts`: Active account dropdown lookup.
+- `GET /api/customers?q=`: Customer dropdown lookup with search.
+- `GET /api/vendors?q=`: Vendor dropdown lookup with search.
+- `GET /api/categories?kind=transaction|expense`: Distinct populated categories.
+- `GET /api/meta/data-range`: Min/max dates and record counts for dashboard bounds.
+
+### Internal Read Layer (for Finance Engine & Agents)
+Members 3 & 4 can query the database directly in Python without HTTP calls using:
+```python
+from backend.services.read_api import fetch_transactions, fetch_invoices, fetch_expenses
+
+# Scoped to business_id, type-safe, returns canonical Pydantic models (max 100k rows)
+txns = fetch_transactions(db=session, business_id=biz_uuid, start_date=d1, end_date=d2)
+```
+See [docs/data-access-for-finance-tools.md](../docs/data-access-for-finance-tools.md) for full details.
+
+### Export OpenAPI Schema
+```bash
+python backend/scripts/export_openapi.py
+# Schema written to docs/openapi.json
+```
+
+
 
