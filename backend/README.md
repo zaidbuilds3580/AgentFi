@@ -45,7 +45,7 @@ backend/
 
 ## 1. Prerequisites
 
-- Python 3.11, 3.12, 3.13, or 3.14
+- Python 3.12 (Recommended standard for AgentFi)
 - A [Supabase](https://supabase.com) account (Free Tier is fully supported)
 - Git
 
@@ -56,8 +56,9 @@ backend/
 From the repository root:
 
 ```bash
-# Create a virtual environment inside backend/ (git-ignored)
-python -m venv backend/.venv
+# Create a virtual environment with Python 3.12 inside backend/ (git-ignored)
+py -3.12 -m venv backend/.venv
+# (or: python -m venv backend/.venv if 3.12 is default)
 
 # Activate the virtual environment
 # Windows (PowerShell):
