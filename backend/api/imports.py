@@ -5,7 +5,7 @@ File ingestion and CSV import endpoints for transactions, invoices, and expenses
 from datetime import datetime
 import io
 import os
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 import uuid
 
 from fastapi import (
