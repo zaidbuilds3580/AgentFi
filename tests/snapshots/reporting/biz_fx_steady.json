@@ -1,0 +1,1334 @@
+{
+  "snapshot_version": 1,
+  "business_id": "biz_fx_steady",
+  "scenario": "Steady",
+  "description": "Healthy business: growing cash, invoices paid on time, no anomalies.",
+  "as_of": "2026-11-05",
+  "source": "finance_engine.fixtures",
+  "daily": {
+    "inputs": {
+      "period": "current_month",
+      "start_date": "2026-11-01",
+      "end_date": "2026-11-05"
+    },
+    "tools": {
+      "financial_summary": {
+        "business_id": "biz_fx_steady",
+        "period": "current_month (2026-11-01 to 2026-11-05)",
+        "inflows": 354000.0,
+        "outflows": 210236.0,
+        "net_cash_flow": 143764.0,
+        "cash_balance": 1171764.0,
+        "receivables": 236000.0,
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      },
+      "forecast": {
+        "business_id": "biz_fx_steady",
+        "horizon_days": 30,
+        "projected_balance": 1199185.33,
+        "method": "run_rate_plus_receivables",
+        "risk_level": "low",
+        "data_coverage": 1.0,
+        "currency": "INR",
+        "warnings": []
+      },
+      "overdue_invoices": {
+        "business_id": "biz_fx_steady",
+        "as_of_date": "2026-11-05",
+        "count": 0,
+        "total_amount": 0.0,
+        "ageing_bands": [
+          {
+            "band": "1-30",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "31-60",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "61+",
+            "count": 0,
+            "total_amount": 0.0
+          }
+        ],
+        "invoices": [],
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      },
+      "expense_anomalies": {
+        "business_id": "biz_fx_steady",
+        "start_date": "2026-11-01",
+        "end_date": "2026-11-05",
+        "anomalies": [],
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      }
+    },
+    "agents": {
+      "cashflow": {
+        "agent_name": "cashflow",
+        "summary": "For current_month (2026-11-01 to 2026-11-05), total inflows were ₹354,000.00 and outflows were ₹210,236.00, resulting in net cash flow of ₹143,764.00 and an ending cash balance of ₹1,171,764.00. Over a 30-day horizon, projected cash balance is ₹1,199,185.33 with a low risk level.",
+        "metrics": {
+          "business_id": "biz_fx_steady",
+          "period": "current_month (2026-11-01 to 2026-11-05)",
+          "inflows": 354000.0,
+          "outflows": 210236.0,
+          "net_cash_flow": 143764.0,
+          "cash_balance": 1171764.0,
+          "receivables": 236000.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 1199185.33,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "Net cash flow is ₹143,764.00 (inflows: ₹354,000.00, outflows: ₹210,236.00).",
+          "Outstanding customer receivables total ₹236,000.00.",
+          "Projected 30-day balance is ₹1,199,185.33 assessed at low risk."
+        ],
+        "recommendations": [
+          "Monitor collection efforts for ₹236,000.00 in pending receivables.",
+          "Maintain ongoing operating expenditures within current levels to preserve cash reserves."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "invoice": {
+        "agent_name": "invoice",
+        "summary": "As of 2026-11-05, there are 0 overdue invoices totaling ₹0.00 across 3 ageing bands.",
+        "metrics": {
+          "business_id": "biz_fx_steady",
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "Total overdue receivables stand at ₹0.00 across 0 invoices.",
+          "Ageing distribution: Band 1-30: ₹0.00 (0 invoices), Band 31-60: ₹0.00 (0 invoices), Band 61+: ₹0.00 (0 invoices)."
+        ],
+        "recommendations": [
+          "All invoices are currently up to date; maintain standard billing procedures."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "expense": {
+        "agent_name": "expense",
+        "summary": "No expense anomalies found between 2026-11-01 and 2026-11-05.",
+        "metrics": {
+          "business_id": "biz_fx_steady",
+          "start_date": "2026-11-01",
+          "end_date": "2026-11-05",
+          "anomalies_count": 0,
+          "anomalies": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "All expenditures conform to expected baselines; no spending anomalies were detected."
+        ],
+        "recommendations": [
+          "All expenditures conform to expected baselines; maintain regular spending reviews."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "intelligence": {
+        "agent_name": "intelligence",
+        "summary": "Ending cash balance is ₹1,171,764.00 with net cash flow of ₹143,764.00 (inflows ₹354,000.00, outflows ₹210,236.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 0 anomalous expense items were identified.",
+        "metrics": {
+          "cashflow": {
+            "business_id": "biz_fx_steady",
+            "period": "current_month (2026-11-01 to 2026-11-05)",
+            "inflows": 354000.0,
+            "outflows": 210236.0,
+            "net_cash_flow": 143764.0,
+            "cash_balance": 1171764.0,
+            "receivables": 236000.0,
+            "calculation_version": "finance-engine-1.1.0",
+            "horizon_days": 30,
+            "projected_balance": 1199185.33,
+            "method": "run_rate_plus_receivables",
+            "risk_level": "low",
+            "data_coverage": 1.0,
+            "currency": "INR",
+            "warnings": []
+          },
+          "business_id": "biz_fx_steady",
+          "period": "current_month (2026-11-01 to 2026-11-05)",
+          "inflows": 354000.0,
+          "outflows": 210236.0,
+          "net_cash_flow": 143764.0,
+          "cash_balance": 1171764.0,
+          "receivables": 236000.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 1199185.33,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": [],
+          "invoice": {
+            "business_id": "biz_fx_steady",
+            "as_of_date": "2026-11-05",
+            "count": 0,
+            "total_amount": 0.0,
+            "ageing_bands": [
+              {
+                "band": "1-30",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "31-60",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "61+",
+                "count": 0,
+                "total_amount": 0.0
+              }
+            ],
+            "invoices": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "expense": {
+            "business_id": "biz_fx_steady",
+            "start_date": "2026-11-01",
+            "end_date": "2026-11-05",
+            "anomalies_count": 0,
+            "anomalies": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "start_date": "2026-11-01",
+          "end_date": "2026-11-05",
+          "anomalies_count": 0,
+          "anomalies": []
+        },
+        "findings": [
+          "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹1,171,764.00).",
+          "0 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹143,764.00).",
+          "Net cash flow of ₹143,764.00 supports the 30-day projected balance of ₹1,199,185.33.",
+          "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹1,199,185.33.",
+          "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "Expense risk: 0 expense anomalies detected."
+        ],
+        "recommendations": [
+          {
+            "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+            "priority": "low",
+            "reason": "Cash balance is ₹1,171,764.00 with low projected liquidity risk.",
+            "requires_approval": false
+          }
+        ],
+        "caveats": [],
+        "requires_approval": false,
+        "overall_summary": "Ending cash balance is ₹1,171,764.00 with net cash flow of ₹143,764.00 (inflows ₹354,000.00, outflows ₹210,236.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 0 anomalous expense items were identified.",
+        "links": [
+          "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹1,171,764.00).",
+          "0 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹143,764.00).",
+          "Net cash flow of ₹143,764.00 supports the 30-day projected balance of ₹1,199,185.33."
+        ],
+        "key_risks": [
+          "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹1,199,185.33.",
+          "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "Expense risk: 0 expense anomalies detected."
+        ],
+        "missing_parts": []
+      }
+    },
+    "report": {
+      "agent_name": "reporting",
+      "summary": "Ending cash balance is ₹1,171,764.00 with net cash flow of ₹143,764.00. Operations show no overdue invoices and 0 expense anomalies were detected.",
+      "metrics": {
+        "intelligence": {
+          "cashflow": {
+            "business_id": "biz_fx_steady",
+            "period": "current_month (2026-11-01 to 2026-11-05)",
+            "inflows": 354000.0,
+            "outflows": 210236.0,
+            "net_cash_flow": 143764.0,
+            "cash_balance": 1171764.0,
+            "receivables": 236000.0,
+            "calculation_version": "finance-engine-1.1.0",
+            "horizon_days": 30,
+            "projected_balance": 1199185.33,
+            "method": "run_rate_plus_receivables",
+            "risk_level": "low",
+            "data_coverage": 1.0,
+            "currency": "INR",
+            "warnings": []
+          },
+          "business_id": "biz_fx_steady",
+          "period": "current_month (2026-11-01 to 2026-11-05)",
+          "inflows": 354000.0,
+          "outflows": 210236.0,
+          "net_cash_flow": 143764.0,
+          "cash_balance": 1171764.0,
+          "receivables": 236000.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 1199185.33,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": [],
+          "invoice": {
+            "business_id": "biz_fx_steady",
+            "as_of_date": "2026-11-05",
+            "count": 0,
+            "total_amount": 0.0,
+            "ageing_bands": [
+              {
+                "band": "1-30",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "31-60",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "61+",
+                "count": 0,
+                "total_amount": 0.0
+              }
+            ],
+            "invoices": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "expense": {
+            "business_id": "biz_fx_steady",
+            "start_date": "2026-11-01",
+            "end_date": "2026-11-05",
+            "anomalies_count": 0,
+            "anomalies": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "start_date": "2026-11-01",
+          "end_date": "2026-11-05",
+          "anomalies_count": 0,
+          "anomalies": []
+        },
+        "cashflow": {
+          "business_id": "biz_fx_steady",
+          "period": "current_month (2026-11-01 to 2026-11-05)",
+          "inflows": 354000.0,
+          "outflows": 210236.0,
+          "net_cash_flow": 143764.0,
+          "cash_balance": 1171764.0,
+          "receivables": 236000.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 1199185.33,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": []
+        },
+        "business_id": "biz_fx_steady",
+        "period": "current_month (2026-11-01 to 2026-11-05)",
+        "inflows": 354000.0,
+        "outflows": 210236.0,
+        "net_cash_flow": 143764.0,
+        "cash_balance": 1171764.0,
+        "receivables": 236000.0,
+        "calculation_version": "finance-engine-1.1.0",
+        "horizon_days": 30,
+        "projected_balance": 1199185.33,
+        "method": "run_rate_plus_receivables",
+        "risk_level": "low",
+        "data_coverage": 1.0,
+        "currency": "INR",
+        "warnings": [],
+        "invoice": {
+          "business_id": "biz_fx_steady",
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "as_of_date": "2026-11-05",
+        "count": 0,
+        "total_amount": 0.0,
+        "ageing_bands": [
+          {
+            "band": "1-30",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "31-60",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "61+",
+            "count": 0,
+            "total_amount": 0.0
+          }
+        ],
+        "invoices": [],
+        "expense": {
+          "business_id": "biz_fx_steady",
+          "start_date": "2026-11-01",
+          "end_date": "2026-11-05",
+          "anomalies_count": 0,
+          "anomalies": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "start_date": "2026-11-01",
+        "end_date": "2026-11-05",
+        "anomalies_count": 0,
+        "anomalies": []
+      },
+      "findings": [],
+      "recommendations": [
+        {
+          "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+          "priority": "low",
+          "reason": "Cash balance is ₹1,171,764.00 with low projected liquidity risk.",
+          "requires_approval": false
+        }
+      ],
+      "caveats": [],
+      "requires_approval": false,
+      "report_type": "daily",
+      "title": "Daily report - 5 November 2026",
+      "evidence": [
+        {
+          "label": "Cash Balance",
+          "value": "₹1,171,764.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Net Cash Flow",
+          "value": "₹143,764.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Projected Cash Balance",
+          "value": "₹1,199,185.33",
+          "source": "cashflow"
+        },
+        {
+          "label": "Liquidity Risk Level",
+          "value": "Low",
+          "source": "cashflow"
+        },
+        {
+          "label": "Overdue Invoices Total",
+          "value": "₹0.00",
+          "source": "invoice"
+        },
+        {
+          "label": "Overdue Invoices Count",
+          "value": "0",
+          "source": "invoice"
+        },
+        {
+          "label": "Expense Anomalies Count",
+          "value": "0",
+          "source": "expense"
+        },
+        {
+          "label": "Overall Financial Health",
+          "value": "Ending cash balance is ₹1,171,764.00 with net cash flow of ₹143,764.00 (inflows ₹354,000.00, outflows ₹210,236.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 0 anomalous expense items were identified.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹1,199,185.33.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Expense risk: 0 expense anomalies detected.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹1,171,764.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "0 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹143,764.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Net cash flow of ₹143,764.00 supports the 30-day projected balance of ₹1,199,185.33.",
+          "source": "intelligence"
+        }
+      ],
+      "missing_parts": [],
+      "currency": "INR"
+    },
+    "chat_response": {
+      "summary": "Ending cash balance is ₹1,171,764.00 with net cash flow of ₹143,764.00. Operations show no overdue invoices and 0 expense anomalies were detected.",
+      "evidence": [
+        {
+          "label": "Cash Balance",
+          "value": "₹1,171,764.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Net Cash Flow",
+          "value": "₹143,764.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Projected Cash Balance",
+          "value": "₹1,199,185.33",
+          "source": "cashflow"
+        },
+        {
+          "label": "Liquidity Risk Level",
+          "value": "Low",
+          "source": "cashflow"
+        },
+        {
+          "label": "Overdue Invoices Total",
+          "value": "₹0.00",
+          "source": "invoice"
+        },
+        {
+          "label": "Overdue Invoices Count",
+          "value": "0",
+          "source": "invoice"
+        },
+        {
+          "label": "Expense Anomalies Count",
+          "value": "0",
+          "source": "expense"
+        },
+        {
+          "label": "Overall Financial Health",
+          "value": "Ending cash balance is ₹1,171,764.00 with net cash flow of ₹143,764.00 (inflows ₹354,000.00, outflows ₹210,236.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 0 anomalous expense items were identified.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹1,199,185.33.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Expense risk: 0 expense anomalies detected.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹1,171,764.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "0 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹143,764.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Net cash flow of ₹143,764.00 supports the 30-day projected balance of ₹1,199,185.33.",
+          "source": "intelligence"
+        }
+      ],
+      "caveats": [],
+      "recommendations": [
+        {
+          "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+          "priority": "low",
+          "reason": "Cash balance is ₹1,171,764.00 with low projected liquidity risk.",
+          "requires_approval": false
+        }
+      ],
+      "missing_parts": [],
+      "report_type": "daily",
+      "currency": "INR"
+    }
+  },
+  "monthly": {
+    "inputs": {
+      "period": "last_month",
+      "start_date": "2026-10-01",
+      "end_date": "2026-10-31"
+    },
+    "tools": {
+      "financial_summary": {
+        "business_id": "biz_fx_steady",
+        "period": "last_month (2026-10-01 to 2026-10-31)",
+        "inflows": 355500.0,
+        "outflows": 210000.0,
+        "net_cash_flow": 145500.0,
+        "cash_balance": 1028000.0,
+        "receivables": 0.0,
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      },
+      "forecast": {
+        "business_id": "biz_fx_steady",
+        "horizon_days": 30,
+        "projected_balance": 1199185.33,
+        "method": "run_rate_plus_receivables",
+        "risk_level": "low",
+        "data_coverage": 1.0,
+        "currency": "INR",
+        "warnings": []
+      },
+      "overdue_invoices": {
+        "business_id": "biz_fx_steady",
+        "as_of_date": "2026-11-05",
+        "count": 0,
+        "total_amount": 0.0,
+        "ageing_bands": [
+          {
+            "band": "1-30",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "31-60",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "61+",
+            "count": 0,
+            "total_amount": 0.0
+          }
+        ],
+        "invoices": [],
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      },
+      "expense_anomalies": {
+        "business_id": "biz_fx_steady",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-31",
+        "anomalies": [],
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      }
+    },
+    "agents": {
+      "cashflow": {
+        "agent_name": "cashflow",
+        "summary": "For last_month (2026-10-01 to 2026-10-31), total inflows were ₹355,500.00 and outflows were ₹210,000.00, resulting in net cash flow of ₹145,500.00 and an ending cash balance of ₹1,028,000.00. Over a 30-day horizon, projected cash balance is ₹1,199,185.33 with a low risk level.",
+        "metrics": {
+          "business_id": "biz_fx_steady",
+          "period": "last_month (2026-10-01 to 2026-10-31)",
+          "inflows": 355500.0,
+          "outflows": 210000.0,
+          "net_cash_flow": 145500.0,
+          "cash_balance": 1028000.0,
+          "receivables": 0.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 1199185.33,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "Net cash flow is ₹145,500.00 (inflows: ₹355,500.00, outflows: ₹210,000.00).",
+          "Outstanding customer receivables total ₹0.00.",
+          "Projected 30-day balance is ₹1,199,185.33 assessed at low risk."
+        ],
+        "recommendations": [
+          "Monitor collection efforts for ₹0.00 in pending receivables.",
+          "Maintain ongoing operating expenditures within current levels to preserve cash reserves."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "invoice": {
+        "agent_name": "invoice",
+        "summary": "As of 2026-11-05, there are 0 overdue invoices totaling ₹0.00 across 3 ageing bands.",
+        "metrics": {
+          "business_id": "biz_fx_steady",
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "Total overdue receivables stand at ₹0.00 across 0 invoices.",
+          "Ageing distribution: Band 1-30: ₹0.00 (0 invoices), Band 31-60: ₹0.00 (0 invoices), Band 61+: ₹0.00 (0 invoices)."
+        ],
+        "recommendations": [
+          "All invoices are currently up to date; maintain standard billing procedures."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "expense": {
+        "agent_name": "expense",
+        "summary": "No expense anomalies found between 2026-10-01 and 2026-10-31.",
+        "metrics": {
+          "business_id": "biz_fx_steady",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-31",
+          "anomalies_count": 0,
+          "anomalies": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "All expenditures conform to expected baselines; no spending anomalies were detected."
+        ],
+        "recommendations": [
+          "All expenditures conform to expected baselines; maintain regular spending reviews."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "intelligence": {
+        "agent_name": "intelligence",
+        "summary": "Ending cash balance is ₹1,028,000.00 with net cash flow of ₹145,500.00 (inflows ₹355,500.00, outflows ₹210,000.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 0 anomalous expense items were identified.",
+        "metrics": {
+          "cashflow": {
+            "business_id": "biz_fx_steady",
+            "period": "last_month (2026-10-01 to 2026-10-31)",
+            "inflows": 355500.0,
+            "outflows": 210000.0,
+            "net_cash_flow": 145500.0,
+            "cash_balance": 1028000.0,
+            "receivables": 0.0,
+            "calculation_version": "finance-engine-1.1.0",
+            "horizon_days": 30,
+            "projected_balance": 1199185.33,
+            "method": "run_rate_plus_receivables",
+            "risk_level": "low",
+            "data_coverage": 1.0,
+            "currency": "INR",
+            "warnings": []
+          },
+          "business_id": "biz_fx_steady",
+          "period": "last_month (2026-10-01 to 2026-10-31)",
+          "inflows": 355500.0,
+          "outflows": 210000.0,
+          "net_cash_flow": 145500.0,
+          "cash_balance": 1028000.0,
+          "receivables": 0.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 1199185.33,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": [],
+          "invoice": {
+            "business_id": "biz_fx_steady",
+            "as_of_date": "2026-11-05",
+            "count": 0,
+            "total_amount": 0.0,
+            "ageing_bands": [
+              {
+                "band": "1-30",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "31-60",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "61+",
+                "count": 0,
+                "total_amount": 0.0
+              }
+            ],
+            "invoices": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "expense": {
+            "business_id": "biz_fx_steady",
+            "start_date": "2026-10-01",
+            "end_date": "2026-10-31",
+            "anomalies_count": 0,
+            "anomalies": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-31",
+          "anomalies_count": 0,
+          "anomalies": []
+        },
+        "findings": [
+          "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹1,028,000.00).",
+          "0 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹145,500.00).",
+          "Net cash flow of ₹145,500.00 supports the 30-day projected balance of ₹1,199,185.33.",
+          "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹1,199,185.33.",
+          "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "Expense risk: 0 expense anomalies detected."
+        ],
+        "recommendations": [
+          {
+            "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+            "priority": "low",
+            "reason": "Cash balance is ₹1,028,000.00 with low projected liquidity risk.",
+            "requires_approval": false
+          }
+        ],
+        "caveats": [],
+        "requires_approval": false,
+        "overall_summary": "Ending cash balance is ₹1,028,000.00 with net cash flow of ₹145,500.00 (inflows ₹355,500.00, outflows ₹210,000.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 0 anomalous expense items were identified.",
+        "links": [
+          "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹1,028,000.00).",
+          "0 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹145,500.00).",
+          "Net cash flow of ₹145,500.00 supports the 30-day projected balance of ₹1,199,185.33."
+        ],
+        "key_risks": [
+          "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹1,199,185.33.",
+          "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "Expense risk: 0 expense anomalies detected."
+        ],
+        "missing_parts": []
+      }
+    },
+    "report": {
+      "agent_name": "reporting",
+      "summary": "Monthly cash balance concluded at ₹1,028,000.00 with a net cash flow of ₹145,500.00 (inflows ₹355,500.00, outflows ₹210,000.00). The 30-day projected cash balance stands at ₹1,199,185.33 under a low liquidity risk assessment. There are no overdue invoices. A total of 0 anomalous expense transactions were detected during the period.",
+      "metrics": {
+        "intelligence": {
+          "cashflow": {
+            "business_id": "biz_fx_steady",
+            "period": "last_month (2026-10-01 to 2026-10-31)",
+            "inflows": 355500.0,
+            "outflows": 210000.0,
+            "net_cash_flow": 145500.0,
+            "cash_balance": 1028000.0,
+            "receivables": 0.0,
+            "calculation_version": "finance-engine-1.1.0",
+            "horizon_days": 30,
+            "projected_balance": 1199185.33,
+            "method": "run_rate_plus_receivables",
+            "risk_level": "low",
+            "data_coverage": 1.0,
+            "currency": "INR",
+            "warnings": []
+          },
+          "business_id": "biz_fx_steady",
+          "period": "last_month (2026-10-01 to 2026-10-31)",
+          "inflows": 355500.0,
+          "outflows": 210000.0,
+          "net_cash_flow": 145500.0,
+          "cash_balance": 1028000.0,
+          "receivables": 0.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 1199185.33,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": [],
+          "invoice": {
+            "business_id": "biz_fx_steady",
+            "as_of_date": "2026-11-05",
+            "count": 0,
+            "total_amount": 0.0,
+            "ageing_bands": [
+              {
+                "band": "1-30",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "31-60",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "61+",
+                "count": 0,
+                "total_amount": 0.0
+              }
+            ],
+            "invoices": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "expense": {
+            "business_id": "biz_fx_steady",
+            "start_date": "2026-10-01",
+            "end_date": "2026-10-31",
+            "anomalies_count": 0,
+            "anomalies": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-31",
+          "anomalies_count": 0,
+          "anomalies": []
+        },
+        "cashflow": {
+          "business_id": "biz_fx_steady",
+          "period": "last_month (2026-10-01 to 2026-10-31)",
+          "inflows": 355500.0,
+          "outflows": 210000.0,
+          "net_cash_flow": 145500.0,
+          "cash_balance": 1028000.0,
+          "receivables": 0.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 1199185.33,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": []
+        },
+        "business_id": "biz_fx_steady",
+        "period": "last_month (2026-10-01 to 2026-10-31)",
+        "inflows": 355500.0,
+        "outflows": 210000.0,
+        "net_cash_flow": 145500.0,
+        "cash_balance": 1028000.0,
+        "receivables": 0.0,
+        "calculation_version": "finance-engine-1.1.0",
+        "horizon_days": 30,
+        "projected_balance": 1199185.33,
+        "method": "run_rate_plus_receivables",
+        "risk_level": "low",
+        "data_coverage": 1.0,
+        "currency": "INR",
+        "warnings": [],
+        "invoice": {
+          "business_id": "biz_fx_steady",
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "as_of_date": "2026-11-05",
+        "count": 0,
+        "total_amount": 0.0,
+        "ageing_bands": [
+          {
+            "band": "1-30",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "31-60",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "61+",
+            "count": 0,
+            "total_amount": 0.0
+          }
+        ],
+        "invoices": [],
+        "expense": {
+          "business_id": "biz_fx_steady",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-31",
+          "anomalies_count": 0,
+          "anomalies": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-31",
+        "anomalies_count": 0,
+        "anomalies": []
+      },
+      "findings": [],
+      "recommendations": [
+        {
+          "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+          "priority": "low",
+          "reason": "Cash balance is ₹1,028,000.00 with low projected liquidity risk.",
+          "requires_approval": false
+        }
+      ],
+      "caveats": [],
+      "requires_approval": false,
+      "report_type": "monthly",
+      "title": "Monthly report - 5 November 2026",
+      "evidence": [
+        {
+          "label": "Cash Balance",
+          "value": "₹1,028,000.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Net Cash Flow",
+          "value": "₹145,500.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Projected Cash Balance",
+          "value": "₹1,199,185.33",
+          "source": "cashflow"
+        },
+        {
+          "label": "Liquidity Risk Level",
+          "value": "Low",
+          "source": "cashflow"
+        },
+        {
+          "label": "Overdue Invoices Total",
+          "value": "₹0.00",
+          "source": "invoice"
+        },
+        {
+          "label": "Overdue Invoices Count",
+          "value": "0",
+          "source": "invoice"
+        },
+        {
+          "label": "Expense Anomalies Count",
+          "value": "0",
+          "source": "expense"
+        },
+        {
+          "label": "Overall Financial Health",
+          "value": "Ending cash balance is ₹1,028,000.00 with net cash flow of ₹145,500.00 (inflows ₹355,500.00, outflows ₹210,000.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 0 anomalous expense items were identified.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹1,199,185.33.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Expense risk: 0 expense anomalies detected.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹1,028,000.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "0 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹145,500.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Net cash flow of ₹145,500.00 supports the 30-day projected balance of ₹1,199,185.33.",
+          "source": "intelligence"
+        }
+      ],
+      "missing_parts": [],
+      "currency": "INR"
+    },
+    "chat_response": {
+      "summary": "Monthly cash balance concluded at ₹1,028,000.00 with a net cash flow of ₹145,500.00 (inflows ₹355,500.00, outflows ₹210,000.00). The 30-day projected cash balance stands at ₹1,199,185.33 under a low liquidity risk assessment. There are no overdue invoices. A total of 0 anomalous expense transactions were detected during the period.",
+      "evidence": [
+        {
+          "label": "Cash Balance",
+          "value": "₹1,028,000.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Net Cash Flow",
+          "value": "₹145,500.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Projected Cash Balance",
+          "value": "₹1,199,185.33",
+          "source": "cashflow"
+        },
+        {
+          "label": "Liquidity Risk Level",
+          "value": "Low",
+          "source": "cashflow"
+        },
+        {
+          "label": "Overdue Invoices Total",
+          "value": "₹0.00",
+          "source": "invoice"
+        },
+        {
+          "label": "Overdue Invoices Count",
+          "value": "0",
+          "source": "invoice"
+        },
+        {
+          "label": "Expense Anomalies Count",
+          "value": "0",
+          "source": "expense"
+        },
+        {
+          "label": "Overall Financial Health",
+          "value": "Ending cash balance is ₹1,028,000.00 with net cash flow of ₹145,500.00 (inflows ₹355,500.00, outflows ₹210,000.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 0 anomalous expense items were identified.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹1,199,185.33.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Expense risk: 0 expense anomalies detected.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹1,028,000.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "0 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹145,500.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Net cash flow of ₹145,500.00 supports the 30-day projected balance of ₹1,199,185.33.",
+          "source": "intelligence"
+        }
+      ],
+      "caveats": [],
+      "recommendations": [
+        {
+          "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+          "priority": "low",
+          "reason": "Cash balance is ₹1,028,000.00 with low projected liquidity risk.",
+          "requires_approval": false
+        }
+      ],
+      "missing_parts": [],
+      "report_type": "monthly",
+      "currency": "INR"
+    }
+  }
+}

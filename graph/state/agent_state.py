@@ -93,5 +93,13 @@ class AgentState(TypedDict, total=False):
 
     # Current execution status of the graph
     status: Literal["running", "success", "failed"]
+    # List of specialist agent names to run in order
+    todo_agents: List[str]
+    # Desired report frequency (e.g., "daily" or "monthly")
+    report_type: str
+    # Holds the intelligence step result (any type accepted)
+    intelligence_result: Optional[Any]
+    # Holds the reporting step result (any type accepted)
+    reporting_result: Optional[Any]
 
 

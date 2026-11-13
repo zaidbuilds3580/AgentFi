@@ -10,6 +10,16 @@
 - **config/** – Configuration files and environment settings
 - **scripts/** – Utility and automation scripts
 
+## Python Version
+The team uses Python 3.12. To set up your local development environment:
+
+```bash
+python3.12 -m venv .venv312
+source .venv312/bin/activate
+pip install -r requirements.txt
+pip install -r backend/requirements.txt
+```
+
 ## Backend & Database (Member 2)
 The backend service powers AgentFi's deterministic financial operations and tenant-isolated data layer:
 - **Framework**: FastAPI with Pydantic v2

@@ -17,6 +17,8 @@ report.net_cash_flow              # Decimal('-60161.50')
 report.model_dump(mode="json")    # JSON-safe for agent state / API (Decimals as strings)
 ```
 
+> **Agent tool reference (final contract):** [finance_tools.md](finance_tools.md). Health check: `python -m scripts.check_tools`.
+
 ## Modules
 
 | File | Responsibility |
@@ -28,6 +30,7 @@ report.model_dump(mode="json")    # JSON-safe for agent state / API (Decimals as
 | [anomalies.py](../finance_engine/anomalies.py) | Expense anomaly rules A1–A8 |
 | [forecasting.py](../finance_engine/forecasting.py) | Cash-flow forecast |
 | [tools.py](../finance_engine/tools.py) | Agent-facing wrappers: `get_*(business_id, period, today=None)` |
+| [errors.py](../finance_engine/errors.py) | `FinanceToolError` → `BusinessNotFoundError`, `InvalidInputError` → `PeriodError` |
 | [agents/cashflow/finance_tools.py](../agents/cashflow/finance_tools.py) | Drop-in replacement for the Cash Flow Agent's mock `get_financial_summary` |
 
 ## Guarantees
@@ -197,6 +200,69 @@ otherwise the bank narration with reference numbers and month names removed.
 
 On the sample business, October gives exactly four findings: the AWS bill jumped 3.3× (A1), GST was 20% above
 its usual amount (A6), the uncategorized `MISC DR 5531` line (A5), and the October Airtel payment is missing (A7).
+
+## Tests
+
+```bash
+python -m pytest -q tests/test_finance_engine.py tests/test_receivables_anomalies.py \
+    tests/test_agent_tools.py tests/test_finance_tools_final.py tests/test_calculation_engine_final.py
+```
+
+| File | Covers |
+|---|---|
+| `test_finance_engine.py` | Period labels, revenue/expense/cash-flow definitions, HDFC statement reconciliation, tools |
+| `test_receivables_anomalies.py` | Aging, DSO, payment behaviour, overdue detection, anomaly rules A1–A8 |
+| `test_agent_tools.py` | Forecast, overdue invoices, anomalies, and real agent tools matching the mock contracts |
+| `test_finance_tools_final.py` | Agent tool contract: auto-build, caching, input validation, error types, thread safety |
+| `test_calculation_engine_final.py` | Final engine tests: date helpers and other fiscal years, bucket partitions, rounding once at output, breakdown order, `balance_on`, series identities, aging/forecast boundaries, run-rate rules, runway. Guarantees checked across **every** engine: input-order independence, no clock/randomness in the source, money exactly 2 dp, tenant isolation |
+| `test_reporting_fixtures.py` | Reporting fixtures and golden snapshots (next section) |
+
+## Reporting fixtures and snapshots
+
+The Reporting Agent never calls a finance tool. It only copies what the specialist agents give it.
+These fixtures let it be tested on **real engine numbers** instead of the mock tools.
+
+**Fixtures** ([finance_engine/fixtures.py](../finance_engine/fixtures.py)) are four fake businesses
+built from canonical models, each designed for one reporting situation on the demo date 2026-11-05.
+The sample business `biz_001` is the fifth scenario.
+
+| business_id | Situation | Forecast risk | Overdue | Anomalies (1–5 Nov) | Warnings |
+|---|---|---|---|---|---|
+| `biz_fx_steady` | Healthy: growing cash, invoices paid on time | low | 0 | 0 | none |
+| `biz_fx_crunch` | Runway under a week, customer stopped paying | high | 3 (one per band) | 0 | none |
+| `biz_fx_anomaly` | Normal cash, odd November spend | low | 0 | 4 (A1, A2, A4, A5) | uncategorized spend |
+| `biz_fx_thin` | New business, 13 days of bank history | medium | 0 | 0 | short history, data gap |
+| `biz_001` | Sample business from `data/samples` | see snapshot | | | |
+
+They are deterministic (fixed lineage timestamps, no clock, no randomness), so the CSVs are byte-identical on every run.
+
+```bash
+python -m scripts.build_fixtures                 # write them to data/processed/ (git-ignored) for the app/API/demo
+```
+
+**Snapshots** (`tests/snapshots/reporting/<business_id>.json`) record the whole chain, run with the
+real tools and no OpenAI key (template summaries only), for two cadences. The daily cadence uses
+`current_month` with anomalies for 1–5 Nov; the monthly cadence uses `last_month` (October) with
+anomalies for October.
+
+```
+tools  ->  cashflow / invoice / expense agents  ->  intelligence agent  ->  reporting agent (+ chat response)
+```
+
+`test_reporting_fixtures.py` checks:
+
+1. **Fixtures:** they are valid, hold one tenant's data, keep their links intact, and give the same engine results after a CSV round trip.
+2. **Scenario intent:** each scenario still produces its situation (crunch is high risk, anomaly trips A1/A2/A4/A5, and so on).
+3. **Golden files:** the output equals the snapshot. A failure lists the JSON paths that changed.
+4. **Backed by the engine:** every report evidence value and metric equals the tool number, every
+   number in the summary is an engine number, and the caveats are the engine's warnings word for word.
+
+After an **intended** change to the engine or an agent, refresh the snapshots and review the git diff:
+
+```bash
+python -m scripts.report_snapshots               # check only: lists changed paths, exit 1 if any
+python -m scripts.report_snapshots --update      # rewrite the snapshot files
+```
 
 ## Not yet covered
 

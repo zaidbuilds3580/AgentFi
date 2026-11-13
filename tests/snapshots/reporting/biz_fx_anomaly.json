@@ -1,0 +1,1788 @@
+{
+  "snapshot_version": 1,
+  "business_id": "biz_fx_anomaly",
+  "scenario": "Expense anomalies",
+  "description": "Normal cash, but November spend trips rules A1, A2, A4 and A5.",
+  "as_of": "2026-11-05",
+  "source": "finance_engine.fixtures",
+  "daily": {
+    "inputs": {
+      "period": "current_month",
+      "start_date": "2026-11-01",
+      "end_date": "2026-11-05"
+    },
+    "tools": {
+      "financial_summary": {
+        "business_id": "biz_fx_anomaly",
+        "period": "current_month (2026-11-01 to 2026-11-05)",
+        "inflows": 0.0,
+        "outflows": 253586.0,
+        "net_cash_flow": -253586.0,
+        "cash_balance": 798414.0,
+        "receivables": 0.0,
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": [
+          "1 outflow(s) totalling 2350.00 are uncategorized."
+        ]
+      },
+      "forecast": {
+        "business_id": "biz_fx_anomaly",
+        "horizon_days": 30,
+        "projected_balance": 592552.0,
+        "method": "run_rate_plus_receivables",
+        "risk_level": "low",
+        "data_coverage": 1.0,
+        "currency": "INR",
+        "warnings": []
+      },
+      "overdue_invoices": {
+        "business_id": "biz_fx_anomaly",
+        "as_of_date": "2026-11-05",
+        "count": 0,
+        "total_amount": 0.0,
+        "ageing_bands": [
+          {
+            "band": "1-30",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "31-60",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "61+",
+            "count": 0,
+            "total_amount": 0.0
+          }
+        ],
+        "invoices": [],
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      },
+      "expense_anomalies": {
+        "business_id": "biz_fx_anomaly",
+        "start_date": "2026-11-01",
+        "end_date": "2026-11-05",
+        "anomalies": [
+          {
+            "anomaly_id": "ANOM-3D1C11AEE9",
+            "category": "Software",
+            "vendor": "Amazon Web Services",
+            "amount": 72000.0,
+            "expected_baseline": 12000.0,
+            "severity": "high",
+            "rule": "Payment is 6.0x the median of 4 earlier payments to this payee",
+            "evidence_refs": [
+              "aws-202611"
+            ]
+          },
+          {
+            "anomaly_id": "ANOM-B1B440C7CB",
+            "category": "Marketing",
+            "vendor": "UPI FASTPRINT BROCHURES",
+            "amount": 9000.0,
+            "expected_baseline": 4500.0,
+            "severity": "high",
+            "rule": "Same amount paid to the same payee twice within 3 days (possible duplicate payment)",
+            "evidence_refs": [
+              "print-1",
+              "print-2"
+            ]
+          },
+          {
+            "anomaly_id": "ANOM-B2C68A0219",
+            "category": "Rent",
+            "vendor": "Orange Realty LLP",
+            "amount": 50000.0,
+            "expected_baseline": 55000.0,
+            "severity": "medium",
+            "rule": "Bank payment differs from the linked bill amount",
+            "evidence_refs": [
+              "bill-rent-202611",
+              "rent-202611"
+            ]
+          },
+          {
+            "anomaly_id": "ANOM-97454DF044",
+            "category": "Uncategorized",
+            "vendor": "POS 4471 CASH WITHDRAWAL",
+            "amount": 2350.0,
+            "expected_baseline": 0.0,
+            "severity": "low",
+            "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+            "evidence_refs": [
+              "misc-1"
+            ]
+          }
+        ],
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      }
+    },
+    "agents": {
+      "cashflow": {
+        "agent_name": "cashflow",
+        "summary": "For current_month (2026-11-01 to 2026-11-05), total inflows were ₹0.00 and outflows were ₹253,586.00, resulting in net cash flow of ₹-253,586.00 and an ending cash balance of ₹798,414.00. Over a 30-day horizon, projected cash balance is ₹592,552.00 with a low risk level.",
+        "metrics": {
+          "business_id": "biz_fx_anomaly",
+          "period": "current_month (2026-11-01 to 2026-11-05)",
+          "inflows": 0.0,
+          "outflows": 253586.0,
+          "net_cash_flow": -253586.0,
+          "cash_balance": 798414.0,
+          "receivables": 0.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 592552.0,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": [
+            "1 outflow(s) totalling 2350.00 are uncategorized."
+          ]
+        },
+        "findings": [
+          "Net cash flow is ₹-253,586.00 (inflows: ₹0.00, outflows: ₹253,586.00).",
+          "Outstanding customer receivables total ₹0.00.",
+          "Projected 30-day balance is ₹592,552.00 assessed at low risk."
+        ],
+        "recommendations": [
+          "Monitor collection efforts for ₹0.00 in pending receivables.",
+          "Maintain ongoing operating expenditures within current levels to preserve cash reserves."
+        ],
+        "caveats": [
+          "1 outflow(s) totalling 2350.00 are uncategorized."
+        ],
+        "requires_approval": false
+      },
+      "invoice": {
+        "agent_name": "invoice",
+        "summary": "As of 2026-11-05, there are 0 overdue invoices totaling ₹0.00 across 3 ageing bands.",
+        "metrics": {
+          "business_id": "biz_fx_anomaly",
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "Total overdue receivables stand at ₹0.00 across 0 invoices.",
+          "Ageing distribution: Band 1-30: ₹0.00 (0 invoices), Band 31-60: ₹0.00 (0 invoices), Band 61+: ₹0.00 (0 invoices)."
+        ],
+        "recommendations": [
+          "All invoices are currently up to date; maintain standard billing procedures."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "expense": {
+        "agent_name": "expense",
+        "summary": "Identified 4 expense anomalies between 2026-11-01 and 2026-11-05, including 2 high-severity variance.",
+        "metrics": {
+          "business_id": "biz_fx_anomaly",
+          "start_date": "2026-11-01",
+          "end_date": "2026-11-05",
+          "anomalies_count": 4,
+          "anomalies": [
+            {
+              "anomaly_id": "ANOM-3D1C11AEE9",
+              "category": "Software",
+              "vendor": "Amazon Web Services",
+              "amount": 72000.0,
+              "expected_baseline": 12000.0,
+              "severity": "high",
+              "rule": "Payment is 6.0x the median of 4 earlier payments to this payee",
+              "evidence_refs": [
+                "aws-202611"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-B1B440C7CB",
+              "category": "Marketing",
+              "vendor": "UPI FASTPRINT BROCHURES",
+              "amount": 9000.0,
+              "expected_baseline": 4500.0,
+              "severity": "high",
+              "rule": "Same amount paid to the same payee twice within 3 days (possible duplicate payment)",
+              "evidence_refs": [
+                "print-1",
+                "print-2"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-B2C68A0219",
+              "category": "Rent",
+              "vendor": "Orange Realty LLP",
+              "amount": 50000.0,
+              "expected_baseline": 55000.0,
+              "severity": "medium",
+              "rule": "Bank payment differs from the linked bill amount",
+              "evidence_refs": [
+                "bill-rent-202611",
+                "rent-202611"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-97454DF044",
+              "category": "Uncategorized",
+              "vendor": "POS 4471 CASH WITHDRAWAL",
+              "amount": 2350.0,
+              "expected_baseline": 0.0,
+              "severity": "low",
+              "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+              "evidence_refs": [
+                "misc-1"
+              ]
+            }
+          ],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "Flagged ANOM-3D1C11AEE9 (Amazon Web Services, Software): ₹72,000.00 vs baseline ₹12,000.00 [high severity] - Payment is 6.0x the median of 4 earlier payments to this payee.",
+          "Flagged ANOM-B1B440C7CB (UPI FASTPRINT BROCHURES, Marketing): ₹9,000.00 vs baseline ₹4,500.00 [high severity] - Same amount paid to the same payee twice within 3 days (possible duplicate payment).",
+          "Flagged ANOM-B2C68A0219 (Orange Realty LLP, Rent): ₹50,000.00 vs baseline ₹55,000.00 [medium severity] - Bank payment differs from the linked bill amount.",
+          "Flagged ANOM-97454DF044 (POS 4471 CASH WITHDRAWAL, Uncategorized): ₹2,350.00 vs baseline ₹0.00 [low severity] - Outflow has no expense category, so it cannot be checked against a baseline."
+        ],
+        "recommendations": [
+          "Review invoice for vendor Amazon Web Services (ANOM-3D1C11AEE9) exceeding baseline by ₹60,000.00.",
+          "Audit recurring subscriptions and verify departmental spending limits against budget caps."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "intelligence": {
+        "agent_name": "intelligence",
+        "summary": "Ending cash balance is ₹798,414.00 with net cash flow of ₹-253,586.00 (inflows ₹0.00, outflows ₹253,586.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 4 anomalous expense items were identified.",
+        "metrics": {
+          "cashflow": {
+            "business_id": "biz_fx_anomaly",
+            "period": "current_month (2026-11-01 to 2026-11-05)",
+            "inflows": 0.0,
+            "outflows": 253586.0,
+            "net_cash_flow": -253586.0,
+            "cash_balance": 798414.0,
+            "receivables": 0.0,
+            "calculation_version": "finance-engine-1.1.0",
+            "horizon_days": 30,
+            "projected_balance": 592552.0,
+            "method": "run_rate_plus_receivables",
+            "risk_level": "low",
+            "data_coverage": 1.0,
+            "currency": "INR",
+            "warnings": [
+              "1 outflow(s) totalling 2350.00 are uncategorized."
+            ]
+          },
+          "business_id": "biz_fx_anomaly",
+          "period": "current_month (2026-11-01 to 2026-11-05)",
+          "inflows": 0.0,
+          "outflows": 253586.0,
+          "net_cash_flow": -253586.0,
+          "cash_balance": 798414.0,
+          "receivables": 0.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 592552.0,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": [
+            "1 outflow(s) totalling 2350.00 are uncategorized."
+          ],
+          "invoice": {
+            "business_id": "biz_fx_anomaly",
+            "as_of_date": "2026-11-05",
+            "count": 0,
+            "total_amount": 0.0,
+            "ageing_bands": [
+              {
+                "band": "1-30",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "31-60",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "61+",
+                "count": 0,
+                "total_amount": 0.0
+              }
+            ],
+            "invoices": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "expense": {
+            "business_id": "biz_fx_anomaly",
+            "start_date": "2026-11-01",
+            "end_date": "2026-11-05",
+            "anomalies_count": 4,
+            "anomalies": [
+              {
+                "anomaly_id": "ANOM-3D1C11AEE9",
+                "category": "Software",
+                "vendor": "Amazon Web Services",
+                "amount": 72000.0,
+                "expected_baseline": 12000.0,
+                "severity": "high",
+                "rule": "Payment is 6.0x the median of 4 earlier payments to this payee",
+                "evidence_refs": [
+                  "aws-202611"
+                ]
+              },
+              {
+                "anomaly_id": "ANOM-B1B440C7CB",
+                "category": "Marketing",
+                "vendor": "UPI FASTPRINT BROCHURES",
+                "amount": 9000.0,
+                "expected_baseline": 4500.0,
+                "severity": "high",
+                "rule": "Same amount paid to the same payee twice within 3 days (possible duplicate payment)",
+                "evidence_refs": [
+                  "print-1",
+                  "print-2"
+                ]
+              },
+              {
+                "anomaly_id": "ANOM-B2C68A0219",
+                "category": "Rent",
+                "vendor": "Orange Realty LLP",
+                "amount": 50000.0,
+                "expected_baseline": 55000.0,
+                "severity": "medium",
+                "rule": "Bank payment differs from the linked bill amount",
+                "evidence_refs": [
+                  "bill-rent-202611",
+                  "rent-202611"
+                ]
+              },
+              {
+                "anomaly_id": "ANOM-97454DF044",
+                "category": "Uncategorized",
+                "vendor": "POS 4471 CASH WITHDRAWAL",
+                "amount": 2350.0,
+                "expected_baseline": 0.0,
+                "severity": "low",
+                "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+                "evidence_refs": [
+                  "misc-1"
+                ]
+              }
+            ],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "start_date": "2026-11-01",
+          "end_date": "2026-11-05",
+          "anomalies_count": 4,
+          "anomalies": [
+            {
+              "anomaly_id": "ANOM-3D1C11AEE9",
+              "category": "Software",
+              "vendor": "Amazon Web Services",
+              "amount": 72000.0,
+              "expected_baseline": 12000.0,
+              "severity": "high",
+              "rule": "Payment is 6.0x the median of 4 earlier payments to this payee",
+              "evidence_refs": [
+                "aws-202611"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-B1B440C7CB",
+              "category": "Marketing",
+              "vendor": "UPI FASTPRINT BROCHURES",
+              "amount": 9000.0,
+              "expected_baseline": 4500.0,
+              "severity": "high",
+              "rule": "Same amount paid to the same payee twice within 3 days (possible duplicate payment)",
+              "evidence_refs": [
+                "print-1",
+                "print-2"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-B2C68A0219",
+              "category": "Rent",
+              "vendor": "Orange Realty LLP",
+              "amount": 50000.0,
+              "expected_baseline": 55000.0,
+              "severity": "medium",
+              "rule": "Bank payment differs from the linked bill amount",
+              "evidence_refs": [
+                "bill-rent-202611",
+                "rent-202611"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-97454DF044",
+              "category": "Uncategorized",
+              "vendor": "POS 4471 CASH WITHDRAWAL",
+              "amount": 2350.0,
+              "expected_baseline": 0.0,
+              "severity": "low",
+              "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+              "evidence_refs": [
+                "misc-1"
+              ]
+            }
+          ]
+        },
+        "findings": [
+          "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹798,414.00).",
+          "4 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹-253,586.00).",
+          "Net cash flow of ₹-253,586.00 supports the 30-day projected balance of ₹592,552.00.",
+          "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹592,552.00.",
+          "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "Expense risk: 4 expense anomalies detected."
+        ],
+        "recommendations": [
+          {
+            "recommendation": "Review and investigate flagged anomalous expenses with department heads.",
+            "priority": "medium",
+            "reason": "4 expenses exceeded expected baseline levels.",
+            "requires_approval": false
+          },
+          {
+            "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+            "priority": "low",
+            "reason": "Cash balance is ₹798,414.00 with low projected liquidity risk.",
+            "requires_approval": false
+          }
+        ],
+        "caveats": [
+          "1 outflow(s) totalling 2350.00 are uncategorized."
+        ],
+        "requires_approval": false,
+        "overall_summary": "Ending cash balance is ₹798,414.00 with net cash flow of ₹-253,586.00 (inflows ₹0.00, outflows ₹253,586.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 4 anomalous expense items were identified.",
+        "links": [
+          "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹798,414.00).",
+          "4 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹-253,586.00).",
+          "Net cash flow of ₹-253,586.00 supports the 30-day projected balance of ₹592,552.00."
+        ],
+        "key_risks": [
+          "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹592,552.00.",
+          "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "Expense risk: 4 expense anomalies detected."
+        ],
+        "missing_parts": []
+      }
+    },
+    "report": {
+      "agent_name": "reporting",
+      "summary": "Ending cash balance is ₹798,414.00 with net cash flow of -₹253,586.00. Operations show no overdue invoices and 4 expense anomalies were detected.",
+      "metrics": {
+        "intelligence": {
+          "cashflow": {
+            "business_id": "biz_fx_anomaly",
+            "period": "current_month (2026-11-01 to 2026-11-05)",
+            "inflows": 0.0,
+            "outflows": 253586.0,
+            "net_cash_flow": -253586.0,
+            "cash_balance": 798414.0,
+            "receivables": 0.0,
+            "calculation_version": "finance-engine-1.1.0",
+            "horizon_days": 30,
+            "projected_balance": 592552.0,
+            "method": "run_rate_plus_receivables",
+            "risk_level": "low",
+            "data_coverage": 1.0,
+            "currency": "INR",
+            "warnings": [
+              "1 outflow(s) totalling 2350.00 are uncategorized."
+            ]
+          },
+          "business_id": "biz_fx_anomaly",
+          "period": "current_month (2026-11-01 to 2026-11-05)",
+          "inflows": 0.0,
+          "outflows": 253586.0,
+          "net_cash_flow": -253586.0,
+          "cash_balance": 798414.0,
+          "receivables": 0.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 592552.0,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": [
+            "1 outflow(s) totalling 2350.00 are uncategorized."
+          ],
+          "invoice": {
+            "business_id": "biz_fx_anomaly",
+            "as_of_date": "2026-11-05",
+            "count": 0,
+            "total_amount": 0.0,
+            "ageing_bands": [
+              {
+                "band": "1-30",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "31-60",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "61+",
+                "count": 0,
+                "total_amount": 0.0
+              }
+            ],
+            "invoices": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "expense": {
+            "business_id": "biz_fx_anomaly",
+            "start_date": "2026-11-01",
+            "end_date": "2026-11-05",
+            "anomalies_count": 4,
+            "anomalies": [
+              {
+                "anomaly_id": "ANOM-3D1C11AEE9",
+                "category": "Software",
+                "vendor": "Amazon Web Services",
+                "amount": 72000.0,
+                "expected_baseline": 12000.0,
+                "severity": "high",
+                "rule": "Payment is 6.0x the median of 4 earlier payments to this payee",
+                "evidence_refs": [
+                  "aws-202611"
+                ]
+              },
+              {
+                "anomaly_id": "ANOM-B1B440C7CB",
+                "category": "Marketing",
+                "vendor": "UPI FASTPRINT BROCHURES",
+                "amount": 9000.0,
+                "expected_baseline": 4500.0,
+                "severity": "high",
+                "rule": "Same amount paid to the same payee twice within 3 days (possible duplicate payment)",
+                "evidence_refs": [
+                  "print-1",
+                  "print-2"
+                ]
+              },
+              {
+                "anomaly_id": "ANOM-B2C68A0219",
+                "category": "Rent",
+                "vendor": "Orange Realty LLP",
+                "amount": 50000.0,
+                "expected_baseline": 55000.0,
+                "severity": "medium",
+                "rule": "Bank payment differs from the linked bill amount",
+                "evidence_refs": [
+                  "bill-rent-202611",
+                  "rent-202611"
+                ]
+              },
+              {
+                "anomaly_id": "ANOM-97454DF044",
+                "category": "Uncategorized",
+                "vendor": "POS 4471 CASH WITHDRAWAL",
+                "amount": 2350.0,
+                "expected_baseline": 0.0,
+                "severity": "low",
+                "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+                "evidence_refs": [
+                  "misc-1"
+                ]
+              }
+            ],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "start_date": "2026-11-01",
+          "end_date": "2026-11-05",
+          "anomalies_count": 4,
+          "anomalies": [
+            {
+              "anomaly_id": "ANOM-3D1C11AEE9",
+              "category": "Software",
+              "vendor": "Amazon Web Services",
+              "amount": 72000.0,
+              "expected_baseline": 12000.0,
+              "severity": "high",
+              "rule": "Payment is 6.0x the median of 4 earlier payments to this payee",
+              "evidence_refs": [
+                "aws-202611"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-B1B440C7CB",
+              "category": "Marketing",
+              "vendor": "UPI FASTPRINT BROCHURES",
+              "amount": 9000.0,
+              "expected_baseline": 4500.0,
+              "severity": "high",
+              "rule": "Same amount paid to the same payee twice within 3 days (possible duplicate payment)",
+              "evidence_refs": [
+                "print-1",
+                "print-2"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-B2C68A0219",
+              "category": "Rent",
+              "vendor": "Orange Realty LLP",
+              "amount": 50000.0,
+              "expected_baseline": 55000.0,
+              "severity": "medium",
+              "rule": "Bank payment differs from the linked bill amount",
+              "evidence_refs": [
+                "bill-rent-202611",
+                "rent-202611"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-97454DF044",
+              "category": "Uncategorized",
+              "vendor": "POS 4471 CASH WITHDRAWAL",
+              "amount": 2350.0,
+              "expected_baseline": 0.0,
+              "severity": "low",
+              "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+              "evidence_refs": [
+                "misc-1"
+              ]
+            }
+          ]
+        },
+        "cashflow": {
+          "business_id": "biz_fx_anomaly",
+          "period": "current_month (2026-11-01 to 2026-11-05)",
+          "inflows": 0.0,
+          "outflows": 253586.0,
+          "net_cash_flow": -253586.0,
+          "cash_balance": 798414.0,
+          "receivables": 0.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 592552.0,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": [
+            "1 outflow(s) totalling 2350.00 are uncategorized."
+          ]
+        },
+        "business_id": "biz_fx_anomaly",
+        "period": "current_month (2026-11-01 to 2026-11-05)",
+        "inflows": 0.0,
+        "outflows": 253586.0,
+        "net_cash_flow": -253586.0,
+        "cash_balance": 798414.0,
+        "receivables": 0.0,
+        "calculation_version": "finance-engine-1.1.0",
+        "horizon_days": 30,
+        "projected_balance": 592552.0,
+        "method": "run_rate_plus_receivables",
+        "risk_level": "low",
+        "data_coverage": 1.0,
+        "currency": "INR",
+        "warnings": [
+          "1 outflow(s) totalling 2350.00 are uncategorized."
+        ],
+        "invoice": {
+          "business_id": "biz_fx_anomaly",
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "as_of_date": "2026-11-05",
+        "count": 0,
+        "total_amount": 0.0,
+        "ageing_bands": [
+          {
+            "band": "1-30",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "31-60",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "61+",
+            "count": 0,
+            "total_amount": 0.0
+          }
+        ],
+        "invoices": [],
+        "expense": {
+          "business_id": "biz_fx_anomaly",
+          "start_date": "2026-11-01",
+          "end_date": "2026-11-05",
+          "anomalies_count": 4,
+          "anomalies": [
+            {
+              "anomaly_id": "ANOM-3D1C11AEE9",
+              "category": "Software",
+              "vendor": "Amazon Web Services",
+              "amount": 72000.0,
+              "expected_baseline": 12000.0,
+              "severity": "high",
+              "rule": "Payment is 6.0x the median of 4 earlier payments to this payee",
+              "evidence_refs": [
+                "aws-202611"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-B1B440C7CB",
+              "category": "Marketing",
+              "vendor": "UPI FASTPRINT BROCHURES",
+              "amount": 9000.0,
+              "expected_baseline": 4500.0,
+              "severity": "high",
+              "rule": "Same amount paid to the same payee twice within 3 days (possible duplicate payment)",
+              "evidence_refs": [
+                "print-1",
+                "print-2"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-B2C68A0219",
+              "category": "Rent",
+              "vendor": "Orange Realty LLP",
+              "amount": 50000.0,
+              "expected_baseline": 55000.0,
+              "severity": "medium",
+              "rule": "Bank payment differs from the linked bill amount",
+              "evidence_refs": [
+                "bill-rent-202611",
+                "rent-202611"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-97454DF044",
+              "category": "Uncategorized",
+              "vendor": "POS 4471 CASH WITHDRAWAL",
+              "amount": 2350.0,
+              "expected_baseline": 0.0,
+              "severity": "low",
+              "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+              "evidence_refs": [
+                "misc-1"
+              ]
+            }
+          ],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "start_date": "2026-11-01",
+        "end_date": "2026-11-05",
+        "anomalies_count": 4,
+        "anomalies": [
+          {
+            "anomaly_id": "ANOM-3D1C11AEE9",
+            "category": "Software",
+            "vendor": "Amazon Web Services",
+            "amount": 72000.0,
+            "expected_baseline": 12000.0,
+            "severity": "high",
+            "rule": "Payment is 6.0x the median of 4 earlier payments to this payee",
+            "evidence_refs": [
+              "aws-202611"
+            ]
+          },
+          {
+            "anomaly_id": "ANOM-B1B440C7CB",
+            "category": "Marketing",
+            "vendor": "UPI FASTPRINT BROCHURES",
+            "amount": 9000.0,
+            "expected_baseline": 4500.0,
+            "severity": "high",
+            "rule": "Same amount paid to the same payee twice within 3 days (possible duplicate payment)",
+            "evidence_refs": [
+              "print-1",
+              "print-2"
+            ]
+          },
+          {
+            "anomaly_id": "ANOM-B2C68A0219",
+            "category": "Rent",
+            "vendor": "Orange Realty LLP",
+            "amount": 50000.0,
+            "expected_baseline": 55000.0,
+            "severity": "medium",
+            "rule": "Bank payment differs from the linked bill amount",
+            "evidence_refs": [
+              "bill-rent-202611",
+              "rent-202611"
+            ]
+          },
+          {
+            "anomaly_id": "ANOM-97454DF044",
+            "category": "Uncategorized",
+            "vendor": "POS 4471 CASH WITHDRAWAL",
+            "amount": 2350.0,
+            "expected_baseline": 0.0,
+            "severity": "low",
+            "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+            "evidence_refs": [
+              "misc-1"
+            ]
+          }
+        ]
+      },
+      "findings": [],
+      "recommendations": [
+        {
+          "recommendation": "Review and investigate flagged anomalous expenses with department heads.",
+          "priority": "medium",
+          "reason": "4 expenses exceeded expected baseline levels.",
+          "requires_approval": false
+        },
+        {
+          "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+          "priority": "low",
+          "reason": "Cash balance is ₹798,414.00 with low projected liquidity risk.",
+          "requires_approval": false
+        }
+      ],
+      "caveats": [
+        "1 outflow(s) totalling 2350.00 are uncategorized."
+      ],
+      "requires_approval": false,
+      "report_type": "daily",
+      "title": "Daily report - 5 November 2026",
+      "evidence": [
+        {
+          "label": "Cash Balance",
+          "value": "₹798,414.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Net Cash Flow",
+          "value": "-₹253,586.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Projected Cash Balance",
+          "value": "₹592,552.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Liquidity Risk Level",
+          "value": "Low",
+          "source": "cashflow"
+        },
+        {
+          "label": "Overdue Invoices Total",
+          "value": "₹0.00",
+          "source": "invoice"
+        },
+        {
+          "label": "Overdue Invoices Count",
+          "value": "0",
+          "source": "invoice"
+        },
+        {
+          "label": "Expense Anomalies Count",
+          "value": "4",
+          "source": "expense"
+        },
+        {
+          "label": "Overall Financial Health",
+          "value": "Ending cash balance is ₹798,414.00 with net cash flow of ₹-253,586.00 (inflows ₹0.00, outflows ₹253,586.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 4 anomalous expense items were identified.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹592,552.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Expense risk: 4 expense anomalies detected.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹798,414.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "4 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹-253,586.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Net cash flow of ₹-253,586.00 supports the 30-day projected balance of ₹592,552.00.",
+          "source": "intelligence"
+        }
+      ],
+      "missing_parts": [],
+      "currency": "INR"
+    },
+    "chat_response": {
+      "summary": "Ending cash balance is ₹798,414.00 with net cash flow of -₹253,586.00. Operations show no overdue invoices and 4 expense anomalies were detected.",
+      "evidence": [
+        {
+          "label": "Cash Balance",
+          "value": "₹798,414.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Net Cash Flow",
+          "value": "-₹253,586.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Projected Cash Balance",
+          "value": "₹592,552.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Liquidity Risk Level",
+          "value": "Low",
+          "source": "cashflow"
+        },
+        {
+          "label": "Overdue Invoices Total",
+          "value": "₹0.00",
+          "source": "invoice"
+        },
+        {
+          "label": "Overdue Invoices Count",
+          "value": "0",
+          "source": "invoice"
+        },
+        {
+          "label": "Expense Anomalies Count",
+          "value": "4",
+          "source": "expense"
+        },
+        {
+          "label": "Overall Financial Health",
+          "value": "Ending cash balance is ₹798,414.00 with net cash flow of ₹-253,586.00 (inflows ₹0.00, outflows ₹253,586.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 4 anomalous expense items were identified.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹592,552.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Expense risk: 4 expense anomalies detected.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹798,414.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "4 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹-253,586.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Net cash flow of ₹-253,586.00 supports the 30-day projected balance of ₹592,552.00.",
+          "source": "intelligence"
+        }
+      ],
+      "caveats": [
+        "1 outflow(s) totalling 2350.00 are uncategorized."
+      ],
+      "recommendations": [
+        {
+          "recommendation": "Review and investigate flagged anomalous expenses with department heads.",
+          "priority": "medium",
+          "reason": "4 expenses exceeded expected baseline levels.",
+          "requires_approval": false
+        },
+        {
+          "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+          "priority": "low",
+          "reason": "Cash balance is ₹798,414.00 with low projected liquidity risk.",
+          "requires_approval": false
+        }
+      ],
+      "missing_parts": [],
+      "report_type": "daily",
+      "currency": "INR"
+    }
+  },
+  "monthly": {
+    "inputs": {
+      "period": "last_month",
+      "start_date": "2026-10-01",
+      "end_date": "2026-10-31"
+    },
+    "tools": {
+      "financial_summary": {
+        "business_id": "biz_fx_anomaly",
+        "period": "last_month (2026-10-01 to 2026-10-31)",
+        "inflows": 295000.0,
+        "outflows": 182000.0,
+        "net_cash_flow": 113000.0,
+        "cash_balance": 1052000.0,
+        "receivables": 0.0,
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      },
+      "forecast": {
+        "business_id": "biz_fx_anomaly",
+        "horizon_days": 30,
+        "projected_balance": 592552.0,
+        "method": "run_rate_plus_receivables",
+        "risk_level": "low",
+        "data_coverage": 1.0,
+        "currency": "INR",
+        "warnings": []
+      },
+      "overdue_invoices": {
+        "business_id": "biz_fx_anomaly",
+        "as_of_date": "2026-11-05",
+        "count": 0,
+        "total_amount": 0.0,
+        "ageing_bands": [
+          {
+            "band": "1-30",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "31-60",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "61+",
+            "count": 0,
+            "total_amount": 0.0
+          }
+        ],
+        "invoices": [],
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      },
+      "expense_anomalies": {
+        "business_id": "biz_fx_anomaly",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-31",
+        "anomalies": [],
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      }
+    },
+    "agents": {
+      "cashflow": {
+        "agent_name": "cashflow",
+        "summary": "For last_month (2026-10-01 to 2026-10-31), total inflows were ₹295,000.00 and outflows were ₹182,000.00, resulting in net cash flow of ₹113,000.00 and an ending cash balance of ₹1,052,000.00. Over a 30-day horizon, projected cash balance is ₹592,552.00 with a low risk level.",
+        "metrics": {
+          "business_id": "biz_fx_anomaly",
+          "period": "last_month (2026-10-01 to 2026-10-31)",
+          "inflows": 295000.0,
+          "outflows": 182000.0,
+          "net_cash_flow": 113000.0,
+          "cash_balance": 1052000.0,
+          "receivables": 0.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 592552.0,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "Net cash flow is ₹113,000.00 (inflows: ₹295,000.00, outflows: ₹182,000.00).",
+          "Outstanding customer receivables total ₹0.00.",
+          "Projected 30-day balance is ₹592,552.00 assessed at low risk."
+        ],
+        "recommendations": [
+          "Monitor collection efforts for ₹0.00 in pending receivables.",
+          "Maintain ongoing operating expenditures within current levels to preserve cash reserves."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "invoice": {
+        "agent_name": "invoice",
+        "summary": "As of 2026-11-05, there are 0 overdue invoices totaling ₹0.00 across 3 ageing bands.",
+        "metrics": {
+          "business_id": "biz_fx_anomaly",
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "Total overdue receivables stand at ₹0.00 across 0 invoices.",
+          "Ageing distribution: Band 1-30: ₹0.00 (0 invoices), Band 31-60: ₹0.00 (0 invoices), Band 61+: ₹0.00 (0 invoices)."
+        ],
+        "recommendations": [
+          "All invoices are currently up to date; maintain standard billing procedures."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "expense": {
+        "agent_name": "expense",
+        "summary": "No expense anomalies found between 2026-10-01 and 2026-10-31.",
+        "metrics": {
+          "business_id": "biz_fx_anomaly",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-31",
+          "anomalies_count": 0,
+          "anomalies": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "All expenditures conform to expected baselines; no spending anomalies were detected."
+        ],
+        "recommendations": [
+          "All expenditures conform to expected baselines; maintain regular spending reviews."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "intelligence": {
+        "agent_name": "intelligence",
+        "summary": "Ending cash balance is ₹1,052,000.00 with net cash flow of ₹113,000.00 (inflows ₹295,000.00, outflows ₹182,000.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 0 anomalous expense items were identified.",
+        "metrics": {
+          "cashflow": {
+            "business_id": "biz_fx_anomaly",
+            "period": "last_month (2026-10-01 to 2026-10-31)",
+            "inflows": 295000.0,
+            "outflows": 182000.0,
+            "net_cash_flow": 113000.0,
+            "cash_balance": 1052000.0,
+            "receivables": 0.0,
+            "calculation_version": "finance-engine-1.1.0",
+            "horizon_days": 30,
+            "projected_balance": 592552.0,
+            "method": "run_rate_plus_receivables",
+            "risk_level": "low",
+            "data_coverage": 1.0,
+            "currency": "INR",
+            "warnings": []
+          },
+          "business_id": "biz_fx_anomaly",
+          "period": "last_month (2026-10-01 to 2026-10-31)",
+          "inflows": 295000.0,
+          "outflows": 182000.0,
+          "net_cash_flow": 113000.0,
+          "cash_balance": 1052000.0,
+          "receivables": 0.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 592552.0,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": [],
+          "invoice": {
+            "business_id": "biz_fx_anomaly",
+            "as_of_date": "2026-11-05",
+            "count": 0,
+            "total_amount": 0.0,
+            "ageing_bands": [
+              {
+                "band": "1-30",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "31-60",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "61+",
+                "count": 0,
+                "total_amount": 0.0
+              }
+            ],
+            "invoices": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "expense": {
+            "business_id": "biz_fx_anomaly",
+            "start_date": "2026-10-01",
+            "end_date": "2026-10-31",
+            "anomalies_count": 0,
+            "anomalies": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-31",
+          "anomalies_count": 0,
+          "anomalies": []
+        },
+        "findings": [
+          "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹1,052,000.00).",
+          "0 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹113,000.00).",
+          "Net cash flow of ₹113,000.00 supports the 30-day projected balance of ₹592,552.00.",
+          "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹592,552.00.",
+          "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "Expense risk: 0 expense anomalies detected."
+        ],
+        "recommendations": [
+          {
+            "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+            "priority": "low",
+            "reason": "Cash balance is ₹1,052,000.00 with low projected liquidity risk.",
+            "requires_approval": false
+          }
+        ],
+        "caveats": [],
+        "requires_approval": false,
+        "overall_summary": "Ending cash balance is ₹1,052,000.00 with net cash flow of ₹113,000.00 (inflows ₹295,000.00, outflows ₹182,000.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 0 anomalous expense items were identified.",
+        "links": [
+          "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹1,052,000.00).",
+          "0 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹113,000.00).",
+          "Net cash flow of ₹113,000.00 supports the 30-day projected balance of ₹592,552.00."
+        ],
+        "key_risks": [
+          "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹592,552.00.",
+          "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "Expense risk: 0 expense anomalies detected."
+        ],
+        "missing_parts": []
+      }
+    },
+    "report": {
+      "agent_name": "reporting",
+      "summary": "Monthly cash balance concluded at ₹1,052,000.00 with a net cash flow of ₹113,000.00 (inflows ₹295,000.00, outflows ₹182,000.00). The 30-day projected cash balance stands at ₹592,552.00 under a low liquidity risk assessment. There are no overdue invoices. A total of 0 anomalous expense transactions were detected during the period.",
+      "metrics": {
+        "intelligence": {
+          "cashflow": {
+            "business_id": "biz_fx_anomaly",
+            "period": "last_month (2026-10-01 to 2026-10-31)",
+            "inflows": 295000.0,
+            "outflows": 182000.0,
+            "net_cash_flow": 113000.0,
+            "cash_balance": 1052000.0,
+            "receivables": 0.0,
+            "calculation_version": "finance-engine-1.1.0",
+            "horizon_days": 30,
+            "projected_balance": 592552.0,
+            "method": "run_rate_plus_receivables",
+            "risk_level": "low",
+            "data_coverage": 1.0,
+            "currency": "INR",
+            "warnings": []
+          },
+          "business_id": "biz_fx_anomaly",
+          "period": "last_month (2026-10-01 to 2026-10-31)",
+          "inflows": 295000.0,
+          "outflows": 182000.0,
+          "net_cash_flow": 113000.0,
+          "cash_balance": 1052000.0,
+          "receivables": 0.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 592552.0,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": [],
+          "invoice": {
+            "business_id": "biz_fx_anomaly",
+            "as_of_date": "2026-11-05",
+            "count": 0,
+            "total_amount": 0.0,
+            "ageing_bands": [
+              {
+                "band": "1-30",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "31-60",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "61+",
+                "count": 0,
+                "total_amount": 0.0
+              }
+            ],
+            "invoices": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "expense": {
+            "business_id": "biz_fx_anomaly",
+            "start_date": "2026-10-01",
+            "end_date": "2026-10-31",
+            "anomalies_count": 0,
+            "anomalies": [],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-31",
+          "anomalies_count": 0,
+          "anomalies": []
+        },
+        "cashflow": {
+          "business_id": "biz_fx_anomaly",
+          "period": "last_month (2026-10-01 to 2026-10-31)",
+          "inflows": 295000.0,
+          "outflows": 182000.0,
+          "net_cash_flow": 113000.0,
+          "cash_balance": 1052000.0,
+          "receivables": 0.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": 592552.0,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "low",
+          "data_coverage": 1.0,
+          "currency": "INR",
+          "warnings": []
+        },
+        "business_id": "biz_fx_anomaly",
+        "period": "last_month (2026-10-01 to 2026-10-31)",
+        "inflows": 295000.0,
+        "outflows": 182000.0,
+        "net_cash_flow": 113000.0,
+        "cash_balance": 1052000.0,
+        "receivables": 0.0,
+        "calculation_version": "finance-engine-1.1.0",
+        "horizon_days": 30,
+        "projected_balance": 592552.0,
+        "method": "run_rate_plus_receivables",
+        "risk_level": "low",
+        "data_coverage": 1.0,
+        "currency": "INR",
+        "warnings": [],
+        "invoice": {
+          "business_id": "biz_fx_anomaly",
+          "as_of_date": "2026-11-05",
+          "count": 0,
+          "total_amount": 0.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "as_of_date": "2026-11-05",
+        "count": 0,
+        "total_amount": 0.0,
+        "ageing_bands": [
+          {
+            "band": "1-30",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "31-60",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "61+",
+            "count": 0,
+            "total_amount": 0.0
+          }
+        ],
+        "invoices": [],
+        "expense": {
+          "business_id": "biz_fx_anomaly",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-31",
+          "anomalies_count": 0,
+          "anomalies": [],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-31",
+        "anomalies_count": 0,
+        "anomalies": []
+      },
+      "findings": [],
+      "recommendations": [
+        {
+          "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+          "priority": "low",
+          "reason": "Cash balance is ₹1,052,000.00 with low projected liquidity risk.",
+          "requires_approval": false
+        }
+      ],
+      "caveats": [],
+      "requires_approval": false,
+      "report_type": "monthly",
+      "title": "Monthly report - 5 November 2026",
+      "evidence": [
+        {
+          "label": "Cash Balance",
+          "value": "₹1,052,000.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Net Cash Flow",
+          "value": "₹113,000.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Projected Cash Balance",
+          "value": "₹592,552.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Liquidity Risk Level",
+          "value": "Low",
+          "source": "cashflow"
+        },
+        {
+          "label": "Overdue Invoices Total",
+          "value": "₹0.00",
+          "source": "invoice"
+        },
+        {
+          "label": "Overdue Invoices Count",
+          "value": "0",
+          "source": "invoice"
+        },
+        {
+          "label": "Expense Anomalies Count",
+          "value": "0",
+          "source": "expense"
+        },
+        {
+          "label": "Overall Financial Health",
+          "value": "Ending cash balance is ₹1,052,000.00 with net cash flow of ₹113,000.00 (inflows ₹295,000.00, outflows ₹182,000.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 0 anomalous expense items were identified.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹592,552.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Expense risk: 0 expense anomalies detected.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹1,052,000.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "0 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹113,000.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Net cash flow of ₹113,000.00 supports the 30-day projected balance of ₹592,552.00.",
+          "source": "intelligence"
+        }
+      ],
+      "missing_parts": [],
+      "currency": "INR"
+    },
+    "chat_response": {
+      "summary": "Monthly cash balance concluded at ₹1,052,000.00 with a net cash flow of ₹113,000.00 (inflows ₹295,000.00, outflows ₹182,000.00). The 30-day projected cash balance stands at ₹592,552.00 under a low liquidity risk assessment. There are no overdue invoices. A total of 0 anomalous expense transactions were detected during the period.",
+      "evidence": [
+        {
+          "label": "Cash Balance",
+          "value": "₹1,052,000.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Net Cash Flow",
+          "value": "₹113,000.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Projected Cash Balance",
+          "value": "₹592,552.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Liquidity Risk Level",
+          "value": "Low",
+          "source": "cashflow"
+        },
+        {
+          "label": "Overdue Invoices Total",
+          "value": "₹0.00",
+          "source": "invoice"
+        },
+        {
+          "label": "Overdue Invoices Count",
+          "value": "0",
+          "source": "invoice"
+        },
+        {
+          "label": "Expense Anomalies Count",
+          "value": "0",
+          "source": "expense"
+        },
+        {
+          "label": "Overall Financial Health",
+          "value": "Ending cash balance is ₹1,052,000.00 with net cash flow of ₹113,000.00 (inflows ₹295,000.00, outflows ₹182,000.00). Outstanding receivables include 0 overdue invoices totaling ₹0.00. 0 anomalous expense items were identified.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Liquidity risk assessed as low over a 30-day horizon with projected balance of ₹592,552.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Receivables risk: 0 overdue invoices total ₹0.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Expense risk: 0 expense anomalies detected.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Overdue receivables of ₹0.00 across 0 invoices delay cash collection and constrain cash balance (currently ₹1,052,000.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "0 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹113,000.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Net cash flow of ₹113,000.00 supports the 30-day projected balance of ₹592,552.00.",
+          "source": "intelligence"
+        }
+      ],
+      "caveats": [],
+      "recommendations": [
+        {
+          "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+          "priority": "low",
+          "reason": "Cash balance is ₹1,052,000.00 with low projected liquidity risk.",
+          "requires_approval": false
+        }
+      ],
+      "missing_parts": [],
+      "report_type": "monthly",
+      "currency": "INR"
+    }
+  }
+}

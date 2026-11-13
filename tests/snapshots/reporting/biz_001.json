@@ -1,0 +1,2269 @@
+{
+  "snapshot_version": 1,
+  "business_id": "biz_001",
+  "scenario": "Sample business",
+  "description": "The fake demo business from data/samples/biz_001 (built by the ETL).",
+  "as_of": "2026-11-05",
+  "source": "data/samples/biz_001",
+  "daily": {
+    "inputs": {
+      "period": "current_month",
+      "start_date": "2026-11-01",
+      "end_date": "2026-11-05"
+    },
+    "tools": {
+      "financial_summary": {
+        "business_id": "biz_001",
+        "period": "current_month (2026-11-01 to 2026-11-05)",
+        "inflows": 20000.0,
+        "outflows": 54440.0,
+        "net_cash_flow": -34440.0,
+        "cash_balance": 5398.5,
+        "receivables": 64460.0,
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": [
+          "Bank data available only through 2026-11-04; later activity in this period is missing.",
+          "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion)."
+        ]
+      },
+      "forecast": {
+        "business_id": "biz_001",
+        "horizon_days": 30,
+        "projected_balance": -82322.9,
+        "method": "run_rate_plus_receivables",
+        "risk_level": "high",
+        "data_coverage": 0.9889,
+        "currency": "INR",
+        "warnings": [
+          "Invoice INV-1005 in USD not included in collections (no FX)."
+        ]
+      },
+      "overdue_invoices": {
+        "business_id": "biz_001",
+        "as_of_date": "2026-11-05",
+        "count": 2,
+        "total_amount": 50300.0,
+        "ageing_bands": [
+          {
+            "band": "1-30",
+            "count": 2,
+            "total_amount": 50300.0
+          },
+          {
+            "band": "31-60",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "61+",
+            "count": 0,
+            "total_amount": 0.0
+          }
+        ],
+        "invoices": [
+          {
+            "invoice_id": "inv-1002",
+            "customer_id": "cust-greenleaf-organics",
+            "due_date": "2026-10-20",
+            "amount": 32600.0,
+            "days_overdue": 16
+          },
+          {
+            "invoice_id": "inv-1003",
+            "customer_id": "cust-brightpath-learning",
+            "due_date": "2026-10-31",
+            "amount": 17700.0,
+            "days_overdue": 5
+          }
+        ],
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      },
+      "expense_anomalies": {
+        "business_id": "biz_001",
+        "start_date": "2026-11-01",
+        "end_date": "2026-11-05",
+        "anomalies": [
+          {
+            "anomaly_id": "ANOM-4B7143375B",
+            "category": "Software",
+            "vendor": "Amazon Web Services",
+            "amount": 8260.0,
+            "expected_baseline": 2495.0,
+            "severity": "medium",
+            "rule": "Payment is 3.3x the median of 4 earlier payments to this payee (robust z-score 129.62)",
+            "evidence_refs": [
+              "txn_8f8d60b35bb0"
+            ]
+          }
+        ],
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      }
+    },
+    "agents": {
+      "cashflow": {
+        "agent_name": "cashflow",
+        "summary": "For current_month (2026-11-01 to 2026-11-05), total inflows were ₹20,000.00 and outflows were ₹54,440.00, resulting in net cash flow of ₹-34,440.00 and an ending cash balance of ₹5,398.50. Over a 30-day horizon, projected cash balance is ₹-82,322.90 with a high risk level.",
+        "metrics": {
+          "business_id": "biz_001",
+          "period": "current_month (2026-11-01 to 2026-11-05)",
+          "inflows": 20000.0,
+          "outflows": 54440.0,
+          "net_cash_flow": -34440.0,
+          "cash_balance": 5398.5,
+          "receivables": 64460.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": -82322.9,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "high",
+          "data_coverage": 0.9889,
+          "currency": "INR",
+          "warnings": [
+            "Bank data available only through 2026-11-04; later activity in this period is missing.",
+            "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+            "Invoice INV-1005 in USD not included in collections (no FX)."
+          ]
+        },
+        "findings": [
+          "Net cash flow is ₹-34,440.00 (inflows: ₹20,000.00, outflows: ₹54,440.00).",
+          "Outstanding customer receivables total ₹64,460.00.",
+          "Projected 30-day balance is ₹-82,322.90 assessed at high risk."
+        ],
+        "recommendations": [
+          "Monitor collection efforts for ₹64,460.00 in pending receivables.",
+          "Maintain ongoing operating expenditures within current levels to preserve cash reserves."
+        ],
+        "caveats": [
+          "Bank data available only through 2026-11-04; later activity in this period is missing.",
+          "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+          "Invoice INV-1005 in USD not included in collections (no FX)."
+        ],
+        "requires_approval": false
+      },
+      "invoice": {
+        "agent_name": "invoice",
+        "summary": "As of 2026-11-05, there are 2 overdue invoices totaling ₹50,300.00 across 3 ageing bands.",
+        "metrics": {
+          "business_id": "biz_001",
+          "as_of_date": "2026-11-05",
+          "count": 2,
+          "total_amount": 50300.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 2,
+              "total_amount": 50300.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [
+            {
+              "invoice_id": "inv-1002",
+              "customer_id": "cust-greenleaf-organics",
+              "due_date": "2026-10-20",
+              "amount": 32600.0,
+              "days_overdue": 16
+            },
+            {
+              "invoice_id": "inv-1003",
+              "customer_id": "cust-brightpath-learning",
+              "due_date": "2026-10-31",
+              "amount": 17700.0,
+              "days_overdue": 5
+            }
+          ],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "Total overdue receivables stand at ₹50,300.00 across 2 invoices.",
+          "Ageing distribution: Band 1-30: ₹50,300.00 (2 invoices), Band 31-60: ₹0.00 (0 invoices), Band 61+: ₹0.00 (0 invoices).",
+          "Most critical overdue invoice: inv-1002 (16 days overdue, ₹32,600.00)."
+        ],
+        "recommendations": [
+          "Consider sending a payment reminder for invoice inv-1002.",
+          "Prioritize collection contact with customer cust-greenleaf-organics regarding overdue balance."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "expense": {
+        "agent_name": "expense",
+        "summary": "Identified 1 expense anomalies between 2026-11-01 and 2026-11-05, including 0 high-severity variance.",
+        "metrics": {
+          "business_id": "biz_001",
+          "start_date": "2026-11-01",
+          "end_date": "2026-11-05",
+          "anomalies_count": 1,
+          "anomalies": [
+            {
+              "anomaly_id": "ANOM-4B7143375B",
+              "category": "Software",
+              "vendor": "Amazon Web Services",
+              "amount": 8260.0,
+              "expected_baseline": 2495.0,
+              "severity": "medium",
+              "rule": "Payment is 3.3x the median of 4 earlier payments to this payee (robust z-score 129.62)",
+              "evidence_refs": [
+                "txn_8f8d60b35bb0"
+              ]
+            }
+          ],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "Flagged ANOM-4B7143375B (Amazon Web Services, Software): ₹8,260.00 vs baseline ₹2,495.00 [medium severity] - Payment is 3.3x the median of 4 earlier payments to this payee (robust z-score 129.62)."
+        ],
+        "recommendations": [
+          "Review invoice for vendor Amazon Web Services (ANOM-4B7143375B) exceeding baseline by ₹5,765.00.",
+          "Audit recurring subscriptions and verify departmental spending limits against budget caps."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "intelligence": {
+        "agent_name": "intelligence",
+        "summary": "Ending cash balance is ₹5,398.50 with net cash flow of ₹-34,440.00 (inflows ₹20,000.00, outflows ₹54,440.00). Outstanding receivables include 2 overdue invoices totaling ₹50,300.00. 1 anomalous expense items were identified.",
+        "metrics": {
+          "cashflow": {
+            "business_id": "biz_001",
+            "period": "current_month (2026-11-01 to 2026-11-05)",
+            "inflows": 20000.0,
+            "outflows": 54440.0,
+            "net_cash_flow": -34440.0,
+            "cash_balance": 5398.5,
+            "receivables": 64460.0,
+            "calculation_version": "finance-engine-1.1.0",
+            "horizon_days": 30,
+            "projected_balance": -82322.9,
+            "method": "run_rate_plus_receivables",
+            "risk_level": "high",
+            "data_coverage": 0.9889,
+            "currency": "INR",
+            "warnings": [
+              "Bank data available only through 2026-11-04; later activity in this period is missing.",
+              "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+              "Invoice INV-1005 in USD not included in collections (no FX)."
+            ]
+          },
+          "business_id": "biz_001",
+          "period": "current_month (2026-11-01 to 2026-11-05)",
+          "inflows": 20000.0,
+          "outflows": 54440.0,
+          "net_cash_flow": -34440.0,
+          "cash_balance": 5398.5,
+          "receivables": 64460.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": -82322.9,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "high",
+          "data_coverage": 0.9889,
+          "currency": "INR",
+          "warnings": [
+            "Bank data available only through 2026-11-04; later activity in this period is missing.",
+            "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+            "Invoice INV-1005 in USD not included in collections (no FX)."
+          ],
+          "invoice": {
+            "business_id": "biz_001",
+            "as_of_date": "2026-11-05",
+            "count": 2,
+            "total_amount": 50300.0,
+            "ageing_bands": [
+              {
+                "band": "1-30",
+                "count": 2,
+                "total_amount": 50300.0
+              },
+              {
+                "band": "31-60",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "61+",
+                "count": 0,
+                "total_amount": 0.0
+              }
+            ],
+            "invoices": [
+              {
+                "invoice_id": "inv-1002",
+                "customer_id": "cust-greenleaf-organics",
+                "due_date": "2026-10-20",
+                "amount": 32600.0,
+                "days_overdue": 16
+              },
+              {
+                "invoice_id": "inv-1003",
+                "customer_id": "cust-brightpath-learning",
+                "due_date": "2026-10-31",
+                "amount": 17700.0,
+                "days_overdue": 5
+              }
+            ],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "as_of_date": "2026-11-05",
+          "count": 2,
+          "total_amount": 50300.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 2,
+              "total_amount": 50300.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [
+            {
+              "invoice_id": "inv-1002",
+              "customer_id": "cust-greenleaf-organics",
+              "due_date": "2026-10-20",
+              "amount": 32600.0,
+              "days_overdue": 16
+            },
+            {
+              "invoice_id": "inv-1003",
+              "customer_id": "cust-brightpath-learning",
+              "due_date": "2026-10-31",
+              "amount": 17700.0,
+              "days_overdue": 5
+            }
+          ],
+          "expense": {
+            "business_id": "biz_001",
+            "start_date": "2026-11-01",
+            "end_date": "2026-11-05",
+            "anomalies_count": 1,
+            "anomalies": [
+              {
+                "anomaly_id": "ANOM-4B7143375B",
+                "category": "Software",
+                "vendor": "Amazon Web Services",
+                "amount": 8260.0,
+                "expected_baseline": 2495.0,
+                "severity": "medium",
+                "rule": "Payment is 3.3x the median of 4 earlier payments to this payee (robust z-score 129.62)",
+                "evidence_refs": [
+                  "txn_8f8d60b35bb0"
+                ]
+              }
+            ],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "start_date": "2026-11-01",
+          "end_date": "2026-11-05",
+          "anomalies_count": 1,
+          "anomalies": [
+            {
+              "anomaly_id": "ANOM-4B7143375B",
+              "category": "Software",
+              "vendor": "Amazon Web Services",
+              "amount": 8260.0,
+              "expected_baseline": 2495.0,
+              "severity": "medium",
+              "rule": "Payment is 3.3x the median of 4 earlier payments to this payee (robust z-score 129.62)",
+              "evidence_refs": [
+                "txn_8f8d60b35bb0"
+              ]
+            }
+          ]
+        },
+        "findings": [
+          "Overdue receivables of ₹50,300.00 across 2 invoices delay cash collection and constrain cash balance (currently ₹5,398.50).",
+          "1 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹-34,440.00).",
+          "Net cash flow of ₹-34,440.00 supports the 30-day projected balance of ₹-82,322.90.",
+          "Liquidity risk assessed as high over a 30-day horizon with projected balance of ₹-82,322.90.",
+          "Receivables risk: 2 overdue invoices total ₹50,300.00.",
+          "Expense risk: 1 expense anomalies detected."
+        ],
+        "recommendations": [
+          {
+            "recommendation": "Send payment reminders for 2 overdue invoices totaling ₹50,300.00.",
+            "priority": "high",
+            "reason": "Recovering ₹50,300.00 in past-due receivables will improve liquid cash reserves.",
+            "requires_approval": true
+          },
+          {
+            "recommendation": "Review and investigate flagged anomalous expenses with department heads.",
+            "priority": "medium",
+            "reason": "1 expenses exceeded expected baseline levels.",
+            "requires_approval": false
+          },
+          {
+            "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+            "priority": "high",
+            "reason": "Cash balance is ₹5,398.50 with high projected liquidity risk.",
+            "requires_approval": false
+          }
+        ],
+        "caveats": [
+          "Bank data available only through 2026-11-04; later activity in this period is missing.",
+          "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+          "Invoice INV-1005 in USD not included in collections (no FX)."
+        ],
+        "requires_approval": true,
+        "overall_summary": "Ending cash balance is ₹5,398.50 with net cash flow of ₹-34,440.00 (inflows ₹20,000.00, outflows ₹54,440.00). Outstanding receivables include 2 overdue invoices totaling ₹50,300.00. 1 anomalous expense items were identified.",
+        "links": [
+          "Overdue receivables of ₹50,300.00 across 2 invoices delay cash collection and constrain cash balance (currently ₹5,398.50).",
+          "1 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹-34,440.00).",
+          "Net cash flow of ₹-34,440.00 supports the 30-day projected balance of ₹-82,322.90."
+        ],
+        "key_risks": [
+          "Liquidity risk assessed as high over a 30-day horizon with projected balance of ₹-82,322.90.",
+          "Receivables risk: 2 overdue invoices total ₹50,300.00.",
+          "Expense risk: 1 expense anomalies detected."
+        ],
+        "missing_parts": []
+      }
+    },
+    "report": {
+      "agent_name": "reporting",
+      "summary": "Ending cash balance is ₹5,398.50 with net cash flow of -₹34,440.00. Operations show 2 overdue invoices total ₹50,300.00 and 1 expense anomalies were detected.",
+      "metrics": {
+        "intelligence": {
+          "cashflow": {
+            "business_id": "biz_001",
+            "period": "current_month (2026-11-01 to 2026-11-05)",
+            "inflows": 20000.0,
+            "outflows": 54440.0,
+            "net_cash_flow": -34440.0,
+            "cash_balance": 5398.5,
+            "receivables": 64460.0,
+            "calculation_version": "finance-engine-1.1.0",
+            "horizon_days": 30,
+            "projected_balance": -82322.9,
+            "method": "run_rate_plus_receivables",
+            "risk_level": "high",
+            "data_coverage": 0.9889,
+            "currency": "INR",
+            "warnings": [
+              "Bank data available only through 2026-11-04; later activity in this period is missing.",
+              "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+              "Invoice INV-1005 in USD not included in collections (no FX)."
+            ]
+          },
+          "business_id": "biz_001",
+          "period": "current_month (2026-11-01 to 2026-11-05)",
+          "inflows": 20000.0,
+          "outflows": 54440.0,
+          "net_cash_flow": -34440.0,
+          "cash_balance": 5398.5,
+          "receivables": 64460.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": -82322.9,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "high",
+          "data_coverage": 0.9889,
+          "currency": "INR",
+          "warnings": [
+            "Bank data available only through 2026-11-04; later activity in this period is missing.",
+            "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+            "Invoice INV-1005 in USD not included in collections (no FX)."
+          ],
+          "invoice": {
+            "business_id": "biz_001",
+            "as_of_date": "2026-11-05",
+            "count": 2,
+            "total_amount": 50300.0,
+            "ageing_bands": [
+              {
+                "band": "1-30",
+                "count": 2,
+                "total_amount": 50300.0
+              },
+              {
+                "band": "31-60",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "61+",
+                "count": 0,
+                "total_amount": 0.0
+              }
+            ],
+            "invoices": [
+              {
+                "invoice_id": "inv-1002",
+                "customer_id": "cust-greenleaf-organics",
+                "due_date": "2026-10-20",
+                "amount": 32600.0,
+                "days_overdue": 16
+              },
+              {
+                "invoice_id": "inv-1003",
+                "customer_id": "cust-brightpath-learning",
+                "due_date": "2026-10-31",
+                "amount": 17700.0,
+                "days_overdue": 5
+              }
+            ],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "as_of_date": "2026-11-05",
+          "count": 2,
+          "total_amount": 50300.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 2,
+              "total_amount": 50300.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [
+            {
+              "invoice_id": "inv-1002",
+              "customer_id": "cust-greenleaf-organics",
+              "due_date": "2026-10-20",
+              "amount": 32600.0,
+              "days_overdue": 16
+            },
+            {
+              "invoice_id": "inv-1003",
+              "customer_id": "cust-brightpath-learning",
+              "due_date": "2026-10-31",
+              "amount": 17700.0,
+              "days_overdue": 5
+            }
+          ],
+          "expense": {
+            "business_id": "biz_001",
+            "start_date": "2026-11-01",
+            "end_date": "2026-11-05",
+            "anomalies_count": 1,
+            "anomalies": [
+              {
+                "anomaly_id": "ANOM-4B7143375B",
+                "category": "Software",
+                "vendor": "Amazon Web Services",
+                "amount": 8260.0,
+                "expected_baseline": 2495.0,
+                "severity": "medium",
+                "rule": "Payment is 3.3x the median of 4 earlier payments to this payee (robust z-score 129.62)",
+                "evidence_refs": [
+                  "txn_8f8d60b35bb0"
+                ]
+              }
+            ],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "start_date": "2026-11-01",
+          "end_date": "2026-11-05",
+          "anomalies_count": 1,
+          "anomalies": [
+            {
+              "anomaly_id": "ANOM-4B7143375B",
+              "category": "Software",
+              "vendor": "Amazon Web Services",
+              "amount": 8260.0,
+              "expected_baseline": 2495.0,
+              "severity": "medium",
+              "rule": "Payment is 3.3x the median of 4 earlier payments to this payee (robust z-score 129.62)",
+              "evidence_refs": [
+                "txn_8f8d60b35bb0"
+              ]
+            }
+          ]
+        },
+        "cashflow": {
+          "business_id": "biz_001",
+          "period": "current_month (2026-11-01 to 2026-11-05)",
+          "inflows": 20000.0,
+          "outflows": 54440.0,
+          "net_cash_flow": -34440.0,
+          "cash_balance": 5398.5,
+          "receivables": 64460.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": -82322.9,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "high",
+          "data_coverage": 0.9889,
+          "currency": "INR",
+          "warnings": [
+            "Bank data available only through 2026-11-04; later activity in this period is missing.",
+            "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+            "Invoice INV-1005 in USD not included in collections (no FX)."
+          ]
+        },
+        "business_id": "biz_001",
+        "period": "current_month (2026-11-01 to 2026-11-05)",
+        "inflows": 20000.0,
+        "outflows": 54440.0,
+        "net_cash_flow": -34440.0,
+        "cash_balance": 5398.5,
+        "receivables": 64460.0,
+        "calculation_version": "finance-engine-1.1.0",
+        "horizon_days": 30,
+        "projected_balance": -82322.9,
+        "method": "run_rate_plus_receivables",
+        "risk_level": "high",
+        "data_coverage": 0.9889,
+        "currency": "INR",
+        "warnings": [
+          "Bank data available only through 2026-11-04; later activity in this period is missing.",
+          "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+          "Invoice INV-1005 in USD not included in collections (no FX)."
+        ],
+        "invoice": {
+          "business_id": "biz_001",
+          "as_of_date": "2026-11-05",
+          "count": 2,
+          "total_amount": 50300.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 2,
+              "total_amount": 50300.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [
+            {
+              "invoice_id": "inv-1002",
+              "customer_id": "cust-greenleaf-organics",
+              "due_date": "2026-10-20",
+              "amount": 32600.0,
+              "days_overdue": 16
+            },
+            {
+              "invoice_id": "inv-1003",
+              "customer_id": "cust-brightpath-learning",
+              "due_date": "2026-10-31",
+              "amount": 17700.0,
+              "days_overdue": 5
+            }
+          ],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "as_of_date": "2026-11-05",
+        "count": 2,
+        "total_amount": 50300.0,
+        "ageing_bands": [
+          {
+            "band": "1-30",
+            "count": 2,
+            "total_amount": 50300.0
+          },
+          {
+            "band": "31-60",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "61+",
+            "count": 0,
+            "total_amount": 0.0
+          }
+        ],
+        "invoices": [
+          {
+            "invoice_id": "inv-1002",
+            "customer_id": "cust-greenleaf-organics",
+            "due_date": "2026-10-20",
+            "amount": 32600.0,
+            "days_overdue": 16
+          },
+          {
+            "invoice_id": "inv-1003",
+            "customer_id": "cust-brightpath-learning",
+            "due_date": "2026-10-31",
+            "amount": 17700.0,
+            "days_overdue": 5
+          }
+        ],
+        "expense": {
+          "business_id": "biz_001",
+          "start_date": "2026-11-01",
+          "end_date": "2026-11-05",
+          "anomalies_count": 1,
+          "anomalies": [
+            {
+              "anomaly_id": "ANOM-4B7143375B",
+              "category": "Software",
+              "vendor": "Amazon Web Services",
+              "amount": 8260.0,
+              "expected_baseline": 2495.0,
+              "severity": "medium",
+              "rule": "Payment is 3.3x the median of 4 earlier payments to this payee (robust z-score 129.62)",
+              "evidence_refs": [
+                "txn_8f8d60b35bb0"
+              ]
+            }
+          ],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "start_date": "2026-11-01",
+        "end_date": "2026-11-05",
+        "anomalies_count": 1,
+        "anomalies": [
+          {
+            "anomaly_id": "ANOM-4B7143375B",
+            "category": "Software",
+            "vendor": "Amazon Web Services",
+            "amount": 8260.0,
+            "expected_baseline": 2495.0,
+            "severity": "medium",
+            "rule": "Payment is 3.3x the median of 4 earlier payments to this payee (robust z-score 129.62)",
+            "evidence_refs": [
+              "txn_8f8d60b35bb0"
+            ]
+          }
+        ]
+      },
+      "findings": [],
+      "recommendations": [
+        {
+          "recommendation": "Send payment reminders for 2 overdue invoices totaling ₹50,300.00.",
+          "priority": "high",
+          "reason": "Recovering ₹50,300.00 in past-due receivables will improve liquid cash reserves.",
+          "requires_approval": true
+        },
+        {
+          "recommendation": "Review and investigate flagged anomalous expenses with department heads.",
+          "priority": "medium",
+          "reason": "1 expenses exceeded expected baseline levels.",
+          "requires_approval": false
+        },
+        {
+          "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+          "priority": "high",
+          "reason": "Cash balance is ₹5,398.50 with high projected liquidity risk.",
+          "requires_approval": false
+        }
+      ],
+      "caveats": [
+        "Bank data available only through 2026-11-04; later activity in this period is missing.",
+        "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+        "Invoice INV-1005 in USD not included in collections (no FX)."
+      ],
+      "requires_approval": true,
+      "report_type": "daily",
+      "title": "Daily report - 5 November 2026",
+      "evidence": [
+        {
+          "label": "Cash Balance",
+          "value": "₹5,398.50",
+          "source": "cashflow"
+        },
+        {
+          "label": "Net Cash Flow",
+          "value": "-₹34,440.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Projected Cash Balance",
+          "value": "-₹82,322.90",
+          "source": "cashflow"
+        },
+        {
+          "label": "Liquidity Risk Level",
+          "value": "High",
+          "source": "cashflow"
+        },
+        {
+          "label": "Overdue Invoices Total",
+          "value": "₹50,300.00",
+          "source": "invoice"
+        },
+        {
+          "label": "Overdue Invoices Count",
+          "value": "2",
+          "source": "invoice"
+        },
+        {
+          "label": "Expense Anomalies Count",
+          "value": "1",
+          "source": "expense"
+        },
+        {
+          "label": "Overall Financial Health",
+          "value": "Ending cash balance is ₹5,398.50 with net cash flow of ₹-34,440.00 (inflows ₹20,000.00, outflows ₹54,440.00). Outstanding receivables include 2 overdue invoices totaling ₹50,300.00. 1 anomalous expense items were identified.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Liquidity risk assessed as high over a 30-day horizon with projected balance of ₹-82,322.90.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Receivables risk: 2 overdue invoices total ₹50,300.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Expense risk: 1 expense anomalies detected.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Overdue receivables of ₹50,300.00 across 2 invoices delay cash collection and constrain cash balance (currently ₹5,398.50).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "1 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹-34,440.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Net cash flow of ₹-34,440.00 supports the 30-day projected balance of ₹-82,322.90.",
+          "source": "intelligence"
+        }
+      ],
+      "missing_parts": [],
+      "currency": "INR"
+    },
+    "chat_response": {
+      "summary": "Ending cash balance is ₹5,398.50 with net cash flow of -₹34,440.00. Operations show 2 overdue invoices total ₹50,300.00 and 1 expense anomalies were detected.",
+      "evidence": [
+        {
+          "label": "Cash Balance",
+          "value": "₹5,398.50",
+          "source": "cashflow"
+        },
+        {
+          "label": "Net Cash Flow",
+          "value": "-₹34,440.00",
+          "source": "cashflow"
+        },
+        {
+          "label": "Projected Cash Balance",
+          "value": "-₹82,322.90",
+          "source": "cashflow"
+        },
+        {
+          "label": "Liquidity Risk Level",
+          "value": "High",
+          "source": "cashflow"
+        },
+        {
+          "label": "Overdue Invoices Total",
+          "value": "₹50,300.00",
+          "source": "invoice"
+        },
+        {
+          "label": "Overdue Invoices Count",
+          "value": "2",
+          "source": "invoice"
+        },
+        {
+          "label": "Expense Anomalies Count",
+          "value": "1",
+          "source": "expense"
+        },
+        {
+          "label": "Overall Financial Health",
+          "value": "Ending cash balance is ₹5,398.50 with net cash flow of ₹-34,440.00 (inflows ₹20,000.00, outflows ₹54,440.00). Outstanding receivables include 2 overdue invoices totaling ₹50,300.00. 1 anomalous expense items were identified.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Liquidity risk assessed as high over a 30-day horizon with projected balance of ₹-82,322.90.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Receivables risk: 2 overdue invoices total ₹50,300.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Expense risk: 1 expense anomalies detected.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Overdue receivables of ₹50,300.00 across 2 invoices delay cash collection and constrain cash balance (currently ₹5,398.50).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "1 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹-34,440.00).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Net cash flow of ₹-34,440.00 supports the 30-day projected balance of ₹-82,322.90.",
+          "source": "intelligence"
+        }
+      ],
+      "caveats": [
+        "Bank data available only through 2026-11-04; later activity in this period is missing.",
+        "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+        "Invoice INV-1005 in USD not included in collections (no FX)."
+      ],
+      "recommendations": [
+        {
+          "recommendation": "Send payment reminders for 2 overdue invoices totaling ₹50,300.00.",
+          "priority": "high",
+          "reason": "Recovering ₹50,300.00 in past-due receivables will improve liquid cash reserves.",
+          "requires_approval": true
+        },
+        {
+          "recommendation": "Review and investigate flagged anomalous expenses with department heads.",
+          "priority": "medium",
+          "reason": "1 expenses exceeded expected baseline levels.",
+          "requires_approval": false
+        },
+        {
+          "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+          "priority": "high",
+          "reason": "Cash balance is ₹5,398.50 with high projected liquidity risk.",
+          "requires_approval": false
+        }
+      ],
+      "missing_parts": [],
+      "report_type": "daily",
+      "currency": "INR"
+    }
+  },
+  "monthly": {
+    "inputs": {
+      "period": "last_month",
+      "start_date": "2026-10-01",
+      "end_date": "2026-10-31"
+    },
+    "tools": {
+      "financial_summary": {
+        "business_id": "biz_001",
+        "period": "last_month (2026-10-01 to 2026-10-31)",
+        "inflows": 101000.0,
+        "outflows": 161161.5,
+        "net_cash_flow": -60161.5,
+        "cash_balance": 39838.5,
+        "receivables": 50300.0,
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": [
+          "Invoice INV-1005 is in USD (1200.00); excluded from revenue (no FX conversion).",
+          "1 outflow(s) totalling 999.00 are uncategorized.",
+          "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion)."
+        ]
+      },
+      "forecast": {
+        "business_id": "biz_001",
+        "horizon_days": 30,
+        "projected_balance": -82322.9,
+        "method": "run_rate_plus_receivables",
+        "risk_level": "high",
+        "data_coverage": 0.9889,
+        "currency": "INR",
+        "warnings": [
+          "Invoice INV-1005 in USD not included in collections (no FX)."
+        ]
+      },
+      "overdue_invoices": {
+        "business_id": "biz_001",
+        "as_of_date": "2026-11-05",
+        "count": 2,
+        "total_amount": 50300.0,
+        "ageing_bands": [
+          {
+            "band": "1-30",
+            "count": 2,
+            "total_amount": 50300.0
+          },
+          {
+            "band": "31-60",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "61+",
+            "count": 0,
+            "total_amount": 0.0
+          }
+        ],
+        "invoices": [
+          {
+            "invoice_id": "inv-1002",
+            "customer_id": "cust-greenleaf-organics",
+            "due_date": "2026-10-20",
+            "amount": 32600.0,
+            "days_overdue": 16
+          },
+          {
+            "invoice_id": "inv-1003",
+            "customer_id": "cust-brightpath-learning",
+            "due_date": "2026-10-31",
+            "amount": 17700.0,
+            "days_overdue": 5
+          }
+        ],
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      },
+      "expense_anomalies": {
+        "business_id": "biz_001",
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-31",
+        "anomalies": [
+          {
+            "anomaly_id": "ANOM-F652FA8270",
+            "category": "Software",
+            "vendor": "Amazon Web Services",
+            "amount": 8260.0,
+            "expected_baseline": 2480.0,
+            "severity": "medium",
+            "rule": "Payment is 3.3x the median of 3 earlier payments to this payee",
+            "evidence_refs": [
+              "txn_e394e0f93cd6"
+            ]
+          },
+          {
+            "anomaly_id": "ANOM-BE95BB56FE",
+            "category": "Taxes",
+            "vendor": "GST PMT CBDT-OCT26 CPIN 26101234567",
+            "amount": 14400.0,
+            "expected_baseline": 12000.0,
+            "severity": "low",
+            "rule": "Recurring payment is 20% higher than its usual amount",
+            "evidence_refs": [
+              "txn_604306d7bf94"
+            ]
+          },
+          {
+            "anomaly_id": "ANOM-FFFB7019E4",
+            "category": "Uncategorized",
+            "vendor": "MISC DR 5531",
+            "amount": 999.0,
+            "expected_baseline": 0.0,
+            "severity": "low",
+            "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+            "evidence_refs": [
+              "txn_7a66fab03f33"
+            ]
+          },
+          {
+            "anomaly_id": "ANOM-E50195E588",
+            "category": "Utilities",
+            "vendor": "Airtel Business",
+            "amount": 0.0,
+            "expected_baseline": 1180.0,
+            "severity": "low",
+            "rule": "Recurring payment expected around 2026-10-05 (every ~31 days) was not found",
+            "evidence_refs": [
+              "expected:2026-10-05",
+              "txn_1136d1f2c81f"
+            ]
+          }
+        ],
+        "calculation_version": "finance-engine-1.1.0",
+        "currency": "INR",
+        "warnings": []
+      }
+    },
+    "agents": {
+      "cashflow": {
+        "agent_name": "cashflow",
+        "summary": "For last_month (2026-10-01 to 2026-10-31), total inflows were ₹101,000.00 and outflows were ₹161,161.50, resulting in net cash flow of ₹-60,161.50 and an ending cash balance of ₹39,838.50. Over a 30-day horizon, projected cash balance is ₹-82,322.90 with a high risk level.",
+        "metrics": {
+          "business_id": "biz_001",
+          "period": "last_month (2026-10-01 to 2026-10-31)",
+          "inflows": 101000.0,
+          "outflows": 161161.5,
+          "net_cash_flow": -60161.5,
+          "cash_balance": 39838.5,
+          "receivables": 50300.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": -82322.9,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "high",
+          "data_coverage": 0.9889,
+          "currency": "INR",
+          "warnings": [
+            "Invoice INV-1005 is in USD (1200.00); excluded from revenue (no FX conversion).",
+            "1 outflow(s) totalling 999.00 are uncategorized.",
+            "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+            "Invoice INV-1005 in USD not included in collections (no FX)."
+          ]
+        },
+        "findings": [
+          "Net cash flow is ₹-60,161.50 (inflows: ₹101,000.00, outflows: ₹161,161.50).",
+          "Outstanding customer receivables total ₹50,300.00.",
+          "Projected 30-day balance is ₹-82,322.90 assessed at high risk."
+        ],
+        "recommendations": [
+          "Monitor collection efforts for ₹50,300.00 in pending receivables.",
+          "Maintain ongoing operating expenditures within current levels to preserve cash reserves."
+        ],
+        "caveats": [
+          "Invoice INV-1005 is in USD (1200.00); excluded from revenue (no FX conversion).",
+          "1 outflow(s) totalling 999.00 are uncategorized.",
+          "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+          "Invoice INV-1005 in USD not included in collections (no FX)."
+        ],
+        "requires_approval": false
+      },
+      "invoice": {
+        "agent_name": "invoice",
+        "summary": "As of 2026-11-05, there are 2 overdue invoices totaling ₹50,300.00 across 3 ageing bands.",
+        "metrics": {
+          "business_id": "biz_001",
+          "as_of_date": "2026-11-05",
+          "count": 2,
+          "total_amount": 50300.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 2,
+              "total_amount": 50300.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [
+            {
+              "invoice_id": "inv-1002",
+              "customer_id": "cust-greenleaf-organics",
+              "due_date": "2026-10-20",
+              "amount": 32600.0,
+              "days_overdue": 16
+            },
+            {
+              "invoice_id": "inv-1003",
+              "customer_id": "cust-brightpath-learning",
+              "due_date": "2026-10-31",
+              "amount": 17700.0,
+              "days_overdue": 5
+            }
+          ],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "Total overdue receivables stand at ₹50,300.00 across 2 invoices.",
+          "Ageing distribution: Band 1-30: ₹50,300.00 (2 invoices), Band 31-60: ₹0.00 (0 invoices), Band 61+: ₹0.00 (0 invoices).",
+          "Most critical overdue invoice: inv-1002 (16 days overdue, ₹32,600.00)."
+        ],
+        "recommendations": [
+          "Consider sending a payment reminder for invoice inv-1002.",
+          "Prioritize collection contact with customer cust-greenleaf-organics regarding overdue balance."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "expense": {
+        "agent_name": "expense",
+        "summary": "Identified 4 expense anomalies between 2026-10-01 and 2026-10-31, including 0 high-severity variance.",
+        "metrics": {
+          "business_id": "biz_001",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-31",
+          "anomalies_count": 4,
+          "anomalies": [
+            {
+              "anomaly_id": "ANOM-F652FA8270",
+              "category": "Software",
+              "vendor": "Amazon Web Services",
+              "amount": 8260.0,
+              "expected_baseline": 2480.0,
+              "severity": "medium",
+              "rule": "Payment is 3.3x the median of 3 earlier payments to this payee",
+              "evidence_refs": [
+                "txn_e394e0f93cd6"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-BE95BB56FE",
+              "category": "Taxes",
+              "vendor": "GST PMT CBDT-OCT26 CPIN 26101234567",
+              "amount": 14400.0,
+              "expected_baseline": 12000.0,
+              "severity": "low",
+              "rule": "Recurring payment is 20% higher than its usual amount",
+              "evidence_refs": [
+                "txn_604306d7bf94"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-FFFB7019E4",
+              "category": "Uncategorized",
+              "vendor": "MISC DR 5531",
+              "amount": 999.0,
+              "expected_baseline": 0.0,
+              "severity": "low",
+              "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+              "evidence_refs": [
+                "txn_7a66fab03f33"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-E50195E588",
+              "category": "Utilities",
+              "vendor": "Airtel Business",
+              "amount": 0.0,
+              "expected_baseline": 1180.0,
+              "severity": "low",
+              "rule": "Recurring payment expected around 2026-10-05 (every ~31 days) was not found",
+              "evidence_refs": [
+                "expected:2026-10-05",
+                "txn_1136d1f2c81f"
+              ]
+            }
+          ],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "findings": [
+          "Flagged ANOM-F652FA8270 (Amazon Web Services, Software): ₹8,260.00 vs baseline ₹2,480.00 [medium severity] - Payment is 3.3x the median of 3 earlier payments to this payee.",
+          "Flagged ANOM-BE95BB56FE (GST PMT CBDT-OCT26 CPIN 26101234567, Taxes): ₹14,400.00 vs baseline ₹12,000.00 [low severity] - Recurring payment is 20% higher than its usual amount.",
+          "Flagged ANOM-FFFB7019E4 (MISC DR 5531, Uncategorized): ₹999.00 vs baseline ₹0.00 [low severity] - Outflow has no expense category, so it cannot be checked against a baseline.",
+          "Flagged ANOM-E50195E588 (Airtel Business, Utilities): ₹0.00 vs baseline ₹1,180.00 [low severity] - Recurring payment expected around 2026-10-05 (every ~31 days) was not found."
+        ],
+        "recommendations": [
+          "Review invoice for vendor Amazon Web Services (ANOM-F652FA8270) exceeding baseline by ₹5,780.00.",
+          "Audit recurring subscriptions and verify departmental spending limits against budget caps."
+        ],
+        "caveats": [],
+        "requires_approval": false
+      },
+      "intelligence": {
+        "agent_name": "intelligence",
+        "summary": "Ending cash balance is ₹39,838.50 with net cash flow of ₹-60,161.50 (inflows ₹101,000.00, outflows ₹161,161.50). Outstanding receivables include 2 overdue invoices totaling ₹50,300.00. 4 anomalous expense items were identified.",
+        "metrics": {
+          "cashflow": {
+            "business_id": "biz_001",
+            "period": "last_month (2026-10-01 to 2026-10-31)",
+            "inflows": 101000.0,
+            "outflows": 161161.5,
+            "net_cash_flow": -60161.5,
+            "cash_balance": 39838.5,
+            "receivables": 50300.0,
+            "calculation_version": "finance-engine-1.1.0",
+            "horizon_days": 30,
+            "projected_balance": -82322.9,
+            "method": "run_rate_plus_receivables",
+            "risk_level": "high",
+            "data_coverage": 0.9889,
+            "currency": "INR",
+            "warnings": [
+              "Invoice INV-1005 is in USD (1200.00); excluded from revenue (no FX conversion).",
+              "1 outflow(s) totalling 999.00 are uncategorized.",
+              "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+              "Invoice INV-1005 in USD not included in collections (no FX)."
+            ]
+          },
+          "business_id": "biz_001",
+          "period": "last_month (2026-10-01 to 2026-10-31)",
+          "inflows": 101000.0,
+          "outflows": 161161.5,
+          "net_cash_flow": -60161.5,
+          "cash_balance": 39838.5,
+          "receivables": 50300.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": -82322.9,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "high",
+          "data_coverage": 0.9889,
+          "currency": "INR",
+          "warnings": [
+            "Invoice INV-1005 is in USD (1200.00); excluded from revenue (no FX conversion).",
+            "1 outflow(s) totalling 999.00 are uncategorized.",
+            "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+            "Invoice INV-1005 in USD not included in collections (no FX)."
+          ],
+          "invoice": {
+            "business_id": "biz_001",
+            "as_of_date": "2026-11-05",
+            "count": 2,
+            "total_amount": 50300.0,
+            "ageing_bands": [
+              {
+                "band": "1-30",
+                "count": 2,
+                "total_amount": 50300.0
+              },
+              {
+                "band": "31-60",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "61+",
+                "count": 0,
+                "total_amount": 0.0
+              }
+            ],
+            "invoices": [
+              {
+                "invoice_id": "inv-1002",
+                "customer_id": "cust-greenleaf-organics",
+                "due_date": "2026-10-20",
+                "amount": 32600.0,
+                "days_overdue": 16
+              },
+              {
+                "invoice_id": "inv-1003",
+                "customer_id": "cust-brightpath-learning",
+                "due_date": "2026-10-31",
+                "amount": 17700.0,
+                "days_overdue": 5
+              }
+            ],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "as_of_date": "2026-11-05",
+          "count": 2,
+          "total_amount": 50300.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 2,
+              "total_amount": 50300.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [
+            {
+              "invoice_id": "inv-1002",
+              "customer_id": "cust-greenleaf-organics",
+              "due_date": "2026-10-20",
+              "amount": 32600.0,
+              "days_overdue": 16
+            },
+            {
+              "invoice_id": "inv-1003",
+              "customer_id": "cust-brightpath-learning",
+              "due_date": "2026-10-31",
+              "amount": 17700.0,
+              "days_overdue": 5
+            }
+          ],
+          "expense": {
+            "business_id": "biz_001",
+            "start_date": "2026-10-01",
+            "end_date": "2026-10-31",
+            "anomalies_count": 4,
+            "anomalies": [
+              {
+                "anomaly_id": "ANOM-F652FA8270",
+                "category": "Software",
+                "vendor": "Amazon Web Services",
+                "amount": 8260.0,
+                "expected_baseline": 2480.0,
+                "severity": "medium",
+                "rule": "Payment is 3.3x the median of 3 earlier payments to this payee",
+                "evidence_refs": [
+                  "txn_e394e0f93cd6"
+                ]
+              },
+              {
+                "anomaly_id": "ANOM-BE95BB56FE",
+                "category": "Taxes",
+                "vendor": "GST PMT CBDT-OCT26 CPIN 26101234567",
+                "amount": 14400.0,
+                "expected_baseline": 12000.0,
+                "severity": "low",
+                "rule": "Recurring payment is 20% higher than its usual amount",
+                "evidence_refs": [
+                  "txn_604306d7bf94"
+                ]
+              },
+              {
+                "anomaly_id": "ANOM-FFFB7019E4",
+                "category": "Uncategorized",
+                "vendor": "MISC DR 5531",
+                "amount": 999.0,
+                "expected_baseline": 0.0,
+                "severity": "low",
+                "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+                "evidence_refs": [
+                  "txn_7a66fab03f33"
+                ]
+              },
+              {
+                "anomaly_id": "ANOM-E50195E588",
+                "category": "Utilities",
+                "vendor": "Airtel Business",
+                "amount": 0.0,
+                "expected_baseline": 1180.0,
+                "severity": "low",
+                "rule": "Recurring payment expected around 2026-10-05 (every ~31 days) was not found",
+                "evidence_refs": [
+                  "expected:2026-10-05",
+                  "txn_1136d1f2c81f"
+                ]
+              }
+            ],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-31",
+          "anomalies_count": 4,
+          "anomalies": [
+            {
+              "anomaly_id": "ANOM-F652FA8270",
+              "category": "Software",
+              "vendor": "Amazon Web Services",
+              "amount": 8260.0,
+              "expected_baseline": 2480.0,
+              "severity": "medium",
+              "rule": "Payment is 3.3x the median of 3 earlier payments to this payee",
+              "evidence_refs": [
+                "txn_e394e0f93cd6"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-BE95BB56FE",
+              "category": "Taxes",
+              "vendor": "GST PMT CBDT-OCT26 CPIN 26101234567",
+              "amount": 14400.0,
+              "expected_baseline": 12000.0,
+              "severity": "low",
+              "rule": "Recurring payment is 20% higher than its usual amount",
+              "evidence_refs": [
+                "txn_604306d7bf94"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-FFFB7019E4",
+              "category": "Uncategorized",
+              "vendor": "MISC DR 5531",
+              "amount": 999.0,
+              "expected_baseline": 0.0,
+              "severity": "low",
+              "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+              "evidence_refs": [
+                "txn_7a66fab03f33"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-E50195E588",
+              "category": "Utilities",
+              "vendor": "Airtel Business",
+              "amount": 0.0,
+              "expected_baseline": 1180.0,
+              "severity": "low",
+              "rule": "Recurring payment expected around 2026-10-05 (every ~31 days) was not found",
+              "evidence_refs": [
+                "expected:2026-10-05",
+                "txn_1136d1f2c81f"
+              ]
+            }
+          ]
+        },
+        "findings": [
+          "Overdue receivables of ₹50,300.00 across 2 invoices delay cash collection and constrain cash balance (currently ₹39,838.50).",
+          "4 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹-60,161.50).",
+          "Net cash flow of ₹-60,161.50 supports the 30-day projected balance of ₹-82,322.90.",
+          "Liquidity risk assessed as high over a 30-day horizon with projected balance of ₹-82,322.90.",
+          "Receivables risk: 2 overdue invoices total ₹50,300.00.",
+          "Expense risk: 4 expense anomalies detected."
+        ],
+        "recommendations": [
+          {
+            "recommendation": "Send payment reminders for 2 overdue invoices totaling ₹50,300.00.",
+            "priority": "high",
+            "reason": "Recovering ₹50,300.00 in past-due receivables will improve liquid cash reserves.",
+            "requires_approval": true
+          },
+          {
+            "recommendation": "Review and investigate flagged anomalous expenses with department heads.",
+            "priority": "medium",
+            "reason": "4 expenses exceeded expected baseline levels.",
+            "requires_approval": false
+          },
+          {
+            "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+            "priority": "high",
+            "reason": "Cash balance is ₹39,838.50 with high projected liquidity risk.",
+            "requires_approval": false
+          }
+        ],
+        "caveats": [
+          "Invoice INV-1005 is in USD (1200.00); excluded from revenue (no FX conversion).",
+          "1 outflow(s) totalling 999.00 are uncategorized.",
+          "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+          "Invoice INV-1005 in USD not included in collections (no FX)."
+        ],
+        "requires_approval": true,
+        "overall_summary": "Ending cash balance is ₹39,838.50 with net cash flow of ₹-60,161.50 (inflows ₹101,000.00, outflows ₹161,161.50). Outstanding receivables include 2 overdue invoices totaling ₹50,300.00. 4 anomalous expense items were identified.",
+        "links": [
+          "Overdue receivables of ₹50,300.00 across 2 invoices delay cash collection and constrain cash balance (currently ₹39,838.50).",
+          "4 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹-60,161.50).",
+          "Net cash flow of ₹-60,161.50 supports the 30-day projected balance of ₹-82,322.90."
+        ],
+        "key_risks": [
+          "Liquidity risk assessed as high over a 30-day horizon with projected balance of ₹-82,322.90.",
+          "Receivables risk: 2 overdue invoices total ₹50,300.00.",
+          "Expense risk: 4 expense anomalies detected."
+        ],
+        "missing_parts": []
+      }
+    },
+    "report": {
+      "agent_name": "reporting",
+      "summary": "Monthly cash balance concluded at ₹39,838.50 with a net cash flow of -₹60,161.50 (inflows ₹101,000.00, outflows ₹161,161.50). The 30-day projected cash balance stands at -₹82,322.90 under a high liquidity risk assessment. Outstanding receivables include 2 overdue invoices totaling ₹50,300.00 requiring collection attention. A total of 4 anomalous expense transactions were detected during the period.",
+      "metrics": {
+        "intelligence": {
+          "cashflow": {
+            "business_id": "biz_001",
+            "period": "last_month (2026-10-01 to 2026-10-31)",
+            "inflows": 101000.0,
+            "outflows": 161161.5,
+            "net_cash_flow": -60161.5,
+            "cash_balance": 39838.5,
+            "receivables": 50300.0,
+            "calculation_version": "finance-engine-1.1.0",
+            "horizon_days": 30,
+            "projected_balance": -82322.9,
+            "method": "run_rate_plus_receivables",
+            "risk_level": "high",
+            "data_coverage": 0.9889,
+            "currency": "INR",
+            "warnings": [
+              "Invoice INV-1005 is in USD (1200.00); excluded from revenue (no FX conversion).",
+              "1 outflow(s) totalling 999.00 are uncategorized.",
+              "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+              "Invoice INV-1005 in USD not included in collections (no FX)."
+            ]
+          },
+          "business_id": "biz_001",
+          "period": "last_month (2026-10-01 to 2026-10-31)",
+          "inflows": 101000.0,
+          "outflows": 161161.5,
+          "net_cash_flow": -60161.5,
+          "cash_balance": 39838.5,
+          "receivables": 50300.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": -82322.9,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "high",
+          "data_coverage": 0.9889,
+          "currency": "INR",
+          "warnings": [
+            "Invoice INV-1005 is in USD (1200.00); excluded from revenue (no FX conversion).",
+            "1 outflow(s) totalling 999.00 are uncategorized.",
+            "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+            "Invoice INV-1005 in USD not included in collections (no FX)."
+          ],
+          "invoice": {
+            "business_id": "biz_001",
+            "as_of_date": "2026-11-05",
+            "count": 2,
+            "total_amount": 50300.0,
+            "ageing_bands": [
+              {
+                "band": "1-30",
+                "count": 2,
+                "total_amount": 50300.0
+              },
+              {
+                "band": "31-60",
+                "count": 0,
+                "total_amount": 0.0
+              },
+              {
+                "band": "61+",
+                "count": 0,
+                "total_amount": 0.0
+              }
+            ],
+            "invoices": [
+              {
+                "invoice_id": "inv-1002",
+                "customer_id": "cust-greenleaf-organics",
+                "due_date": "2026-10-20",
+                "amount": 32600.0,
+                "days_overdue": 16
+              },
+              {
+                "invoice_id": "inv-1003",
+                "customer_id": "cust-brightpath-learning",
+                "due_date": "2026-10-31",
+                "amount": 17700.0,
+                "days_overdue": 5
+              }
+            ],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "as_of_date": "2026-11-05",
+          "count": 2,
+          "total_amount": 50300.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 2,
+              "total_amount": 50300.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [
+            {
+              "invoice_id": "inv-1002",
+              "customer_id": "cust-greenleaf-organics",
+              "due_date": "2026-10-20",
+              "amount": 32600.0,
+              "days_overdue": 16
+            },
+            {
+              "invoice_id": "inv-1003",
+              "customer_id": "cust-brightpath-learning",
+              "due_date": "2026-10-31",
+              "amount": 17700.0,
+              "days_overdue": 5
+            }
+          ],
+          "expense": {
+            "business_id": "biz_001",
+            "start_date": "2026-10-01",
+            "end_date": "2026-10-31",
+            "anomalies_count": 4,
+            "anomalies": [
+              {
+                "anomaly_id": "ANOM-F652FA8270",
+                "category": "Software",
+                "vendor": "Amazon Web Services",
+                "amount": 8260.0,
+                "expected_baseline": 2480.0,
+                "severity": "medium",
+                "rule": "Payment is 3.3x the median of 3 earlier payments to this payee",
+                "evidence_refs": [
+                  "txn_e394e0f93cd6"
+                ]
+              },
+              {
+                "anomaly_id": "ANOM-BE95BB56FE",
+                "category": "Taxes",
+                "vendor": "GST PMT CBDT-OCT26 CPIN 26101234567",
+                "amount": 14400.0,
+                "expected_baseline": 12000.0,
+                "severity": "low",
+                "rule": "Recurring payment is 20% higher than its usual amount",
+                "evidence_refs": [
+                  "txn_604306d7bf94"
+                ]
+              },
+              {
+                "anomaly_id": "ANOM-FFFB7019E4",
+                "category": "Uncategorized",
+                "vendor": "MISC DR 5531",
+                "amount": 999.0,
+                "expected_baseline": 0.0,
+                "severity": "low",
+                "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+                "evidence_refs": [
+                  "txn_7a66fab03f33"
+                ]
+              },
+              {
+                "anomaly_id": "ANOM-E50195E588",
+                "category": "Utilities",
+                "vendor": "Airtel Business",
+                "amount": 0.0,
+                "expected_baseline": 1180.0,
+                "severity": "low",
+                "rule": "Recurring payment expected around 2026-10-05 (every ~31 days) was not found",
+                "evidence_refs": [
+                  "expected:2026-10-05",
+                  "txn_1136d1f2c81f"
+                ]
+              }
+            ],
+            "calculation_version": "finance-engine-1.1.0",
+            "currency": "INR",
+            "warnings": []
+          },
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-31",
+          "anomalies_count": 4,
+          "anomalies": [
+            {
+              "anomaly_id": "ANOM-F652FA8270",
+              "category": "Software",
+              "vendor": "Amazon Web Services",
+              "amount": 8260.0,
+              "expected_baseline": 2480.0,
+              "severity": "medium",
+              "rule": "Payment is 3.3x the median of 3 earlier payments to this payee",
+              "evidence_refs": [
+                "txn_e394e0f93cd6"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-BE95BB56FE",
+              "category": "Taxes",
+              "vendor": "GST PMT CBDT-OCT26 CPIN 26101234567",
+              "amount": 14400.0,
+              "expected_baseline": 12000.0,
+              "severity": "low",
+              "rule": "Recurring payment is 20% higher than its usual amount",
+              "evidence_refs": [
+                "txn_604306d7bf94"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-FFFB7019E4",
+              "category": "Uncategorized",
+              "vendor": "MISC DR 5531",
+              "amount": 999.0,
+              "expected_baseline": 0.0,
+              "severity": "low",
+              "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+              "evidence_refs": [
+                "txn_7a66fab03f33"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-E50195E588",
+              "category": "Utilities",
+              "vendor": "Airtel Business",
+              "amount": 0.0,
+              "expected_baseline": 1180.0,
+              "severity": "low",
+              "rule": "Recurring payment expected around 2026-10-05 (every ~31 days) was not found",
+              "evidence_refs": [
+                "expected:2026-10-05",
+                "txn_1136d1f2c81f"
+              ]
+            }
+          ]
+        },
+        "cashflow": {
+          "business_id": "biz_001",
+          "period": "last_month (2026-10-01 to 2026-10-31)",
+          "inflows": 101000.0,
+          "outflows": 161161.5,
+          "net_cash_flow": -60161.5,
+          "cash_balance": 39838.5,
+          "receivables": 50300.0,
+          "calculation_version": "finance-engine-1.1.0",
+          "horizon_days": 30,
+          "projected_balance": -82322.9,
+          "method": "run_rate_plus_receivables",
+          "risk_level": "high",
+          "data_coverage": 0.9889,
+          "currency": "INR",
+          "warnings": [
+            "Invoice INV-1005 is in USD (1200.00); excluded from revenue (no FX conversion).",
+            "1 outflow(s) totalling 999.00 are uncategorized.",
+            "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+            "Invoice INV-1005 in USD not included in collections (no FX)."
+          ]
+        },
+        "business_id": "biz_001",
+        "period": "last_month (2026-10-01 to 2026-10-31)",
+        "inflows": 101000.0,
+        "outflows": 161161.5,
+        "net_cash_flow": -60161.5,
+        "cash_balance": 39838.5,
+        "receivables": 50300.0,
+        "calculation_version": "finance-engine-1.1.0",
+        "horizon_days": 30,
+        "projected_balance": -82322.9,
+        "method": "run_rate_plus_receivables",
+        "risk_level": "high",
+        "data_coverage": 0.9889,
+        "currency": "INR",
+        "warnings": [
+          "Invoice INV-1005 is in USD (1200.00); excluded from revenue (no FX conversion).",
+          "1 outflow(s) totalling 999.00 are uncategorized.",
+          "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+          "Invoice INV-1005 in USD not included in collections (no FX)."
+        ],
+        "invoice": {
+          "business_id": "biz_001",
+          "as_of_date": "2026-11-05",
+          "count": 2,
+          "total_amount": 50300.0,
+          "ageing_bands": [
+            {
+              "band": "1-30",
+              "count": 2,
+              "total_amount": 50300.0
+            },
+            {
+              "band": "31-60",
+              "count": 0,
+              "total_amount": 0.0
+            },
+            {
+              "band": "61+",
+              "count": 0,
+              "total_amount": 0.0
+            }
+          ],
+          "invoices": [
+            {
+              "invoice_id": "inv-1002",
+              "customer_id": "cust-greenleaf-organics",
+              "due_date": "2026-10-20",
+              "amount": 32600.0,
+              "days_overdue": 16
+            },
+            {
+              "invoice_id": "inv-1003",
+              "customer_id": "cust-brightpath-learning",
+              "due_date": "2026-10-31",
+              "amount": 17700.0,
+              "days_overdue": 5
+            }
+          ],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "as_of_date": "2026-11-05",
+        "count": 2,
+        "total_amount": 50300.0,
+        "ageing_bands": [
+          {
+            "band": "1-30",
+            "count": 2,
+            "total_amount": 50300.0
+          },
+          {
+            "band": "31-60",
+            "count": 0,
+            "total_amount": 0.0
+          },
+          {
+            "band": "61+",
+            "count": 0,
+            "total_amount": 0.0
+          }
+        ],
+        "invoices": [
+          {
+            "invoice_id": "inv-1002",
+            "customer_id": "cust-greenleaf-organics",
+            "due_date": "2026-10-20",
+            "amount": 32600.0,
+            "days_overdue": 16
+          },
+          {
+            "invoice_id": "inv-1003",
+            "customer_id": "cust-brightpath-learning",
+            "due_date": "2026-10-31",
+            "amount": 17700.0,
+            "days_overdue": 5
+          }
+        ],
+        "expense": {
+          "business_id": "biz_001",
+          "start_date": "2026-10-01",
+          "end_date": "2026-10-31",
+          "anomalies_count": 4,
+          "anomalies": [
+            {
+              "anomaly_id": "ANOM-F652FA8270",
+              "category": "Software",
+              "vendor": "Amazon Web Services",
+              "amount": 8260.0,
+              "expected_baseline": 2480.0,
+              "severity": "medium",
+              "rule": "Payment is 3.3x the median of 3 earlier payments to this payee",
+              "evidence_refs": [
+                "txn_e394e0f93cd6"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-BE95BB56FE",
+              "category": "Taxes",
+              "vendor": "GST PMT CBDT-OCT26 CPIN 26101234567",
+              "amount": 14400.0,
+              "expected_baseline": 12000.0,
+              "severity": "low",
+              "rule": "Recurring payment is 20% higher than its usual amount",
+              "evidence_refs": [
+                "txn_604306d7bf94"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-FFFB7019E4",
+              "category": "Uncategorized",
+              "vendor": "MISC DR 5531",
+              "amount": 999.0,
+              "expected_baseline": 0.0,
+              "severity": "low",
+              "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+              "evidence_refs": [
+                "txn_7a66fab03f33"
+              ]
+            },
+            {
+              "anomaly_id": "ANOM-E50195E588",
+              "category": "Utilities",
+              "vendor": "Airtel Business",
+              "amount": 0.0,
+              "expected_baseline": 1180.0,
+              "severity": "low",
+              "rule": "Recurring payment expected around 2026-10-05 (every ~31 days) was not found",
+              "evidence_refs": [
+                "expected:2026-10-05",
+                "txn_1136d1f2c81f"
+              ]
+            }
+          ],
+          "calculation_version": "finance-engine-1.1.0",
+          "currency": "INR",
+          "warnings": []
+        },
+        "start_date": "2026-10-01",
+        "end_date": "2026-10-31",
+        "anomalies_count": 4,
+        "anomalies": [
+          {
+            "anomaly_id": "ANOM-F652FA8270",
+            "category": "Software",
+            "vendor": "Amazon Web Services",
+            "amount": 8260.0,
+            "expected_baseline": 2480.0,
+            "severity": "medium",
+            "rule": "Payment is 3.3x the median of 3 earlier payments to this payee",
+            "evidence_refs": [
+              "txn_e394e0f93cd6"
+            ]
+          },
+          {
+            "anomaly_id": "ANOM-BE95BB56FE",
+            "category": "Taxes",
+            "vendor": "GST PMT CBDT-OCT26 CPIN 26101234567",
+            "amount": 14400.0,
+            "expected_baseline": 12000.0,
+            "severity": "low",
+            "rule": "Recurring payment is 20% higher than its usual amount",
+            "evidence_refs": [
+              "txn_604306d7bf94"
+            ]
+          },
+          {
+            "anomaly_id": "ANOM-FFFB7019E4",
+            "category": "Uncategorized",
+            "vendor": "MISC DR 5531",
+            "amount": 999.0,
+            "expected_baseline": 0.0,
+            "severity": "low",
+            "rule": "Outflow has no expense category, so it cannot be checked against a baseline",
+            "evidence_refs": [
+              "txn_7a66fab03f33"
+            ]
+          },
+          {
+            "anomaly_id": "ANOM-E50195E588",
+            "category": "Utilities",
+            "vendor": "Airtel Business",
+            "amount": 0.0,
+            "expected_baseline": 1180.0,
+            "severity": "low",
+            "rule": "Recurring payment expected around 2026-10-05 (every ~31 days) was not found",
+            "evidence_refs": [
+              "expected:2026-10-05",
+              "txn_1136d1f2c81f"
+            ]
+          }
+        ]
+      },
+      "findings": [],
+      "recommendations": [
+        {
+          "recommendation": "Send payment reminders for 2 overdue invoices totaling ₹50,300.00.",
+          "priority": "high",
+          "reason": "Recovering ₹50,300.00 in past-due receivables will improve liquid cash reserves.",
+          "requires_approval": true
+        },
+        {
+          "recommendation": "Review and investigate flagged anomalous expenses with department heads.",
+          "priority": "medium",
+          "reason": "4 expenses exceeded expected baseline levels.",
+          "requires_approval": false
+        },
+        {
+          "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+          "priority": "high",
+          "reason": "Cash balance is ₹39,838.50 with high projected liquidity risk.",
+          "requires_approval": false
+        }
+      ],
+      "caveats": [
+        "Invoice INV-1005 is in USD (1200.00); excluded from revenue (no FX conversion).",
+        "1 outflow(s) totalling 999.00 are uncategorized.",
+        "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+        "Invoice INV-1005 in USD not included in collections (no FX)."
+      ],
+      "requires_approval": true,
+      "report_type": "monthly",
+      "title": "Monthly report - 5 November 2026",
+      "evidence": [
+        {
+          "label": "Cash Balance",
+          "value": "₹39,838.50",
+          "source": "cashflow"
+        },
+        {
+          "label": "Net Cash Flow",
+          "value": "-₹60,161.50",
+          "source": "cashflow"
+        },
+        {
+          "label": "Projected Cash Balance",
+          "value": "-₹82,322.90",
+          "source": "cashflow"
+        },
+        {
+          "label": "Liquidity Risk Level",
+          "value": "High",
+          "source": "cashflow"
+        },
+        {
+          "label": "Overdue Invoices Total",
+          "value": "₹50,300.00",
+          "source": "invoice"
+        },
+        {
+          "label": "Overdue Invoices Count",
+          "value": "2",
+          "source": "invoice"
+        },
+        {
+          "label": "Expense Anomalies Count",
+          "value": "4",
+          "source": "expense"
+        },
+        {
+          "label": "Overall Financial Health",
+          "value": "Ending cash balance is ₹39,838.50 with net cash flow of ₹-60,161.50 (inflows ₹101,000.00, outflows ₹161,161.50). Outstanding receivables include 2 overdue invoices totaling ₹50,300.00. 4 anomalous expense items were identified.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Liquidity risk assessed as high over a 30-day horizon with projected balance of ₹-82,322.90.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Receivables risk: 2 overdue invoices total ₹50,300.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Expense risk: 4 expense anomalies detected.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Overdue receivables of ₹50,300.00 across 2 invoices delay cash collection and constrain cash balance (currently ₹39,838.50).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "4 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹-60,161.50).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Net cash flow of ₹-60,161.50 supports the 30-day projected balance of ₹-82,322.90.",
+          "source": "intelligence"
+        }
+      ],
+      "missing_parts": [],
+      "currency": "INR"
+    },
+    "chat_response": {
+      "summary": "Monthly cash balance concluded at ₹39,838.50 with a net cash flow of -₹60,161.50 (inflows ₹101,000.00, outflows ₹161,161.50). The 30-day projected cash balance stands at -₹82,322.90 under a high liquidity risk assessment. Outstanding receivables include 2 overdue invoices totaling ₹50,300.00 requiring collection attention. A total of 4 anomalous expense transactions were detected during the period.",
+      "evidence": [
+        {
+          "label": "Cash Balance",
+          "value": "₹39,838.50",
+          "source": "cashflow"
+        },
+        {
+          "label": "Net Cash Flow",
+          "value": "-₹60,161.50",
+          "source": "cashflow"
+        },
+        {
+          "label": "Projected Cash Balance",
+          "value": "-₹82,322.90",
+          "source": "cashflow"
+        },
+        {
+          "label": "Liquidity Risk Level",
+          "value": "High",
+          "source": "cashflow"
+        },
+        {
+          "label": "Overdue Invoices Total",
+          "value": "₹50,300.00",
+          "source": "invoice"
+        },
+        {
+          "label": "Overdue Invoices Count",
+          "value": "2",
+          "source": "invoice"
+        },
+        {
+          "label": "Expense Anomalies Count",
+          "value": "4",
+          "source": "expense"
+        },
+        {
+          "label": "Overall Financial Health",
+          "value": "Ending cash balance is ₹39,838.50 with net cash flow of ₹-60,161.50 (inflows ₹101,000.00, outflows ₹161,161.50). Outstanding receivables include 2 overdue invoices totaling ₹50,300.00. 4 anomalous expense items were identified.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Liquidity risk assessed as high over a 30-day horizon with projected balance of ₹-82,322.90.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Receivables risk: 2 overdue invoices total ₹50,300.00.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Key Risk",
+          "value": "Expense risk: 4 expense anomalies detected.",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Overdue receivables of ₹50,300.00 across 2 invoices delay cash collection and constrain cash balance (currently ₹39,838.50).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "4 anomalous expense items increase outflows against baseline spending, affecting net cash flow (₹-60,161.50).",
+          "source": "intelligence"
+        },
+        {
+          "label": "Cross-domain Link",
+          "value": "Net cash flow of ₹-60,161.50 supports the 30-day projected balance of ₹-82,322.90.",
+          "source": "intelligence"
+        }
+      ],
+      "caveats": [
+        "Invoice INV-1005 is in USD (1200.00); excluded from revenue (no FX conversion).",
+        "1 outflow(s) totalling 999.00 are uncategorized.",
+        "Invoice INV-1005 (USD 1200.00) excluded from receivables (no FX conversion).",
+        "Invoice INV-1005 in USD not included in collections (no FX)."
+      ],
+      "recommendations": [
+        {
+          "recommendation": "Send payment reminders for 2 overdue invoices totaling ₹50,300.00.",
+          "priority": "high",
+          "reason": "Recovering ₹50,300.00 in past-due receivables will improve liquid cash reserves.",
+          "requires_approval": true
+        },
+        {
+          "recommendation": "Review and investigate flagged anomalous expenses with department heads.",
+          "priority": "medium",
+          "reason": "4 expenses exceeded expected baseline levels.",
+          "requires_approval": false
+        },
+        {
+          "recommendation": "Maintain ongoing operating expenditures within current budget limits.",
+          "priority": "high",
+          "reason": "Cash balance is ₹39,838.50 with high projected liquidity risk.",
+          "requires_approval": false
+        }
+      ],
+      "missing_parts": [],
+      "report_type": "monthly",
+      "currency": "INR"
+    }
+  }
+}
