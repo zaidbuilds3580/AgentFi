@@ -60,6 +60,10 @@ class Settings(BaseSettings):
     CSV_ENCODINGS: List[str] = ["utf-8-sig", "cp1252"]
     USE_M3_ETL: bool = False
 
+    # Finance Engine Integration Settings (Day 5)
+    FINANCE_ENGINE_MODE: str = "auto"  # "auto" | "engine" | "interim"
+    FINANCE_ENGINE_TIMEOUT_SECONDS: float = 20.0
+
     model_config = SettingsConfigDict(
         env_file=DOTENV_PATH,
         env_file_encoding="utf-8",

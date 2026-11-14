@@ -259,5 +259,29 @@ python backend/scripts/export_openapi.py
 # Schema written to docs/openapi.json
 ```
 
+---
+
+## 10. Financial Summary API & Engine Adapter (Day 5)
+
+Exposes the business financial summary endpoint backed by Member 3's deterministic Finance Engine via an extensible provider adapter.
+
+### REST Endpoints
+- `GET /api/businesses/{business_id}/financial-summary`: Primary endpoint. Enforces tenant matching against JWT (403 if mismatch). Returns headline KPIs (`total_inflow`, `total_outflow`, `net_cash_flow`, `total_expenses`), cash balances, receivables aging, top 5 expense categories, and preceding period comparisons.
+- `GET /api/financial-summary`: Convenience alias using the token's `business_id`.
+
+### Configuration Settings
+- `FINANCE_ENGINE_MODE`: `auto` (default), `engine` (enforces Member 3's engine), or `interim` (fallback backend SQL aggregates).
+- `FINANCE_ENGINE_TIMEOUT_SECONDS`: Request timeout guard (default `20.0`).
+
+### Running Day 5 Tests
+```bash
+# Run unit tests (no DB required)
+python -m pytest tests/test_backend_summary_unit.py
+
+# Run live integration tests against Supabase
+python -m pytest tests/test_backend_summary_integration.py -m integration
+```
+
+
 
 
