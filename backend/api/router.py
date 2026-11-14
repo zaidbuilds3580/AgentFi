@@ -4,7 +4,7 @@ Central API router that aggregates all domain route handlers.
 
 from fastapi import APIRouter
 
-from backend.api import auth, expenses, health, imports, invoices, lookups, transactions
+from backend.api import auth, expenses, financial_summary, health, imports, invoices, lookups, transactions
 
 api_router = APIRouter()
 
@@ -22,3 +22,6 @@ api_router.include_router(transactions.router)
 api_router.include_router(invoices.router)
 api_router.include_router(expenses.router)
 api_router.include_router(lookups.router)
+
+# Register Day 5 Financial Summary API under /api
+api_router.include_router(financial_summary.router)
