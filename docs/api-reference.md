@@ -261,3 +261,27 @@ Fetch single expense by UUID. Returns `404 Not Found` if missing or owned by ano
   "expenses": { "min_date": "2026-01-05", "max_date": "2026-10-30", "count": 80 }
 }
 ```
+
+---
+
+## 5. Financial Summary Endpoints (Day 5)
+
+### 5.1 Primary Endpoint: `GET /api/businesses/{business_id}/financial-summary`
+Fetch headline financial KPIs, cash balances, receivables aging, top spend categories, and preceding period comparisons backed deterministically by Member 3's Finance Engine.
+
+**Query Parameters:**
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `period` | string | `last_30_days` | Preset: `last_30_days`, `this_month`, `last_month`, `this_quarter`, `last_quarter`, `this_fy`, `last_fy`, `ytd`, `custom` |
+| `date_from` | Date (`YYYY-MM-DD`) | null | Required when `period=custom` |
+| `date_to` | Date (`YYYY-MM-DD`) | null | Required when `period=custom` |
+| `as_of` | Date (`YYYY-MM-DD`) | null | Anchor date (default: today in business timezone) |
+| `compare_previous`| boolean | `true` | Compute immediately preceding period of equal length |
+| `include` | string | null | Comma-separated list to trim payload: `kpis,receivables,expenses,cash,comparison` |
+
+**Multi-Tenant Security:**
+Path `business_id` must match the caller's JWT token claim. Mismatches return `403 Forbidden`.
+
+### 5.2 Convenience Alias: `GET /api/financial-summary`
+Same response contract and query parameters, automatically scoped to the authenticated caller's `business_id`.
+

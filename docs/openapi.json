@@ -1806,6 +1806,290 @@
         ]
       }
     },
+    "/api/businesses/{business_id}/financial-summary": {
+      "get": {
+        "tags": [
+          "Financial Summary"
+        ],
+        "summary": "Get business financial summary and KPIs backed by the deterministic Finance Engine",
+        "operationId": "get_business_financial_summary_endpoint_api_businesses__business_id__financial_summary_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "business_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Business Id"
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Period preset (last_30_days, this_month, last_month, this_quarter, last_quarter, this_fy, last_fy, ytd, custom)",
+              "default": "last_30_days",
+              "title": "Period"
+            },
+            "description": "Period preset (last_30_days, this_month, last_month, this_quarter, last_quarter, this_fy, last_fy, ytd, custom)"
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Start date when period=custom (YYYY-MM-DD)",
+              "title": "Date From"
+            },
+            "description": "Start date when period=custom (YYYY-MM-DD)"
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "End date when period=custom (YYYY-MM-DD)",
+              "title": "Date To"
+            },
+            "description": "End date when period=custom (YYYY-MM-DD)"
+          },
+          {
+            "name": "as_of",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Reference anchor date for calculations (defaults to today in business timezone)",
+              "title": "As Of"
+            },
+            "description": "Reference anchor date for calculations (defaults to today in business timezone)"
+          },
+          {
+            "name": "compare_previous",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Whether to compute the immediately preceding period of equal length",
+              "default": true,
+              "title": "Compare Previous"
+            },
+            "description": "Whether to compute the immediately preceding period of equal length"
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Comma-separated sections to include: kpis,receivables,expenses,cash,comparison (default all)",
+              "title": "Include"
+            },
+            "description": "Comma-separated sections to include: kpis,receivables,expenses,cash,comparison (default all)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialSummaryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/financial-summary": {
+      "get": {
+        "tags": [
+          "Financial Summary"
+        ],
+        "summary": "Get financial summary for the authenticated user's business (convenience alias)",
+        "operationId": "get_current_business_financial_summary_alias_api_financial_summary_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Period preset (last_30_days, this_month, last_month, this_quarter, last_quarter, this_fy, last_fy, ytd, custom)",
+              "default": "last_30_days",
+              "title": "Period"
+            },
+            "description": "Period preset (last_30_days, this_month, last_month, this_quarter, last_quarter, this_fy, last_fy, ytd, custom)"
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Start date when period=custom (YYYY-MM-DD)",
+              "title": "Date From"
+            },
+            "description": "Start date when period=custom (YYYY-MM-DD)"
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "End date when period=custom (YYYY-MM-DD)",
+              "title": "Date To"
+            },
+            "description": "End date when period=custom (YYYY-MM-DD)"
+          },
+          {
+            "name": "as_of",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Reference anchor date for calculations (defaults to today in business timezone)",
+              "title": "As Of"
+            },
+            "description": "Reference anchor date for calculations (defaults to today in business timezone)"
+          },
+          {
+            "name": "compare_previous",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Whether to compute the immediately preceding period of equal length",
+              "default": true,
+              "title": "Compare Previous"
+            },
+            "description": "Whether to compute the immediately preceding period of equal length"
+          },
+          {
+            "name": "include",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Comma-separated sections to include: kpis,receivables,expenses,cash,comparison (default all)",
+              "title": "Include"
+            },
+            "description": "Comma-separated sections to include: kpis,receivables,expenses,cash,comparison (default all)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FinancialSummaryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "summary": "Root index",
@@ -1864,6 +2148,35 @@
         ],
         "title": "AccountLookupRead"
       },
+      "AccountSummaryItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "account_type": {
+            "type": "string",
+            "title": "Account Type"
+          },
+          "current_balance": {
+            "type": "string",
+            "title": "Current Balance"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "account_type",
+          "current_balance"
+        ],
+        "title": "AccountSummaryItem"
+      },
       "Body_upload_import_alias_api_businesses__business_id__upload_post": {
         "properties": {
           "file": {
@@ -1921,6 +2234,99 @@
           "import_type"
         ],
         "title": "Body_upload_import_api_imports_post"
+      },
+      "BusinessSummaryHeader": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "currency"
+        ],
+        "title": "BusinessSummaryHeader"
+      },
+      "CashSummary": {
+        "properties": {
+          "total_cash_balance": {
+            "type": "string",
+            "title": "Total Cash Balance",
+            "description": "Sum of active accounts' current_balance",
+            "default": "0.00"
+          },
+          "accounts": {
+            "items": {
+              "$ref": "#/components/schemas/AccountSummaryItem"
+            },
+            "type": "array",
+            "title": "Accounts"
+          }
+        },
+        "type": "object",
+        "title": "CashSummary"
+      },
+      "ComparisonSummary": {
+        "properties": {
+          "net_cash_flow_change_abs": {
+            "type": "string",
+            "title": "Net Cash Flow Change Abs",
+            "description": "Current net cash flow minus previous net cash flow"
+          },
+          "net_cash_flow_change_pct": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Cash Flow Change Pct",
+            "description": "Percentage change in net cash flow (null if previous was zero)"
+          },
+          "inflow_change_pct": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Inflow Change Pct",
+            "description": "Percentage change in total inflow (null if previous was zero)"
+          },
+          "outflow_change_pct": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outflow Change Pct",
+            "description": "Percentage change in total outflow (null if previous was zero)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "net_cash_flow_change_abs"
+        ],
+        "title": "ComparisonSummary"
       },
       "CustomerLookupRead": {
         "properties": {
@@ -1995,6 +2401,30 @@
         },
         "type": "object",
         "title": "DataRangeSummary"
+      },
+      "ExpenseCategoryBreakdown": {
+        "properties": {
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "amount": {
+            "type": "string",
+            "title": "Amount"
+          },
+          "share_pct": {
+            "type": "string",
+            "title": "Share Pct",
+            "description": "Percentage share of total expenses (0..100)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category",
+          "amount",
+          "share_pct"
+        ],
+        "title": "ExpenseCategoryBreakdown"
       },
       "ExpenseListItemRead": {
         "properties": {
@@ -2222,6 +2652,100 @@
         ],
         "title": "ExpenseTotals",
         "description": "Display-only summary totals over the entire filtered expense set."
+      },
+      "ExpensesSummary": {
+        "properties": {
+          "top_categories": {
+            "items": {
+              "$ref": "#/components/schemas/ExpenseCategoryBreakdown"
+            },
+            "type": "array",
+            "title": "Top Categories",
+            "description": "Top expense categories by spend (up to 5)"
+          }
+        },
+        "type": "object",
+        "title": "ExpensesSummary"
+      },
+      "FinancialSummaryResponse": {
+        "properties": {
+          "business": {
+            "$ref": "#/components/schemas/BusinessSummaryHeader"
+          },
+          "period": {
+            "$ref": "#/components/schemas/PeriodHeader"
+          },
+          "previous_period": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PreviousPeriodHeader"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kpis": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/KpisSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cash": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CashSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "receivables": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReceivablesSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "expenses": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExpensesSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "comparison": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ComparisonSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "meta": {
+            "$ref": "#/components/schemas/SummaryMeta"
+          }
+        },
+        "type": "object",
+        "required": [
+          "business",
+          "period",
+          "meta"
+        ],
+        "title": "FinancialSummaryResponse"
       },
       "HTTPValidationError": {
         "properties": {
@@ -2508,6 +3032,43 @@
         "title": "InvoiceListItemRead",
         "description": "Enriched Invoice DTO for table views including joined customer name and computed outstanding balance."
       },
+      "KpisSummary": {
+        "properties": {
+          "total_inflow": {
+            "type": "string",
+            "title": "Total Inflow",
+            "description": "Total cash inflows in period",
+            "default": "0.00"
+          },
+          "total_outflow": {
+            "type": "string",
+            "title": "Total Outflow",
+            "description": "Total cash outflows in period",
+            "default": "0.00"
+          },
+          "net_cash_flow": {
+            "type": "string",
+            "title": "Net Cash Flow",
+            "description": "Net cash flow (inflow - outflow)",
+            "default": "0.00"
+          },
+          "total_expenses": {
+            "type": "string",
+            "title": "Total Expenses",
+            "description": "Total expenses in period",
+            "default": "0.00"
+          },
+          "transaction_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Transaction Count",
+            "description": "Total transactions in period",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "KpisSummary"
+      },
       "LoginRequest": {
         "properties": {
           "email": {
@@ -2572,6 +3133,94 @@
           "has_more"
         ],
         "title": "Page[InvoiceListItemRead]"
+      },
+      "PeriodHeader": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "date_from": {
+            "type": "string",
+            "format": "date",
+            "title": "Date From"
+          },
+          "date_to": {
+            "type": "string",
+            "format": "date",
+            "title": "Date To"
+          },
+          "as_of": {
+            "type": "string",
+            "format": "date",
+            "title": "As Of"
+          },
+          "days": {
+            "type": "integer",
+            "title": "Days"
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "date_from",
+          "date_to",
+          "as_of",
+          "days"
+        ],
+        "title": "PeriodHeader"
+      },
+      "PreviousPeriodHeader": {
+        "properties": {
+          "date_from": {
+            "type": "string",
+            "format": "date",
+            "title": "Date From"
+          },
+          "date_to": {
+            "type": "string",
+            "format": "date",
+            "title": "Date To"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date_from",
+          "date_to"
+        ],
+        "title": "PreviousPeriodHeader"
+      },
+      "ReceivablesSummary": {
+        "properties": {
+          "total_outstanding": {
+            "type": "string",
+            "title": "Total Outstanding",
+            "description": "Total outstanding invoice balance",
+            "default": "0.00"
+          },
+          "overdue_amount": {
+            "type": "string",
+            "title": "Overdue Amount",
+            "description": "Total overdue balance past due_date",
+            "default": "0.00"
+          },
+          "overdue_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Overdue Count",
+            "description": "Count of overdue open invoices",
+            "default": 0
+          },
+          "open_invoice_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Open Invoice Count",
+            "description": "Count of open invoices",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "ReceivablesSummary"
       },
       "RegisterRequest": {
         "properties": {
@@ -2650,6 +3299,48 @@
           "message"
         ],
         "title": "RowErrorRead"
+      },
+      "SummaryMeta": {
+        "properties": {
+          "computed_by": {
+            "type": "string",
+            "title": "Computed By",
+            "description": "'finance_engine' or 'interim_backend_sql'"
+          },
+          "engine_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Engine Version"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Generated At"
+          },
+          "data_coverage": {
+            "type": "object",
+            "title": "Data Coverage"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "computed_by",
+          "generated_at"
+        ],
+        "title": "SummaryMeta"
       },
       "Token": {
         "properties": {

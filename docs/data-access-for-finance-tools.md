@@ -148,3 +148,37 @@ def get_outstanding_receivables(business_id: str) -> dict:
             "total_outstanding_amount": str(total_outstanding),
         }
 ```
+
+---
+
+## 4. Financial Summary Engine Adapter & Provider (Day 5)
+
+Located in:
+`backend.services.finance_engine_adapter` and `backend.services.financial_summary_service`
+
+### 4.1 Architecture
+To preserve clean separation of concerns and avoid financial formula duplication:
+- **`read_api`** fetches tenant-isolated records from Supabase PostgreSQL.
+- **`SummaryInputs`** bundles the business, accounts, transactions, invoices, expenses, customers, and vendors in memory.
+- **`FinanceSummaryProvider` (Protocol)** defines the contract `get_summary(...) -> EngineSummary`.
+  - **`RealEngineSummaryProvider` (Mode A)**: Converts inputs into `finance_engine.data.FinanceData` and runs Member 3's pure calculations (`financial_summary`, `calculate_expenses`, `calculate_receivables`).
+  - **`InterimSummaryProvider` (Mode C)**: Fallback provider calculating basic aggregates directly, marked with `computed_by = "interim_backend_sql"`.
+- Configuration: `FINANCE_ENGINE_MODE=auto|engine|interim` (default `auto`).
+
+### 4.2 Programmatic Usage for Member 4 Agents
+Agents in `agents/` can call `get_financial_summary_service` directly without making HTTP requests:
+```python
+from backend.database.session import get_db
+from backend.services.financial_summary_service import get_financial_summary_service
+
+with next(get_db()) as session:
+    summary = get_financial_summary_service(
+        db=session,
+        business_id=biz_uuid,
+        period="last_30_days",
+    )
+    print("Inflows:", summary.kpis.total_inflow)
+    print("Net Cash Flow:", summary.kpis.net_cash_flow)
+    print("Cash Balance:", summary.cash.total_cash_balance)
+```
+
