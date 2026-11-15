@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from backend.api.deps import get_db
 from backend.core.config import settings
 from backend.core.logging import logger
+from backend.core.version import CONTRACT_VERSION
 
 router = APIRouter(tags=["Health"])
 
@@ -16,11 +17,12 @@ router = APIRouter(tags=["Health"])
 @router.get("/health", summary="Application Health Check")
 def check_health() -> dict:
     """
-    Returns application status and current environment.
+    Returns application status, current environment, and API contract version.
     """
     return {
         "status": "ok",
         "environment": settings.ENVIRONMENT,
+        "contract_version": CONTRACT_VERSION,
     }
 
 
