@@ -131,6 +131,7 @@ async def upload_import(
     response_model=ImportResult,
     status_code=status.HTTP_201_CREATED,
     summary="Upload CSV data (alias endpoint with explicit business_id verification)",
+    include_in_schema=False,
 )
 async def upload_import_alias(
     business_id: uuid.UUID,

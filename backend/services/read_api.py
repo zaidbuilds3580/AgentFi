@@ -1,26 +1,52 @@
 """
 Internal programmatic read API for Members 3 & 4 (Finance Engine & LangGraph Agents).
 Provides fast, tenant-scoped, type-safe data access without going through HTTP endpoints.
+
+Supports passing either a raw business_id (UUID/str) or a server-injected ToolContext.
 """
 
 from datetime import date
-from typing import List, Optional
+from typing import List, Optional, Union
 import uuid
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from backend.models.accounts import Account
+from backend.models.customers import Customer
 from backend.models.expenses import Expense
 from backend.models.invoices import Invoice
 from backend.models.transactions import Transaction
-from backend.schemas.canonical import ExpenseRead, InvoiceRead, TransactionRead
+from backend.models.vendors import Vendor
+from backend.schemas.canonical import (
+    AccountLookupRead,
+    AccountRead,
+    CustomerLookupRead,
+    CustomerRead,
+    ExpenseRead,
+    InvoiceRead,
+    TransactionRead,
+    VendorLookupRead,
+    VendorRead,
+)
+from backend.services.query_filters import scoped
+from backend.services.tool_context import ToolContext
 
 MAX_INTERNAL_ROWS = 100000
 
 
+def _resolve_business_uuid(target: Union[uuid.UUID, str, ToolContext]) -> uuid.UUID:
+    """Helper to safely extract business UUID from ToolContext, str, or UUID."""
+    if isinstance(target, ToolContext):
+        return target.business_uuid
+    if isinstance(target, uuid.UUID):
+        return target
+    return uuid.UUID(str(target))
+
+
 def fetch_transactions(
     db: Session,
-    business_id: uuid.UUID,
+    business_id: Union[uuid.UUID, str, ToolContext],
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
     account_id: Optional[uuid.UUID] = None,
@@ -29,15 +55,17 @@ def fetch_transactions(
     limit: Optional[int] = None,
 ) -> List[TransactionRead]:
     """
-    Programmatic fetch for transactions scoped to business_id.
+    Programmatic fetch for transactions scoped to business_id or ToolContext.
     Used by cash flow calculations, analytics, and agent tools.
     """
+    biz_uuid = _resolve_business_uuid(business_id)
+
     if limit is not None and limit > MAX_INTERNAL_ROWS:
         raise ValueError(
             f"Requested limit {limit} exceeds maximum allowed internal rows ({MAX_INTERNAL_ROWS})."
         )
 
-    stmt = select(Transaction).where(Transaction.business_id == business_id)
+    stmt = scoped(Transaction, biz_uuid)
 
     if start_date:
         stmt = stmt.where(Transaction.transaction_date >= start_date)
@@ -68,7 +96,7 @@ def fetch_transactions(
 
 def fetch_invoices(
     db: Session,
-    business_id: uuid.UUID,
+    business_id: Union[uuid.UUID, str, ToolContext],
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
     customer_id: Optional[uuid.UUID] = None,
@@ -76,15 +104,17 @@ def fetch_invoices(
     limit: Optional[int] = None,
 ) -> List[InvoiceRead]:
     """
-    Programmatic fetch for invoices scoped to business_id.
+    Programmatic fetch for invoices scoped to business_id or ToolContext.
     Used by AR aging, revenue forecasts, and invoice agents.
     """
+    biz_uuid = _resolve_business_uuid(business_id)
+
     if limit is not None and limit > MAX_INTERNAL_ROWS:
         raise ValueError(
             f"Requested limit {limit} exceeds maximum allowed internal rows ({MAX_INTERNAL_ROWS})."
         )
 
-    stmt = select(Invoice).where(Invoice.business_id == business_id)
+    stmt = scoped(Invoice, biz_uuid)
 
     if start_date:
         stmt = stmt.where(Invoice.invoice_date >= start_date)
@@ -111,7 +141,7 @@ def fetch_invoices(
 
 def fetch_expenses(
     db: Session,
-    business_id: uuid.UUID,
+    business_id: Union[uuid.UUID, str, ToolContext],
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
     category: Optional[str] = None,
@@ -119,15 +149,17 @@ def fetch_expenses(
     limit: Optional[int] = None,
 ) -> List[ExpenseRead]:
     """
-    Programmatic fetch for expenses scoped to business_id.
+    Programmatic fetch for expenses scoped to business_id or ToolContext.
     Used by spend analytics, burn-rate calculators, and expense agents.
     """
+    biz_uuid = _resolve_business_uuid(business_id)
+
     if limit is not None and limit > MAX_INTERNAL_ROWS:
         raise ValueError(
             f"Requested limit {limit} exceeds maximum allowed internal rows ({MAX_INTERNAL_ROWS})."
         )
 
-    stmt = select(Expense).where(Expense.business_id == business_id)
+    stmt = scoped(Expense, biz_uuid)
 
     if start_date:
         stmt = stmt.where(Expense.expense_date >= start_date)
@@ -150,3 +182,43 @@ def fetch_expenses(
         )
 
     return [ExpenseRead.model_validate(r) for r in records[:effective_limit]]
+
+
+def fetch_accounts(
+    db: Session,
+    business_id: Union[uuid.UUID, str, ToolContext],
+    is_active: bool = True,
+) -> List[AccountLookupRead]:
+    """
+    Programmatic fetch for financial accounts scoped to business tenant.
+    """
+    biz_uuid = _resolve_business_uuid(business_id)
+    stmt = scoped(Account, biz_uuid).where(Account.is_active == is_active).order_by(Account.name.asc())
+    records = db.scalars(stmt).all()
+    return [AccountLookupRead.model_validate(r) for r in records]
+
+
+def fetch_customers(
+    db: Session,
+    business_id: Union[uuid.UUID, str, ToolContext],
+) -> List[CustomerLookupRead]:
+    """
+    Programmatic fetch for customers scoped to business tenant.
+    """
+    biz_uuid = _resolve_business_uuid(business_id)
+    stmt = scoped(Customer, biz_uuid).order_by(Customer.name.asc())
+    records = db.scalars(stmt).all()
+    return [CustomerLookupRead.model_validate(r) for r in records]
+
+
+def fetch_vendors(
+    db: Session,
+    business_id: Union[uuid.UUID, str, ToolContext],
+) -> List[VendorLookupRead]:
+    """
+    Programmatic fetch for vendors scoped to business tenant.
+    """
+    biz_uuid = _resolve_business_uuid(business_id)
+    stmt = scoped(Vendor, biz_uuid).order_by(Vendor.name.asc())
+    records = db.scalars(stmt).all()
+    return [VendorLookupRead.model_validate(r) for r in records]

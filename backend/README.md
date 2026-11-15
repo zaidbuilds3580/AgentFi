@@ -282,6 +282,48 @@ python -m pytest tests/test_backend_summary_unit.py
 python -m pytest tests/test_backend_summary_integration.py -m integration
 ```
 
+---
+
+## 11. API Contract Freeze & Strict Tenant Isolation (Day 6)
+
+Guarantees contract stability (`v1.0.0`) for Member 1 (Next.js Frontend) and Members 3 & 4 (Finance Engine & Agents) with automated breaking change guards and end-to-end multi-tenant isolation proofs.
+
+### Contract Guard
+Checks live OpenAPI schemas against `docs/openapi.frozen.json`:
+```bash
+# Verify no breaking changes (exit code 1 if broken)
+python backend/scripts/check_contract.py
+
+# Deliberately update frozen specification (requires team consensus + version bump)
+python backend/scripts/check_contract.py --update
+```
+
+### Security & Tenant Isolation Tests
+```bash
+# 1. Verify Contract Guard in CI
+python -m pytest tests/contract/test_api_contract.py
+
+# 2. Verify all routes enforce authentication (401 on unauthenticated access)
+python -m pytest tests/security/test_route_inventory.py
+
+# 3. Static AST scan to ensure all queries use scoped() or business_id
+python -m pytest tests/security/test_scoping_guard.py
+
+# 4. Cross-tenant matrix, token tampering, and RBAC tests (against Supabase)
+python -m pytest tests/security/test_tenant_isolation_matrix.py -m integration
+
+# 5. Database catalog audit: RLS on all tables and indexed business_id
+python -m pytest tests/security/test_database_rls_and_indexes.py -m integration
+```
+
+### Key Documentation
+- [docs/api-contract-inventory.md](../docs/api-contract-inventory.md): Complete catalog of STABLE, ALIAS, and INTERNAL endpoints.
+- [docs/tenant-isolation.md](../docs/tenant-isolation.md): Multi-tenant architecture, defense-in-depth layers, and isolation proofs.
+- [docs/tool-contracts.md](../docs/tool-contracts.md): Tool parameters, server-injected `ToolContext`, and teammate mismatch action items.
+- [docs/CHANGELOG-API.md](../docs/CHANGELOG-API.md): API contract version history and team governance policy.
+- [docs/day6-api-freeze-announcement.md](../docs/day6-api-freeze-announcement.md): Team sync pack and confirmation checklist.
+
+
 
 
 

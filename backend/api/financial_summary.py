@@ -22,6 +22,7 @@ router = APIRouter(tags=["Financial Summary"])
     "/businesses/{business_id}/financial-summary",
     response_model=FinancialSummaryResponse,
     summary="Get business financial summary and KPIs backed by the deterministic Finance Engine",
+    include_in_schema=False,
 )
 def get_business_financial_summary_endpoint(
     business_id: uuid.UUID,

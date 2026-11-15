@@ -7,7 +7,7 @@ from decimal import Decimal
 from typing import List, Optional
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status as http_status
 from sqlalchemy.orm import Session
 
 from backend.api.deps import get_current_user, get_db
@@ -109,7 +109,7 @@ def get_business_invoices_alias(
 ) -> Page[InvoiceListItemRead]:
     if str(business_id) != str(current_user.business_id):
         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
+            status_code=http_status.HTTP_403_FORBIDDEN,
             detail="Cannot access data for another business.",
         )
     return list_invoices(
