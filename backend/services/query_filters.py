@@ -13,11 +13,17 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import Select
 
 
-def scoped(model: Type[Any], business_id: uuid.UUID) -> Select:
+def scoped(model: Type[Any], business_id: Any) -> Select:
     """
     Creates a base Select query for any business-owned model strictly filtered by business_id.
     Makes tenant isolation structurally enforced across all query services.
+    Accepts uuid.UUID or string representation.
     """
+    if isinstance(business_id, str):
+        try:
+            business_id = uuid.UUID(business_id)
+        except ValueError:
+            pass
     return select(model).where(model.business_id == business_id)
 
 
