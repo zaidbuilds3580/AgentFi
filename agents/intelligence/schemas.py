@@ -2,8 +2,8 @@
 Pydantic schemas for Financial Intelligence Agent.
 """
 
-from typing import Any, Dict, List, Literal
-from pydantic import BaseModel, Field, model_validator
+from typing import Any, Dict, List, Literal, Optional
+from pydantic import BaseModel, Field, model_serializer, model_validator
 
 from graph.state.models import AgentResult
 
@@ -31,6 +31,17 @@ class IntelligenceRecommendation(BaseModel):
         default=False,
         description="True if this recommendation suggests an external business action requiring human sign-off."
     )
+    proposal_id: Optional[str] = Field(
+        default=None,
+        description="Optional identifier linking to an ActionProposal."
+    )
+
+    @model_serializer(mode="wrap")
+    def _serialize(self, handler: Any, info: Any) -> Any:
+        data = handler(self)
+        if isinstance(data, dict) and self.proposal_id is None and "proposal_id" in data:
+            del data["proposal_id"]
+        return data
 
     def __getitem__(self, item: str) -> Any:
         return getattr(self, item)

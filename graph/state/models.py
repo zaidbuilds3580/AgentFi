@@ -9,7 +9,7 @@ in the finance engine or isolated tool execution contexts.
 """
 
 from enum import Enum
-from typing import Any, Dict, List, Literal
+from typing import Any, Dict, List, Literal, Optional, Union
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -124,6 +124,14 @@ class ActionProposal(BaseModel):
     status: Literal["pending", "approved", "rejected"] = Field(
         default="pending",
         description="Current workflow status of the proposal."
+    )
+    business_id: Optional[str] = Field(
+        default=None,
+        description="Tenant business identifier."
+    )
+    evidence: Optional[Union[List[str], Dict[str, Any], str]] = Field(
+        default_factory=list,
+        description="Tool name, reference date, or supporting evidence."
     )
 
     @field_validator("requires_approval")
